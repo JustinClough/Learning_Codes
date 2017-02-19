@@ -1,0 +1,16 @@
+#Ignore...
+
+#Hidden files
+.**
+
+#But not itself
+!.gitignore
+
+#Barn Directories
+/barn**
+
+#Scratch Directories
+/scratch**
+
+#Build Directories
+**/build
