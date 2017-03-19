@@ -3,7 +3,7 @@
 #SBATCH --partition=debug
 #SBATCH -t 00:10:00
 #SBATCH -n 1
-
+#SBATCH --export=NONE
 exe=$1; shift
 args=("$@")
 srun $exe ${args[@]}

@@ -8,6 +8,11 @@ int main(int argc, char** argv)
   pGeom geom = pumi_geom_load("cube.dmg", "mesh");
   pMesh mesh = pumi_mesh_load(geom, "mixed-mesh-1.smb",1);
   //
+
+  int modFaceNum = 81; // Model face number according to handout
+
+
+
   // insert mesh query code here
   //
   pumi_mesh_write(mesh,"outMixed","vtk");
