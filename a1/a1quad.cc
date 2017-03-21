@@ -1,6 +1,8 @@
 // PUMI Headers
 #include <PCU.h>
 #include <pumi.h>
+#include <apf.h>
+#include <apfNumbering.h>
 
 // STL Headers
 #include <stdlib.h>
@@ -28,7 +30,7 @@ int main(int argc, char** argv)
   MPI_Init(&argc,&argv);
   pumi_start();
   pGeom geom = pumi_geom_load(NULL, "null");
-  pMesh mesh = pumi_mesh_create(geom, 3);
+  pMesh mesh = pumi_mesh_create(geom, 2);
  
   // Declare working variables
   double Coords[3] = {0,0,0};
@@ -74,74 +76,42 @@ int main(int argc, char** argv)
     }
   } 
   
-  std::cout << "Finished Verteces Edges" << std::endl;
-  std::cout << "Total Verteces placed: " << (int)Verts.size() << std::endl;
-  
-  pMeshEnt Vert_pair[2];
-  std::vector<pMeshEnt> Edges;
-  pMeshEnt edge;
+  std::cout << "Total Verteces placed: " <<(int)Verts.size() << std::endl;
 
-  // Create edges between verteces
-  // Loop over ordered vector of verteces to create horizontal edges
-  for(int i=0; i< (int)Verts.size(); i++)
-  {
-    if( (i+1)%(Vert_Width) != 0 || i == 0)
-    {
-      Vert_pair[0] = Verts[i];
-      Vert_pair[1] = Verts[i+1];
-      // Create edge
-      edge = pumi_mesh_createEnt( mesh, NULL, 1, Vert_pair);
-      Edges.push_back(edge);
-    } // End if
-  } // End for
-  
-  int Hor_Edges = Edges.size();
-  std::cout << "Finished Creating " << Hor_Edges << " Horizontal Edges" << std::endl;
-
-  // Loop over ordered vector of verteces to create vertical edges
-  for(int i=0; i< (int)Verts.size(); i++)
-  {
-    if( i < (Vert_Width)*(Height))
-    {
-      Vert_pair[0] = Verts[i];
-      Vert_pair[1] = Verts[i+Vert_Width];
-      // Create edge
-      edge = pumi_mesh_createEnt( mesh, NULL, 1, Vert_pair);
-      Edges.push_back(edge);
-    } // End if
-  } // End for
-
-  std::cout << "Finished Creating Vertical Edges" << std::endl;
-  std::cout << "Total Edges placed: " << (int)Edges.size() << std::endl;
-  
-  // Create Edge Group to write to 
+  // Create vertex Group to write to 
   pMeshEnt downward[4];
   
   // Create Vector of Elements
   std::vector<pMeshEnt> Elements;
   pMeshEnt element;
   
-  // Create Topology
-  for( int i = 0; i< (Hor_Edges-(int)Width); i++)
-  {
-    // Create group of downward adjecent edges
-    downward[0] = Edges[i];
-    downward[1] = Edges[i+Hor_Edges+1];
-    downward[2] = Edges[i+Vert_Width];
-    downward[3] = Edges[i+Hor_Edges];
-    // Create Element
-    element = pumi_mesh_createEnt( mesh, NULL, 3, downward);
-    Elements.push_back(element);
+  std::cout << "Creating Topology... \n" << std::endl;
 
-  }
+  // Create Topology
+  for(int i=0; i< ((int)Verts.size()-Vert_Width); i++)
+  {
+    if( (i+1)%(Vert_Width) != 0 || i == 0)
+    {
+      downward[0] = Verts[i];
+      downward[1] = Verts[i+1];
+      downward[2] = Verts[i+Vert_Width+1];
+      downward[3] = Verts[i+Vert_Width];
+      // Create edge
+      element = pumi_mesh_createElem( mesh, NULL, 3, downward);
+      Elements.push_back(element);
+    } // End if
+  } // End for
+
   int Tot_Elements = (int)Elements.size();
   std::cout << "Finished Creating Element" << std::endl;
   std::cout << "Total Elements placed: " << Tot_Elements << std::endl;
+  
+  mesh->acceptChanges();
+  //pumi_mesh_verify( mesh); //Can't verify before assigning numbering; fails geometric asserts (?)
 
-  std::cout << "Assigning GlobalID\n" << std::endl;
-  // Assign Global Numbering scheme to finished mesh
-  pumi_mesh_createGlobalID( mesh );
-  int ID;
+  // Create Local Numbering Scheme for elements and Vertices
+  apf::Numbering* num_elem = numberOwnedDimension( mesh, "Element_Number", 2);
+  apf::Numbering* num_vert = numberOwnedDimension( mesh, "Vertex_Number", 0);
 
   // Prep printout space for Element and Vertex numbers
   Op3Results << "\nList of Elements and Vertex Members\n" ; 
@@ -149,42 +119,34 @@ int main(int argc, char** argv)
   
   // Create list of member verteces
   std::vector<pMeshEnt> adj_Verts;
-  apf::MeshIterator* ElemIt = mesh->begin(2);
   
-  while(( element = mesh->iterate(ElemIt)))
+  int ID = 0;
+  for(int i=0; i<(int)Elements.size(); i++ )
   {
-    std::cout << "Getting Element GlobalID\n" << std::endl;
-    ID = (pumi_ment_getGlobalID( element ));
-    Op3Results << ID ;
-    Op3Results << "\t" ;
-    // Get dimension 0 (vertex) adjecntcies of element
-    pumi_ment_getAdj(element, 0, adj_Verts);
+    ID = apf::getNumber(num_elem,Elements[i], 0,0);
+    Op3Results <<  ID;
+    Op3Results << "\t\t" ;
+    // Get dimension 0 (vertex) adjcentcies of element
+    pumi_ment_getAdj(Elements[i], 0, adj_Verts);
     
-    for(int j=0; j< (pumi_ment_getNumAdj(element, 0)); j++)
+    for(int j=0; j< (pumi_ment_getNumAdj(Elements[i], 0)); j++)
     {
-      Vert = adj_Verts[j];
-      std::cout << "Getting Vertex GlobalID \n" << std::endl;
-      Op3Results << (pumi_ment_getGlobalID( Vert )) ; 
+      Op3Results <<  apf::getNumber(num_vert, adj_Verts[j], 0,0); 
       Op3Results << "\t" ;
-      
+      adj_Verts.clear();
     }
     Op3Results << "\n";
   }
-  mesh->end(ElemIt);
 
   // Clean up
   Op3Results.close();
+  apf::destroyNumbering(num_elem);
+  apf::destroyNumbering(num_vert);
   pumi_mesh_freeze(mesh);
+  pumi_mesh_verify( mesh);
  
-  std::cout << "Writing Mesh..." << std::endl; 
   pumi_mesh_write(mesh,"outQuad","vtk");
-  std::cout << "Finished Writing Mesh." << std::endl;
   pumi_mesh_delete(mesh);
   pumi_finalize();
   MPI_Finalize();
 }
-
-/* Questions for work session:
- * 1. Crashes when writing <mesh>.vtk files; why?
- * 2. Crashes when (attempting to) read GlobalID for elements; why?
- */

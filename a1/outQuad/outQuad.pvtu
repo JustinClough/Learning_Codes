@@ -8,6 +8,7 @@
 <PCellData>
 <PDataArray type="Float64" Name="ghost_field_1" NumberOfComponents="1" format="binary"/>
 <PDataArray type="Float64" Name="own_field_1" NumberOfComponents="1" format="binary"/>
+<PDataArray type="Int32" Name="Element_Number_1" NumberOfComponents="1" format="binary"/>
 <PDataArray type="Int32" Name="apf_part" NumberOfComponents="1" format="binary"/>
 </PCellData>
 <Piece Source="0/0.vtu"/>
