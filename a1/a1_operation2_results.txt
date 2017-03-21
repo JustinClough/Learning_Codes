@@ -1,0 +1,10 @@
+Vertex Number 	Bounded Edges
+1		5
+2		5
+3		6
+4		7
+5		6
+6		7
+7		4
+8		4
+9		6
