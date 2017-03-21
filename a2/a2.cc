@@ -1,5 +1,8 @@
+// PUMI Headers
 #include <PCU.h>
 #include <pumi.h>
+
+// STL Headers
 #include <stdlib.h>
 #include <string.h>
 
@@ -21,10 +24,23 @@ int main(int argc, char** argv)
   pMesh mesh = pumi_mesh_load(geom,argv[2],1);
   if(!strcmp (argv[1], "reorder_c.dmg"))
     pumi_mesh_setShape(mesh,pumi_shape_getLagrange(2));
+/*
+//// STEP 1:
+  // Find most extreme vertex
+  std::vector<pMeshEnt> Verts;
+  int length_old = 0;
+  int length_now = 1;
+  while( length_old<length_now)
+  {
 
-  //
-  // insert reordering (numbering) code here
-  //
+
+  }
+  
+*/
+
+
+
+  // Finish
   pumi_mesh_write(mesh,"numbered","vtk");
   pumi_mesh_delete(mesh);
   pumi_finalize();
