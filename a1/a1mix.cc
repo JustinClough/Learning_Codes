@@ -44,6 +44,53 @@ int main(int argc, char** argv)
     Op4Results << pumi_ment_getGlobalID( meshFaces[i]);
     Op4Results << "\n";
   }
+  Op4Results.close();
+
+  // Operation 5: List region type (tet, hex, ...) 
+  //              for each mesh region
+
+  // Create a list to Write to
+  std::ofstream Op5Results;
+  Op5Results.open("a1_operation5_results.txt");
+  Op5Results << "Region ID:\tType:\n";
+  
+  int type;
+  pMeshEnt e;
+  pMeshIter it = mesh->begin(3);
+  while((e = mesh->iterate(it)))
+  {
+    // Print mesh region global ID
+    Op5Results << pumi_ment_getGlobalID(e);
+    Op5Results << "\t\t";
+
+    // Get enumeration
+    type = pumi_ment_getTopo(e);
+
+    // Convert enumeration to text and print
+    if(type == 3)
+    {
+    Op5Results << "Quad";
+    }
+    else if(type == 4)
+    {
+    Op5Results << "Tet";
+    }
+    else if(type == 5)
+    {
+    Op5Results << "Hex";
+    }
+    else if(type == 6)
+    {
+    Op5Results << "Prism";
+    }
+    else if(type == 7)
+    {
+    Op5Results << "Pyramid";
+    }
+  Op5Results << "\n";
+  }
+  mesh->end(it);
+  Op5Results.close();
 
   pumi_mesh_write(mesh,"outMixed","vtk");
   pumi_mesh_delete(mesh);
