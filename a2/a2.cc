@@ -26,37 +26,22 @@ double get_sq_magnitude( double* Coords)
   return sq_mag;
 }
 
-
-int main(int argc, char** argv)
+pMeshEnt find_start( pGeom geom, pMesh mesh)
 {
-  if (argc != 3) {
-    printf("usage: %s reorder_?.dmg reorder_?.smb\n", argv[0]);
-    return 0;
-  }
-
-  MPI_Init(&argc,&argv);
-  pumi_start();
-  pGeom geom = pumi_geom_load(argv[1],"mesh");
-  pMesh mesh = pumi_mesh_load(geom,argv[2],1);
-  if(!strcmp (argv[1], "reorder_c.dmg"))
-    pumi_mesh_setShape(mesh,pumi_shape_getLagrange(2));
-
-//// STEP 1:  Find starting vertex
   // Declare working variables
   std::vector<pMeshEnt> model_Verts;
   std::vector<pMeshEnt> Verts;
   pMeshEnt Start_Vert;
-  std::vector<double*> Vert_Coords;
   double Coords[3] = {0,0,0};
   double Sum_Coords[3] = {0,0,0}; 
   double Ave_Coords[3] = {0,0,0};
-  double* Dif_Coords[3] = {0,0,0};
+  double Dif_Coords[3] = {0,0,0};
   double distance = 0.0;
   double g_distance = 0.0;
   double n = 0;
 
   // For every model vertex...
-  for(pGeomIter it=geom->begin(1); it!=geom->end(1); ++it)
+  for(pGeomIter it=geom->begin(0); it!=geom->end(0); ++it)
   {
     // Get mesh vertex classified on model vertex
     pumi_gent_getRevClas( *it, model_Verts);
@@ -64,7 +49,10 @@ int main(int argc, char** argv)
 
     // Update vertex set stats
     pumi_node_getCoord( model_Verts[0], 0, Coords);
-    Vert_Coords.push_back(Coords); 
+  
+    // Clear vector for reuse
+    model_Verts.clear();
+
     for(int i=0; i<3; i++)
     {
       Sum_Coords[i] = Coords[i];
@@ -82,7 +70,7 @@ int main(int argc, char** argv)
   for( int i=0; i< (int)Verts.size(); i++)
   {
     // Get this Vertex's Coordinates
-    Coords = Vert_Coords[i];
+    pumi_node_getCoord( Verts[i], 0, Coords);
 
     // Compare this vertex's coordinates to the average; get the distance
     for(int j=0; j<3; j++)
@@ -90,7 +78,6 @@ int main(int argc, char** argv)
       Dif_Coords[j] = Ave_Coords[j] - Coords[j];
     } 
     distance = get_sq_magnitude( Dif_Coords );
-    
 
     // If this vertex is further from the center of all vertices than all others
     //  (ties go to the home team, not runner)
@@ -106,6 +93,27 @@ int main(int argc, char** argv)
   // Clean up
   Verts.clear();
 
+  return Start_Vert;
+} //END find_start( pGeom geom, pMesh mesh);
+
+
+int main(int argc, char** argv)
+{
+  if (argc != 3) {
+    printf("usage: %s reorder_?.dmg reorder_?.smb\n", argv[0]);
+    return 0;
+  }
+
+  MPI_Init(&argc,&argv);
+  pumi_start();
+  pGeom geom = pumi_geom_load(argv[1],"mesh");
+  pMesh mesh = pumi_mesh_load(geom,argv[2],1);
+  if(!strcmp (argv[1], "reorder_c.dmg"))
+    pumi_mesh_setShape(mesh,pumi_shape_getLagrange(2));
+
+  // STEP 1:  Find starting vertex
+  pMeshEnt Start_Vert = find_start( geom, mesh);
+  std::cout << "Found starting vertex." << std::endl;
 
   // Finish
   pumi_mesh_write(mesh,"numbered","vtk");
