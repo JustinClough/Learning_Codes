@@ -92,10 +92,60 @@ pMeshEnt find_start( pGeom geom, pMesh mesh)
 
   // Clean up
   Verts.clear();
-
+  
+  std::cout << "Found starting vertex." << std::endl;
   return Start_Vert;
 } //END find_start( pGeom geom, pMesh mesh);
 
+void reorder_mesh( pGeom geom, pMesh mesh, pMeshEnt Start_Vert)
+  {
+    // Declare working variables
+    std::vector<pMeshEnt> q; 
+    pMeshEnt vert;
+    pMeshEnt edge;
+    pMeshEnt node;
+    
+    // Get total number of nodes and faces; add 1 for auto-reversing
+    pShape shape = pumi_mesh_getShape( mesh );
+    int Dof_per_edge = pumi_shape_getNumNode( shape, 1); 
+    int labeldof = 1 + pumi_mesh_getNumEnt( mesh, 0) + Dof_per_edge*pumi_mesh_getNumEnt( mesh, 1);
+    int labelface = 1 + pumi_mesh_getNumEnt( mesh, 2);
+  
+    // Create numbering scheme
+    pNumbering num_dofs = pumi_numbering_createOwned( mesh, "Degrees_of_Freedom", NULL);
+    
+    // Begin at starting node
+    q.push_back(Start_Vert);
+    
+    int LoopCount =0;
+    while( (int)q.size()>0 && LoopCount<=labeldof+1)
+    {
+      LoopCount++;
+      std::cout << "LoopCount = " << LoopCount << std::endl;
+      
+      // Get the node at front of line; change where the end of the line is
+      node = q.front();
+      std::cout << "Got node at front of queue." << std::endl;
+      q.erase(q.begin());
+      std::cout << "Freed front of queue." << std::endl;
+
+      int number = pumi_ment_getNumber( node, num_dofs, 0, 0);
+      std::cout << "Current DOF number = " << number << std::endl;
+
+      // If this entity has not already been labeled...
+      if (pumi_ment_getNumber( node, num_dofs, 0, 0) == 0)
+      {
+        std::cout << "This node has unlabeled DoFs." << std::endl;
+        // Then get and label its Degrees of Freedom
+
+      }
+
+    } 
+
+
+
+  return; 
+  }
 
 int main(int argc, char** argv)
 {
@@ -111,9 +161,11 @@ int main(int argc, char** argv)
   if(!strcmp (argv[1], "reorder_c.dmg"))
     pumi_mesh_setShape(mesh,pumi_shape_getLagrange(2));
 
-  // STEP 1:  Find starting vertex
+  // STEP 1: Find starting vertex
   pMeshEnt Start_Vert = find_start( geom, mesh);
-  std::cout << "Found starting vertex." << std::endl;
+
+  // STEP 2: Reorder Mesh
+  reorder_mesh( geom, mesh, Start_Vert);
 
   // Finish
   pumi_mesh_write(mesh,"numbered","vtk");
