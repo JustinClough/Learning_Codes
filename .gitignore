@@ -2,5 +2,5 @@
 *.swp
 
 #Ignore intermediate TeX files in the latex_practice directory
-latex_practice/*.log
-latex_practice/*.aux
+latex_practice/**/*.log
+latex_practice/**/*.aux
