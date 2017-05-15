@@ -4,3 +4,6 @@
 #Ignore intermediate TeX files in the latex_practice directory
 latex_practice/**/*.log
 latex_practice/**/*.aux
+
+#Ignore build directories
+**/build/**
