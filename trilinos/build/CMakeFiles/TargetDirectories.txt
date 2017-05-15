@@ -1,0 +1,4 @@
+/lore/clougj/Learning_Codes/trilinos/build/CMakeFiles/rebuild_cache.dir
+/lore/clougj/Learning_Codes/trilinos/build/CMakeFiles/tpetra2.dir
+/lore/clougj/Learning_Codes/trilinos/build/CMakeFiles/edit_cache.dir
+/lore/clougj/Learning_Codes/trilinos/build/CMakeFiles/tpetra1.dir
