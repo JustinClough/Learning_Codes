@@ -6,4 +6,4 @@ latex_practice/**/*.log
 latex_practice/**/*.aux
 
 #Ignore build directories
-**/build/**
+build/
