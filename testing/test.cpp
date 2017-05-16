@@ -1,6 +1,7 @@
 #include <iostream>
 
-class square{
+class square
+{
   private:
     int length;
   public:
@@ -15,7 +16,7 @@ class square{
 
 square::square ()
   {
-  length = 10;
+    length = 10;
   }
 
 square::square( int a)
@@ -36,7 +37,7 @@ int main( int argc, char** argv ) {
     std::cout << "i = " << i << std::endl;
   }
 
-  square sq_def;
+  square sq_def {};
 
   cout << "Default Area = " << sq_def.area() << endl;
 
