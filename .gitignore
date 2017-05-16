@@ -7,3 +7,6 @@ latex_practice/**/*.aux
 
 #Ignore build directories
 build/
+
+#Ignore g++'s default executable
+a.out
