@@ -28,3 +28,6 @@ add_executable( tpetra3 tpetra3.cpp)
 target_include_directories( tpetra3 PRIVATE ${ALL_INCS} ) 
 target_link_libraries( tpetra3 ${ALL_LIBS})
 
+add_executable( tpetra5 tpetra5.cpp)
+target_include_directories( tpetra5 PRIVATE ${ALL_INCS} ) 
+target_link_libraries( tpetra5 ${ALL_LIBS})
