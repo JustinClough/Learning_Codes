@@ -11,14 +11,49 @@
 #include <iterator>
 #include <iostream>
 #include <fstream>
+#include <deque>
 
 using std::cout;
 using std::endl;
 
-bool hasNode(pMesh m, pMeshEnt e)
+class Line
 {
-  return pumi_shape_hasNode(pumi_mesh_getShape(m),pumi_ment_getTopo(e));
-}
+  public:
+    std::deque<pMeshEnt> q;
+    std::set<pMeshEnt> set;
+    void put_back(pMeshEnt e, pNumbering num)
+    {
+      if( (set.count(e) == 0) && (!pumi_ment_isNumbered( e, num)))
+      {
+        q.push_back(e);
+        set.insert(e);
+      }
+    }
+    pMeshEnt drop_front()
+    {
+      pMeshEnt e = q.front();
+      q.pop_front();
+      set.erase(e);
+      return e;
+    }
+    bool visited( pMeshEnt e, pNumbering num)
+    {
+      bool isin;
+      if(set.count(e) > 0)
+      {
+        isin = true;
+      }
+     return (pumi_ment_isNumbered( e, num) || isin);
+    }
+    void add_list( std::vector<pMeshEnt> list, pNumbering num)
+    {
+      for(int i=0; i< (int) list.size(); i++)
+      {
+        put_back(list[i], num);
+      }
+    }
+  //End Public:
+};
 
 double get_sq_magnitude( double* Coords)
 {
@@ -81,7 +116,7 @@ pMeshEnt find_start( pGeom geom, pMesh mesh)
     distance = get_sq_magnitude( Dif_Coords );
     // If this vertex is further from the center of all vertices than all others
     //  (ties go to the home team, not runner)
-    if( distance > g_distance)
+    if( distance >= g_distance)
     {
       // Then, it is likely to be the most extreme vertex
       Start_Vert = Verts[i];
@@ -97,108 +132,120 @@ pMeshEnt find_start( pGeom geom, pMesh mesh)
   return Start_Vert;
 } //END find_start( pGeom geom, pMesh mesh);
 
-void reorder_mesh( pGeom geom, pMesh mesh, pMeshEnt Start_Vert)
+void write_before( pGeom geom, pMesh mesh)
 {
-  std::cout << std::endl;
-  std::cout << "Begining Mesh Reorder." << std::endl;
-  // Declare working variables
-  std::vector<pMeshEnt> q; 
-  pMeshEnt vert;
-  pMeshEnt edge;
-  pMeshEnt node;
+  pNumbering un_node = pumi_numbering_createOwnedNode( mesh, "Node");
+  pNumbering un_elem = pumi_numbering_createOwned( mesh, "Element",pumi_mesh_getDim(mesh));
 
-  // Get total number of nodes and faces; add 1 for auto-reversing
-  pShape shape = pumi_mesh_getShape( mesh );
-  int Dof_per_edge = pumi_shape_getNumNode( shape, 1); 
-  int labeldof = 1 + pumi_mesh_getNumEnt( mesh, 0) + Dof_per_edge*pumi_mesh_getNumEnt( mesh, 1);
-  int labelface = 1 + pumi_mesh_getNumEnt( mesh, 2);
+  pumi_mesh_write(mesh,"Before_Reorder","vtk");
 
-  // Create numbering scheme
-  pNumbering num_dofs = createNumbering( mesh, "Degrees_of_Freedom", shape, 1);
+  pumi_numbering_delete( un_node);
+  pumi_numbering_delete( un_elem);
+  return; 
+}
 
-  pMeshEnt e;
-  pMeshIter it = mesh->begin(0);
-  while ((e=mesh->iterate(it))){
-    if (isNumbered( num_dofs, e, 0, 1)){
-        cout << "Vertex is numbered" << endl;
-    }
-    cout << getNumber(num_dofs, e, 0,1) << endl;
-  }
+void reorder_mesh( pGeom geom, pMesh mesh, pMeshEnt start_vert)
+{
+  int mesh_dim = pumi_mesh_getDim(mesh);
+  pShape node_shape = pumi_mesh_getShape( mesh );
+  pShape elem_shape = pumi_shape_getConstant( mesh_dim );
+
+  pNumbering node_numbering = pumi_numbering_create( mesh, "Node", node_shape);
+  pNumbering elem_numbering = pumi_numbering_create( mesh, "Element", elem_shape); 
   
-  it = mesh->begin(1);
-  while ((e=mesh->iterate(it)))
+  int label_dof = pumi_mesh_getNumEnt( mesh, 0); // Number of nodes on verts
+  int num_node_line = pumi_shape_getNumNode( node_shape, 1); 
+  if (num_node_line > 0)
   {
-    if (isNumbered( num_dofs, e, 0, 1)){
-        cout << "Line is numbered" << endl;
-    }
-    cout << getNumber(num_dofs, e, 0,1) << endl;
+    label_dof+=num_node_line*pumi_mesh_getNumEnt( mesh,1); // Num nodes on edges
   }
-  
-  for (int i=0; i<3; i++)
+  int label_elem = pumi_mesh_getNumEnt( mesh, mesh_dim);
+
+  Line line; 
+  line.put_back(start_vert, node_numbering);
+  int loop = 0;
+  int edgeCount = 0;
+  int vertCount = 0;
+  int elemCount = 0;
+  while( (int)line.q.size() > 0)
   {
-    if (shape->hasNodesIn(i))
+    cout << "Loop Count " << loop++ << endl;
+    cout << "Line.q.size = " << line.q.size() << endl;
+    pMeshEnt e = line.drop_front();
+    if(! pumi_ment_isNumbered( e, node_numbering))
     {
-      int num = shape->countNodesOn(i);
-      cout << "Has " << num << "  nodes on Dimension "<< i << endl;
+      cout << "Node Number set = " << label_dof;
+      pumi_ment_setNumber( e, node_numbering, 0, 0, --label_dof);
+      cout << ", Total Nodes Numbered = " << ++vertCount << endl;
     }
-  }
-
-  // Begin at starting node
-  q.push_back(Start_Vert);
-
-  int LoopCount = 0;
-  // Iterate on q until empty, track num of loops
-  while( (int)q.size()>0 && LoopCount<=labeldof+1)
-  {
-    std::cout << "LoopCount = " << ++LoopCount << std::endl;
-
-    // Get the node at front of line; change where the front of the line is
-    node = q.front();
-    std::cout << "Got node at front of queue." << std::endl;
-    q.erase(q.begin());
-    std::cout << "Freed front of queue." << std::endl;
-
-    // If this entity has not already been labeled...
-    if ( getNumber(num_dofs, node, 0,1)==0 )  // CURRENTLY BREAKS HERE WHEN EVALUATING NODES ON EDGES
+    std::vector<pMeshEnt> list;
+    if(pumi_ment_getDim( e) == 0)
     {
-      std::cout << "This node has unlabeled DoFs." << std::endl;
-      // Then get and label its Degrees of Freedom
-      number(num_dofs, node, 0,0,labeldof--);
-      cout << "Labeled as " << labeldof << endl;
-
-      // Check if node is from a edge or vertex
-      if (getDimension (mesh, node) ==0)
+      pMeshEnt vert = e;
+      std::vector<pMeshEnt> adj_edges;
+      pumi_ment_getAdj( vert, 1, adj_edges);
+      for (int i=0; i<(int) adj_edges.size(); i++)
       {
-        // Check if mesh edges have nodes
-        if (shape->hasNodesIn(1)) 
+        cout << "Looping over Adj Edges" << endl;
+        pMeshEnt edge = adj_edges[i];
+        std::vector<pMeshEnt> adj_faces;
+        pumi_ment_getAdj( edge, 2, adj_faces);
+        for (int j=0; j<(int) adj_faces.size(); j++)
         {
-          cout << "Getting Adjacent Elements" << endl;
-          // Get adjacent elements
-          apf::Adjacent adj;
-          mesh->getAdjacent(node, 2, adj);
-          cout << "Number of adjacent faces= " << adj.size() << endl;
-          for (int k=0; k< adj.size(); k++)
+          cout << "Looping over Adj Faces" << endl;
+          pMeshEnt face = adj_faces[j];
+          if( !pumi_ment_isNumbered(face, elem_numbering))
           {
-            cout << "Getting Adjacent Edges" << endl;
-            // Get list of edges adjacent to faces
-            apf::Adjacent edges;
-            mesh->getAdjacent(adj[k], 1, edges);
-            cout << "Number of adjacent edges= " << edges.size() << endl;
-            // Store edges in the q
-            for (int kk=0; kk<edges.size(); kk++)
-            {
-              cout << "Storing Edge in q." << endl;
-              q.insert(q.begin(), edges[kk]);
-            }
+            cout << "Element Number set = " << label_elem;
+            pumi_ment_setNumber( face, elem_numbering, 0, 0, --label_elem);
+            cout << ", Total Elements Numbered = " << ++elemCount << endl;
+          }
+        }
+        adj_faces.clear();
+        adj_faces.resize(0);
+          /*ENQUEUE FACE HERE???*/
+        cout << "Getting otherVert" << endl;
+        pMeshEnt otherVert = pumi_medge_getOtherVtx( edge, vert);
+        if(pumi_shape_hasNode( node_shape, 1))
+        {
+          if(line.visited( otherVert, node_numbering) && 
+             (!pumi_ment_isNumbered(edge,node_numbering)))
+          {
+            cout << "Set Edge Number = " << label_dof ;
+            pumi_ment_setNumber( edge, node_numbering, 0,0, --label_dof);
+            cout << ", Total Edges Numbered = " << ++edgeCount << endl;
+          }
+          else
+          {
+            line.put_back(edge, node_numbering);
+            list.push_back(otherVert);
+          }
+        }
+        else
+        {
+          if(!pumi_ment_isNumbered( otherVert, node_numbering))
+          {
+            list.push_back(otherVert);
           }
         }
       }
+      adj_edges.clear();
+      adj_edges.resize(0);
+      line.add_list(list, node_numbering);
+      list.clear();
+      list.resize(0);
+    }
+    else
+    {
+      cout << "Not a Vertex" << endl;
     }
   }
+  pumi_mesh_write(mesh,"Reordered","vtk");
 
+  pumi_numbering_delete( elem_numbering);
+  pumi_numbering_delete( node_numbering);
 
-  std::cout << "Finished Mesh Reorder." << std::endl;
-  return; 
+  return;
 }
 
 int main(int argc, char** argv)
@@ -215,15 +262,13 @@ int main(int argc, char** argv)
   if(!strcmp (argv[1], "reorder_c.dmg"))
     pumi_mesh_setShape(mesh,pumi_shape_getLagrange(2));
 
-  // STEP 1: Find starting vertex
-  pMeshEnt Start_Vert = find_start( geom, mesh);
-
-  // STEP 2: Reorder Mesh
-  reorder_mesh( geom, mesh, Start_Vert);
+  pMeshEnt v_start = find_start(geom, mesh);
+  write_before( geom, mesh);  
+  reorder_mesh(geom, mesh, v_start);
 
   // Finish
-  pumi_mesh_write(mesh,"numbered","vtk");
   pumi_mesh_delete(mesh);
   pumi_finalize();
   MPI_Finalize();
+  return 0;
 }
