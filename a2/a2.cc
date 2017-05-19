@@ -116,7 +116,7 @@ pMeshEnt find_start( pGeom geom, pMesh mesh)
     distance = get_sq_magnitude( Dif_Coords );
     // If this vertex is further from the center of all vertices than all others
     //  (ties go to the home team, not runner)
-    if( distance >= g_distance)
+    if( distance  g_distance)
     {
       // Then, it is likely to be the most extreme vertex
       Start_Vert = Verts[i];
@@ -146,74 +146,66 @@ void write_before( pGeom geom, pMesh mesh)
 
 void reorder_mesh( pGeom geom, pMesh mesh, pMeshEnt start_vert)
 {
+  // Get Mesh dimension and shapes
   int mesh_dim = pumi_mesh_getDim(mesh);
   pShape node_shape = pumi_mesh_getShape( mesh );
   pShape elem_shape = pumi_shape_getConstant( mesh_dim );
 
+  // Create empty numbering schemes
   pNumbering node_numbering = pumi_numbering_create( mesh, "Node", node_shape);
   pNumbering elem_numbering = pumi_numbering_create( mesh, "Element", elem_shape); 
   
-  int label_dof = pumi_mesh_getNumEnt( mesh, 0); // Number of nodes on verts
+  int label_dof = pumi_mesh_getNumEnt( mesh, 0); 
+      // Number of nodes on verts
   int num_node_line = pumi_shape_getNumNode( node_shape, 1); 
   if (num_node_line > 0)
   {
-    label_dof+=num_node_line*pumi_mesh_getNumEnt( mesh,1); // Num nodes on edges
+    label_dof+=num_node_line*pumi_mesh_getNumEnt( mesh,1); 
+                          // Num nodes on edges
   }
   int label_elem = pumi_mesh_getNumEnt( mesh, mesh_dim);
 
   Line line; 
+  // Begin line with starting vertex
   line.put_back(start_vert, node_numbering);
-  int loop = 0;
-  int edgeCount = 0;
-  int vertCount = 0;
-  int elemCount = 0;
   while( (int)line.q.size() > 0)
   {
-    cout << "Loop Count " << loop++ << endl;
-    cout << "Line.q.size = " << line.q.size() << endl;
     pMeshEnt e = line.drop_front();
     if(! pumi_ment_isNumbered( e, node_numbering))
     {
-      cout << "Node Number set = " << label_dof;
       pumi_ment_setNumber( e, node_numbering, 0, 0, --label_dof);
-      cout << ", Total Nodes Numbered = " << ++vertCount << endl;
     }
     std::vector<pMeshEnt> list;
     if(pumi_ment_getDim( e) == 0)
     {
+      // Iterate on edges connected to vertex
       pMeshEnt vert = e;
       std::vector<pMeshEnt> adj_edges;
       pumi_ment_getAdj( vert, 1, adj_edges);
       for (int i=0; i<(int) adj_edges.size(); i++)
       {
-        cout << "Looping over Adj Edges" << endl;
         pMeshEnt edge = adj_edges[i];
         std::vector<pMeshEnt> adj_faces;
         pumi_ment_getAdj( edge, 2, adj_faces);
         for (int j=0; j<(int) adj_faces.size(); j++)
         {
-          cout << "Looping over Adj Faces" << endl;
+          // label faces not already labeled
           pMeshEnt face = adj_faces[j];
           if( !pumi_ment_isNumbered(face, elem_numbering))
           {
-            cout << "Element Number set = " << label_elem;
             pumi_ment_setNumber( face, elem_numbering, 0, 0, --label_elem);
-            cout << ", Total Elements Numbered = " << ++elemCount << endl;
           }
         }
         adj_faces.clear();
         adj_faces.resize(0);
-          /*ENQUEUE FACE HERE???*/
-        cout << "Getting otherVert" << endl;
+        // Get vertex opposite this one on current edge
         pMeshEnt otherVert = pumi_medge_getOtherVtx( edge, vert);
         if(pumi_shape_hasNode( node_shape, 1))
         {
           if(line.visited( otherVert, node_numbering) && 
              (!pumi_ment_isNumbered(edge,node_numbering)))
           {
-            cout << "Set Edge Number = " << label_dof ;
             pumi_ment_setNumber( edge, node_numbering, 0,0, --label_dof);
-            cout << ", Total Edges Numbered = " << ++edgeCount << endl;
           }
           else
           {
@@ -231,17 +223,16 @@ void reorder_mesh( pGeom geom, pMesh mesh, pMeshEnt start_vert)
       }
       adj_edges.clear();
       adj_edges.resize(0);
+      // Add contents of the list to the line
       line.add_list(list, node_numbering);
       list.clear();
       list.resize(0);
     }
-    else
-    {
-      cout << "Not a Vertex" << endl;
-    }
   }
+  // Write out reorded mesh
   pumi_mesh_write(mesh,"Reordered","vtk");
 
+  // Clean up
   pumi_numbering_delete( elem_numbering);
   pumi_numbering_delete( node_numbering);
 
