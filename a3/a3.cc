@@ -1,5 +1,12 @@
+//PUMI Headers
 #include <PCU.h>
 #include <pumi.h>
+
+//STL Headers
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 int main(int argc, char** argv)
 {
@@ -8,7 +15,7 @@ int main(int argc, char** argv)
   pGeom geom = pumi_geom_load("cube.dmg","mesh");
   pMesh mesh = pumi_mesh_load(geom,"parallelMesh.smb",2);
 
-  /* your code here */
+
 
   pumi_mesh_delete(mesh);
   pumi_finalize();
