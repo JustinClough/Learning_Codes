@@ -17,3 +17,6 @@
 
 #Slurm output
 slurm-**
+
+#Testing Output
+output.txt
