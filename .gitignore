@@ -10,3 +10,6 @@ build/
 
 #Ignore g++'s default executable
 a.out
+
+#Ignore g++'s pre-compiled headers
+*.gch
