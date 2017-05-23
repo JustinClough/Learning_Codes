@@ -28,6 +28,8 @@ add_executable( tpetra3 tpetra3.cpp)
 target_include_directories( tpetra3 PRIVATE ${ALL_INCS} ) 
 target_link_libraries( tpetra3 ${ALL_LIBS})
 
+#No code for exercise 4
+
 add_executable( tpetra5 tpetra5.cpp)
 target_include_directories( tpetra5 PRIVATE ${ALL_INCS} ) 
 target_link_libraries( tpetra5 ${ALL_LIBS})
@@ -39,3 +41,7 @@ target_link_libraries( tpetra6 ${ALL_LIBS})
 add_executable( tpetra7 tpetra7.cpp)
 target_include_directories( tpetra7 PRIVATE ${ALL_INCS} ) 
 target_link_libraries( tpetra7 ${ALL_LIBS})
+
+add_executable( belos_practice belos_practice.cpp)
+target_include_directories( belos_practice PRIVATE ${ALL_INCS} ) 
+target_link_libraries( belos_practice ${ALL_LIBS})
