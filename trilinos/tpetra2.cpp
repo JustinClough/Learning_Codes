@@ -204,23 +204,21 @@ exampleRoutine (const Teuchos::RCP<const Teuchos::Comm<int> >& comm,
   // process as contigMap, but distributes them differently, in
   // round-robin (1-D cyclic) fashion instead of contiguously.
   RCP<const map_type> cyclicMap;
-  {
-    // We'll use the version of the Map constructor that takes, on
-    // each MPI process, a list of the global entries in the Map
-    // belonging to that process.  You can use this constructor to
-    // construct an overlapping (also called "not 1-to-1") Map, in
-    // which one or more entries are owned by multiple processes.  We
-    // don't do that here; we make a nonoverlapping (also called
-    // "1-to-1") Map.
-    Array<global_ordinal_type>::size_type numEltsPerProc = 5;
-    Array<global_ordinal_type> elementList (numEltsPerProc);
-    const int numProcs = comm->getSize ();
-    const int myRank = comm->getRank ();
-    for (Array<global_ordinal_type>::size_type k = 0; k < numEltsPerProc; ++k) {
-      elementList[k] = myRank + k*numProcs;
-    }
-    cyclicMap = rcp (new map_type (numGlobalEntries, elementList, indexBase, comm));
+  // We'll use the version of the Map constructor that takes, on
+  // each MPI process, a list of the global entries in the Map
+  // belonging to that process.  You can use this constructor to
+  // construct an overlapping (also called "not 1-to-1") Map, in
+  // which one or more entries are owned by multiple processes.  We
+  // don't do that here; we make a nonoverlapping (also called
+  // "1-to-1") Map.
+  Array<global_ordinal_type>::size_type numEltsPerProc = 5;
+  Array<global_ordinal_type> elementList (numEltsPerProc);
+  const int numProcs = comm->getSize ();
+  const int myRank = comm->getRank ();
+  for (Array<global_ordinal_type>::size_type k = 0; k < numEltsPerProc; ++k) {
+    elementList[k] = myRank + k*numProcs;
   }
+  cyclicMap = rcp (new map_type (numGlobalEntries, elementList, indexBase, comm));
   // If there's more than one MPI process in the communicator,
   // then cyclicMap is definitely NOT contiguous.
   TEUCHOS_TEST_FOR_EXCEPTION(
