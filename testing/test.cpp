@@ -66,6 +66,7 @@ Square::Square( int a)
   set_h();
 }
 
+
 int main( int argc, char** argv ) 
 {
   // Declare an integer b and define value as 5
@@ -74,6 +75,7 @@ int main( int argc, char** argv )
   // Declare an integer pointer a, define it to point to the address of b
   int* a = &b;
 
+  // Iterate from 0 to the value pointed to by a
   for(int i=0; i<*a; i++)
   {
     std::cout << "i = " << i << std::endl;
