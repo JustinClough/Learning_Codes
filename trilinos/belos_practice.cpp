@@ -28,7 +28,7 @@ typedef Tpetra::Vector<>::local_ordinal_type local_ordinal_t;
 typedef Tpetra::CrsMatrix<> crs_mat_t;
 typedef Tpetra::Map<> map_t;
 
-RCP<crs_mat_t> make_A(RCP<const map_t> map, int n, std::ostream& out)
+RCP<crs_mat_t> make_A(RCP<const map_t> map, int n)
 {
   // Construct empty A, diagnol and off diag components
   RCP <crs_mat_t> A (new crs_mat_t (map,0));
@@ -49,21 +49,18 @@ RCP<crs_mat_t> make_A(RCP<const map_t> map, int n, std::ostream& out)
     // Assign index and values, edge cases first
     if( gblRow == 0)
     { // A(0,0:1) = [diag, off_diag]
-      out << "Placed first Row contents" << endl;
       A->insertGlobalValues( gblRow, 
             tuple<global_ordinal_t> (gblCol, gblCol+1), 
             tuple<scalar_t> (off_diag_comp, diag_comp));
     }
     else if( gblRow == n-1)
     { // A(n-1, n-2:n-1) = [off_diag, diag]
-      out << "Placed Last Row Contents" << endl;
       A->insertGlobalValues( gblRow, 
             tuple<global_ordinal_t> (gblCol-1, gblCol), 
             tuple<scalar_t> (diag_comp, off_diag_comp));
     }
     else
     { // A(i, i-1:i+1) = [off_diag, diag, off_diag]
-      out << "Placed row number " << int(lclRow) << "'s contents" << endl;
       A->insertGlobalValues( gblRow, 
             tuple<global_ordinal_t> (gblCol-1, gblCol, gblCol+1), 
             tuple<scalar_t> (off_diag_comp, diag_comp, off_diag_comp));
@@ -94,7 +91,7 @@ void solve_Axb(
   out << "||x||_2 = " << x.norm2() << endl;
   out << "||b||_2 = " << b.norm2() << endl;
 
-  make_A( map, n, out);
+  make_A( map, n);
   
   return;
 }
