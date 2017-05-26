@@ -4,8 +4,11 @@
 
 //STL Headers
 #include <iostream>
+#include <fstream>
 #include <set>
 #include <vector>
+#include <string>
+#include <sstream>
 
 using std::cout;
 using std::endl;
@@ -30,6 +33,14 @@ class collection_t
     { set.size();}
 };
 
+template <typename T>
+  std::string make_string( T num)
+  {
+    std::ostringstream ss;
+    ss << num;
+    return ss.str();
+  }
+
 void operation_1(pGeom geom, pMesh mesh)
 { // Determine the number of regions using each mesh vertex accounting for the full mesh (including edges on other parts)
   // For each part, list only the vertices owned by that part with local vertex number and the number of mesh 
@@ -50,9 +61,14 @@ void operation_1(pGeom geom, pMesh mesh)
     adj_ents.clear();
   }
   mesh->end(it);
+  
+  std::ofstream Op1Results;
+  std::string fName_s = "Op1Results_Proc" + make_string(pumi_rank()) +".txt";
+  char* fName = &fName_s[0u];
+  Op1Results.open( fName);
+  Op1Results << "Process " << pumi_rank() << " found " << regions.size() << " regions.\n";
 
-  cout << "Regions " << regions.size() << " on " << PCU_Comm_Self()  << endl;
-
+  Op1Results.close();
   return;
 } //END operation_1()
 
