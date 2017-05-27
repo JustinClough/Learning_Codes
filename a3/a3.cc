@@ -62,13 +62,31 @@ void operation_1(pGeom geom, pMesh mesh)
   }
   mesh->end(it);
   
+  // Have each process write its results for part 1 to a file
   std::ofstream Op1Results;
   std::string fName_s = "Op1Results_Proc" + make_string(pumi_rank()) +".txt";
   char* fName = &fName_s[0u];
   Op1Results.open( fName);
   Op1Results << "Process " << pumi_rank() << " found " << regions.size() << " regions.\n";
 
+  Op1Results << "\nVertex number owned by this part (G: Global ID, L: Local ID) and number of bounded regions (R):\n";
+  Op1Results << "G: \tL:\tR:\n" ;
+  it = mesh->begin(0);
+  while((vertex = mesh->iterate(it)))
+  {
+    if(pumi_ment_isOwned(vertex))
+    {
+      int localID = pumi_ment_getID(vertex);
+      int globalID = pumi_ment_getGlobalID(vertex);
+      Op1Results << globalID << "\t" ;
+      Op1Results << localID << "\t" ;
+      int num_adj = pumi_ment_getNumAdj(vertex, 3);
+      Op1Results << num_adj << "\n";
+    }
+  }
+  mesh->end(it);
   Op1Results.close();
+
   return;
 } //END operation_1()
 
