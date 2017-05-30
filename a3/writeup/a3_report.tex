@@ -1,0 +1,73 @@
+\documentclass[a4paper, 12pt]{article}
+\author{Justin Clough, RIN:661682899}
+\title{FEP: Assignment 3}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{float}
+\usepackage{enumerate}
+\usepackage{listings}
+\lstset{
+    frame=single,
+    breaklines=true,
+}
+
+\begin{document}
+\maketitle
+
+\section*{Algorithm Description}
+
+\subsection*{Operation 1} \label{sec:sub:op1}
+
+The number of mesh regions for each part was determined by 
+first iterating over all mesh vertices. For each mesh vertex, 
+its third dimensional adjacencies, surrounding mesh regions, were 
+collected into a temporary vector. The contents of this temporary 
+vector were then added to another data structure if it did not 
+already exist in the other structure. The size of this data 
+structure was then the number of regions on each part. The mesh
+vertices were then iterated over again. For each mesh vertex, 
+it was first checked if it was owned by the operating process. 
+If it was owned, then the local and global identification numbers 
+were recorded. The number of adjacent regions was recorded as well 
+for each vertex.
+
+\subsection*{Operation 2} \label{sec:sub:op2}
+
+A similar process as shown in Operation 1 was used. The number of
+mesh faces for each part was determined by first iterating over all mesh
+vertices. For each mesh vertex, 
+its first dimensional adjacencies, surrounding mesh edges, were 
+collected into a temporary vector. The contents of this temporary 
+vector were then added to another data structure if it did not 
+already exist in the other structure. The size of this data 
+structure was then the number of edges on each part. The mesh
+vertices were then iterated over again. For each mesh vertex, 
+it was first checked if it was owned by the operating process. 
+If it was owned, then the local and global identification numbers 
+were recorded. The number of adjacent faces was recorded as well 
+for each vertex.
+
+\subsection*{Operation 3} \label{sec:sub:op3}
+
+
+
+\section*{Operation 1 Results} \label{sec:results1}
+\lstinputlisting{
+  /lore/clougj/FiniteElementProgramming/a3/Op1Results_Proc0.txt}
+\lstinputlisting{
+  /lore/clougj/FiniteElementProgramming/a3/Op1Results_Proc1.txt}
+\section*{Operation 2 Results} \label{sec:results2}
+\lstinputlisting{
+  /lore/clougj/FiniteElementProgramming/a3/Op2Results_Proc0.txt}
+\lstinputlisting{
+  /lore/clougj/FiniteElementProgramming/a3/Op2Results_Proc1.txt}
+\section*{Operation 3 Results} \label{sec:results3}
+\lstinputlisting{
+  /lore/clougj/FiniteElementProgramming/a3/Op3Results_Proc0.txt}
+\lstinputlisting{
+  /lore/clougj/FiniteElementProgramming/a3/Op3Results_Proc1.txt}
+
+\newpage
+\section*{Code} \label{sec:code}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a3/a3.cc}
+
+\end{document}
