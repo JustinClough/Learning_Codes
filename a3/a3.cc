@@ -17,17 +17,28 @@ class collection_t
 {
   public:
     std::set<pMeshEnt> set;
+    std::vector<pMeshEnt> vector;
     void add_unqs(std::vector<pMeshEnt> ents)
     {// Add element only if unique
       for(int i=0; i<int(ents.size());i++)
       {
         pMeshEnt e = ents[i];
-        if(set.count(e)==0)
-        {
-          set.insert(e);
-        }
+        add_unq(e);
       }
       return;
+    }
+    void add_unq(pMeshEnt e)
+    {
+      if(set.count(e) == 0)
+      {
+        set.insert(e);
+        vector.push_back(e);
+      }
+      return;
+    }
+    void vectorize(std::vector<pMeshEnt>& in_vec)
+    {
+      in_vec = vector;
     }
     int size()
     { set.size();}
@@ -141,7 +152,7 @@ void operation_2(pGeom geom, pMesh mesh)
 
 void operation_3(pGeom geom, pMesh mesh)
 { // Count the number of mesh faces on the partition model face before migration.
-  // List the mesh regions on Part 1 that have at least one mesh face on teh partition model face between 1 and 2. 
+  // List the mesh regions on Part 1 that have at least one mesh face on the partition model face between 1 and 2. 
   // Migrate mesh regions from Part 1 to 2. 
   // Count the number of mesh faces on the partition model face after migration.
 
@@ -162,11 +173,61 @@ void operation_3(pGeom geom, pMesh mesh)
     }
   }
   mesh->end(it);
-
   Op3Results << "Process " << pumi_rank() << " found " 
           << pre_mig << " faces on the part boundary before migration.\n" ;
 
+  Migration* plan = new Migration(mesh);
+  if( pumi_rank() == 0)
+  {
+    Op3Results << "\nThe following regions (local ID) on part 1 have at least one face on the part boundary before migration:\n";
+    collection_t mig_regs;
+    pMeshEnt region;
+    it = mesh->begin(3);
+    while((region = mesh->iterate(it)))
+    {
+      if(pumi_ment_isOwned(region))
+      {
+        std::vector<pMeshEnt> adj_faces;
+        pumi_ment_getAdj(region, 2, adj_faces);
+        for(int i=0; i<(int)adj_faces.size(); i++)
+        {
+          if(pumi_ment_isOnBdry(adj_faces[i]))
+          {
+            mig_regs.add_unq(region);
+          }
+        }
+        adj_faces.clear();
+      }
+    }
+    mesh->end(it);
+    std::vector<pMeshEnt> regs;
+    mig_regs.vectorize(regs);
+    for(int i=0; i<(int)regs.size();i++)
+    {
+      Op3Results << pumi_ment_getID(regs[i]) << "\n";
+    }
 
+    for(int i=0; i<(int)mig_regs.size(); i++)
+    {
+      plan->send(mig_regs.vector[i], pumi_size()-1);
+    }
+  }
+
+  pumi_mesh_migrate(mesh, plan);
+  pumi_mesh_verify(mesh); 
+
+  int post_mig = 0;
+  it = mesh->begin(2);
+  while((face = mesh->iterate(it)))
+  {
+    if(pumi_ment_isOnBdry( face))
+    {
+      post_mig++;
+    }
+  }
+  mesh->end(it);
+  Op3Results << "Process " << pumi_rank() << " found " 
+          << post_mig << " faces on the part boundary after migration.\n" ;
   
   Op3Results.close();
   return;
