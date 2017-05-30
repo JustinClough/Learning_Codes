@@ -28,7 +28,9 @@ vertices were then iterated over again. For each mesh vertex,
 it was first checked if it was owned by the operating process. 
 If it was owned, then the local and global identification numbers 
 were recorded. The number of adjacent regions was recorded as well 
-for each vertex.
+for each vertex. The results for this operation are shown in the
+results section. Printed out content from process zero is followed
+by process one.
 
 \subsection*{Operation 2} \label{sec:sub:op2}
 
@@ -44,11 +46,37 @@ vertices were then iterated over again. For each mesh vertex,
 it was first checked if it was owned by the operating process. 
 If it was owned, then the local and global identification numbers 
 were recorded. The number of adjacent faces was recorded as well 
-for each vertex.
+for each vertex. The results for this operation are shown in the
+results section.
+Printed out content from process zero is followed
+by process one.
+
 
 \subsection*{Operation 3} \label{sec:sub:op3}
 
-
+The number of mesh faces on the partition model face before migration
+was determined by iterating over all mesh faces. An integer counter
+was started at zero and was incremented if a mesh face was on the 
+part boundary. After all mesh faces were iterated on, the value of 
+the counter was recorded. Next, a migration plan was constructed. 
+Process zero then iterated over all mesh regions. For each mesh 
+region, it was first checked if it was owned by process zero. If it
+was, then its second dimension adjacencies were collected in a 
+temporary vector. The faces in this temporary vector were then 
+iterated over and each checked if they were on the part boundary.
+If any of each region's faces were on the part boundary, then the 
+region was added to another data structure. The region was only added
+to this other data structure if it had not already been added. The 
+regions in this data structure were then iterated over. Each region was 
+then added to the migration plan and its local identification number 
+was recorded. Mesh migration was then performed and the resulting mesh
+was verified. The mesh faces were then iterated over again. A counter 
+was stared at zero and was incremented each time a face was found on 
+the boundary. The results for this operation are shown in the
+results section.
+Printed out content from process zero is followed
+by process one. The code to execute the above three process begins
+on page \pageref{sec:code}.
 
 \section*{Operation 1 Results} \label{sec:results1}
 \lstinputlisting{
