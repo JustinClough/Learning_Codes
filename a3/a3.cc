@@ -145,6 +145,30 @@ void operation_3(pGeom geom, pMesh mesh)
   // Migrate mesh regions from Part 1 to 2. 
   // Count the number of mesh faces on the partition model face after migration.
 
+  std::ofstream Op3Results;
+  std::string fName_s = "Op3Results_Proc" + make_string(pumi_rank()) + ".txt";
+  char* fName = &fName_s[0u];
+  Op3Results.open( fName);
+
+  int pre_mig = 0;
+  pMeshEnt face;
+  pMeshIter it;
+  it = mesh->begin(2);
+  while((face = mesh->iterate(it)))
+  {
+    if(pumi_ment_isOnBdry( face))
+    {
+      pre_mig++;
+    }
+  }
+  mesh->end(it);
+
+  Op3Results << "Process " << pumi_rank() << " found " 
+          << pre_mig << " faces on the part boundary before migration.\n" ;
+
+
+  
+  Op3Results.close();
   return;
 } //END operation_3()
 
