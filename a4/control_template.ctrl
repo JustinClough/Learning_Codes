@@ -1,0 +1,23 @@
+########################################
+# Comments follow after hash (#) character
+# Template begins after line of all hashes
+# Input must be in order shown
+# Input options are seperated by dashes
+# Input options are strings unless 
+#   noted otherwise
+########################################
+ELEMENT_ORDER linear - quadratic
+ELEMENT_SHAPE four_sided - three_sided
+GEOM_FILE <Geom_file_name>.dmg
+NEUMANN <Geom dim (int)> <Geom ID (int)> <Traction vector (X Y Z)>
+DIRICHLET <Geom dim (int)> <Geom ID (int)> <Position vector (X Y Z)>
+
+########################################
+# Example Below:
+########################################
+
+ELEMENT_ORDER linear
+ELEMENT_SHAPE four_sided
+GEOM_FILE /lore/clougj/FiniteElementProgramming/a4/rectangle.dmg
+NEUMANN   1 2 1 0 0 
+DIRICHLET 1 4 0 0 0 

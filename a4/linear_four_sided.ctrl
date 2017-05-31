@@ -1,0 +1,5 @@
+ELEMENT_ORDER linear
+ELEMENT_SHAPE four_sided
+GEOM_FILE /lore/clougj/FiniteElementProgramming/a4/rectangle.dmg
+NEUMANN 1 2 1 0 0 
+DIRICHLET 1 4 0 0 0 
