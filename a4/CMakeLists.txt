@@ -5,7 +5,7 @@
 
 cmake_minimum_required(VERSION 3.0.0)
 
-project(a1 VERSION 1.0.0 LANGUAGES CXX)
+project(a4 VERSION 1.0.0 LANGUAGES CXX)
 
 # Starting here are the critical lines:
 
