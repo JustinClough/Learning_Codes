@@ -20,3 +20,17 @@ slurm-**
 
 #Testing Output
 output.txt
+
+#Reordered meshes
+a2/Reordered_**
+
+#Results
+**/*Results*
+
+#a3 meshes
+a3/a3/
+a3/migrated/
+
+#Latex support files
+**.aux
+**.log
