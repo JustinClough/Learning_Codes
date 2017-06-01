@@ -1,3 +1,16 @@
+/*
+* Finite Element Analysis code
+* Reads geometry and problem definition
+* from control file. Assumes:
+*   - a rectangular geometry in the XY plane at Z=0. 
+*   - all potential dof associate with node points
+*   - number of dof per node is the same for all nodes
+*
+*
+*
+*/
+
+
 //PUMI Headers
 #include <PCU.h>
 #include <pumi.h>
@@ -21,19 +34,80 @@ class boundaryCond_t
     char type; // N for Neumann, D for Dirichlet
     int geom_dim;
     int geom_ID;
-    double cond[3];
+    int direction;
+    double value;
     bool DOG_zero;
-    void set_cond(double* vector);
     void print();
     boundaryCond_t();
 };
-
-void boundaryCond_t::set_cond(double* vector)
+class paramList
 {
-  for(int i=0;i<3;i++)
+  public:
+    int dimension;
+    int order;
+    int numSides;
+    double refinement;
+    pGeom geom;
+    pMesh mesh;
+    std::vector<boundaryCond_t> BCs;
+    void assign_BC(boundaryCond_t BonCon)
+    { BCs.push_back(BonCon); }
+    void print();
+};
+
+void print_error( string message);
+
+void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts);
+
+void print_comps(double* comps);
+
+void set_BC(string& cmd, string& action,paramList& list);
+
+void line_parse(string& line, size_t& pos, paramList& list);
+
+void parse_control(std::ifstream& file, paramList& list);
+
+void read_control(const char* ctrl, paramList& list);
+
+void create_elems(paramList& list);
+
+void create_mesh(paramList& list);
+
+void start(int argc, char** argv);
+
+void finish(paramList& list);
+
+int main(int argc, char** argv)
+{
+  if(argc != 2)
   {
-    cond[i] = vector[i];
+    printf("Usage: %s <Control>.ctrl\n", argv[0]);
+    return 0;
   }
+
+  start(argc, argv);
+
+  paramList list;
+
+  read_control(argv[1], list);
+  create_mesh(list);
+
+  finish(list);
+  return 0;
+}
+
+void finish(paramList& list)
+{
+  pumi_mesh_delete(list.mesh);
+  pumi_finalize();
+  MPI_Finalize();
+  return;
+}
+
+void start(int argc, char** argv)
+{
+  MPI_Init(&argc,&argv);
+  pumi_start();
   return;
 }
 
@@ -42,34 +116,31 @@ void boundaryCond_t::print()
   cout << "Type = " << type << endl;
   cout << "geom_dim = " << geom_dim << endl;
   cout << "geom_ID = " << geom_ID << endl;
-  cout << "Condition Vector = (" ;
-  for(int i=0; i<3; i++)
-  {
-    cout << cond[i] << " " ;
-  }
-  cout << "\b)" << endl;
+  cout << "Direction = " << direction << endl;
+  cout << "Value = " << value << endl;
   cout << "DOG_zero = " << DOG_zero << endl;
 }
 
 boundaryCond_t::boundaryCond_t ()
 {
-  for(int i=0; i<3; i++)
-  {
-    cond[i] = 0.0;
-  }
   DOG_zero = false;
 }
 
-class paramList
+void paramList::print()
 {
-  public:
-    int order;
-    int numSides;
-    pGeom geom;
-    std::vector<boundaryCond_t> BCs;
-    void assign_BC(boundaryCond_t BonCon)
-    { BCs.push_back(BonCon); }
-};
+  cout << "Dimension = " << dimension << endl;
+  cout << "Element Order = " << order << endl;
+  cout << "Element Sides = " << numSides << endl;
+  cout << "Mesh Refinement Level = " << refinement << endl;
+  cout << "Boundary Conditions set: " << endl;
+  for(int i=0; i<(int)BCs.size(); i++)
+  {
+    boundaryCond_t BC = BCs[i];
+    BC.print();
+    cout << endl;
+  }
+  return;
+}
 
 void print_error( string message)
 {
@@ -101,16 +172,32 @@ void set_BC(string& cmd, string& action,paramList& list)
     {
       geom_ID=std::atoi(value.c_str());
     }
-    else if (inst>=3 && inst<=5)
+    else if (inst==3)
     {
-      vector[inst-3] = std::atof(value.c_str());
+      if(value.compare("X")==0)
+      {
+        BC.direction = 0;
+      }
+      else if(value.compare("Y")==0)
+      {
+        BC.direction = 1;
+      }
+      else if(value.compare("Z")==0)
+      {
+        BC.direction = 2;
+      }
+      else { print_error("ERROR READING BOUNDARY CONDITION DIRECTION");}
+    }
+    else if (inst==4)
+    {
+      BC.value = std::atof(value.c_str());
     }
     else { print_error("ERROR READING BOUNDARY CONDITION VALUES");}
     action.erase(0, pos+delim.size());
     pos = action.find(delim);
   }
 
-  if(vector[0]==0 && vector[1]==0 && vector[2] == 0)
+  if(BC.value == 0)
   {
     zero_flag = true;
   }
@@ -127,7 +214,6 @@ void set_BC(string& cmd, string& action,paramList& list)
 
   BC.geom_dim = geom_dim;
   BC.geom_ID = geom_ID;
-  BC.set_cond(vector);
   BC.DOG_zero = zero_flag;
   list.assign_BC(BC);
   return;
@@ -169,13 +255,22 @@ void line_parse(string& line, size_t& pos, paramList& list)
   {
     set_BC(cmd, action, list);
   }
+  else if (cmd.compare("ELEMENT_SIZE")==0)
+  {
+    list.refinement = std::atof(action.c_str());
+  }
+  else if (cmd.compare("#")==0)
+  {
+    // is a commented line, do nothing
+  }
   else { print_error("ERROR READING CONTROL FILE");}
 
   return;
 }
 
 void parse_control(std::ifstream& file, paramList& list)
-{
+{ 
+  list.dimension = 2; // Hard code to only solve 2D problems
   string line;
   string delim = " ";
   while(std::getline(file, line))
@@ -198,34 +293,63 @@ void read_control(const char* ctrl, paramList& list)
   {
     parse_control(ctrlFile, list);
     ctrlFile.close();
-    cout << "Boundary Conditions set: " << endl;
-    for(int i=0; i<(int)list.BCs.size(); i++)
-    {
-      boundaryCond_t BC = list.BCs[i];
-      BC.print();
-      cout << endl;
-    }
   }
   else
   { print_error( "ERROR OPENING CONTROL FILE"); }
   return;
 }
 
-int main(int argc, char** argv)
+void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts)
 {
-  if(argc != 2)
+  double refine = list.refinement;
+  std::vector<pGeomEnt> geom_corners;
+  double coords[3] = {0,0,0};
+
+  gmi_model* gmi_m = (gmi_model*)(list.geom);
+  cout << "zero" << endl;
+  gmi_iter* it = gmi_begin(gmi_m, 1);
+  double p[2] = {0.0, 0.0};
+  apf::Vector3 x;
+  cout << "one" << endl;
+  if(gmi_can_eval(gmi_m))
   {
-    printf("Usage: %s <Control>.ctrl\n", argv[0]);
-    return 0;
+    gmi_ent* gmi_e = gmi_next(gmi_m, it);
+    cout << "two" << endl;
+    gmi_eval(gmi_m, gmi_e, p, &x[0]);
+    cout << "three" << endl;
   }
+  //print_comps(x);
   
-  MPI_Init(&argc,&argv);
-  pumi_start();
+  //int numXVerts =  
+  //int numYVerts = 
+  
+  return;
+}
 
-  paramList list;
+void create_elems(paramList& list)
+{
+  std::vector<pMeshEnt> verts;
+  create_mesh_verts(list, verts);
+  
+  return;
+}
 
-  read_control(argv[1], list);
+void create_mesh(paramList& list)
+{
+  list.mesh = pumi_mesh_create(list.geom, 2);
+  create_elems(list);
+  pumi_mesh_freeze(list.mesh);
 
-  pumi_finalize();
-  MPI_Finalize();
+  return;
+}
+
+void print_comps(double* comps)
+{
+  cout << "(";
+  for(int i=0; i<3; i++)
+  {
+    cout << comps[i] << " " ;
+  }
+  cout << "\b)\n" << endl;
+  return;
 }
