@@ -18,13 +18,24 @@ using std::string;
 class boundaryCond_t
 {
   public:
-    string type;
+    char type; // N for Neumann, D for Dirichlet
     int geom_dim;
     int geom_ID;
     double cond[3];
-    bool DOG;
+    bool DOG_zero;
+    void set_cond(double* vector);
     boundaryCond_t();
 };
+
+void boundaryCond_t::set_cond(double* vector)
+{
+  for(int i=0;i<3;i++)
+  {
+    cond[i] = vector[i];
+  }
+  return;
+}
+  
 
 boundaryCond_t::boundaryCond_t ()
 {
@@ -32,7 +43,7 @@ boundaryCond_t::boundaryCond_t ()
   {
     cond[i] = 0.0;
   }
-  DOG = false;
+  DOG_zero = false;
 }
 
 class paramList
@@ -56,8 +67,59 @@ void set_BC(string& cmd, string& action,paramList& list)
 {
   int geom_dim;
   int geom_ID;
+  bool zero_flag = false;
   double vector[3] = {0.0,0.0,0.0};
+  boundaryCond_t BC;
 
+  string delim = " ";
+  size_t oldpos = 0;
+  size_t pos = action.find(delim);
+  size_t null_pos = std::string::npos;
+  int inst = 0;
+  while(pos!=null_pos)
+  {
+    string value = action.substr(oldpos, pos);
+    inst++;
+    if(inst==1)
+    {
+      geom_dim=std::atoi(value.c_str());
+    }
+    else if (inst==2)
+    {
+      geom_ID=std::atoi(value.c_str());
+    }
+    else if (inst>=3 && inst<=5)
+    {
+      vector[inst-3] = std::atof(value.c_str());
+    }
+    else { print_error("ERROR READING BOUNDARY CONDITION VALUES");}
+    // assign
+    oldpos = pos;
+    action.erase(oldpos, oldpos+delim.size());
+    pos = action.find(delim);
+  }
+
+  if(vector[0]==0 && vector[1]==0 && vector[2] == 0)
+  {
+    zero_flag = true;
+  }
+
+  if(cmd.compare("NEUMANN")==0)
+  {
+    BC.type = 'N';
+  }
+  else if (cmd.compare("DIRICHLET")==0)
+  {
+    BC.type = 'D';
+  }
+  else { print_error("ERROR READING BOUNDARY CONDITION TYPE");}
+
+  BC.geom_dim = geom_dim;
+  BC.geom_ID = geom_ID;
+  BC.set_cond(vector);
+  BC.DOG_zero = zero_flag;
+  list.assign_BC(BC);
+  return;
 }
 
 void line_parse(string& line, size_t& pos, paramList& list)
