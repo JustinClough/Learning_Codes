@@ -24,6 +24,7 @@ class boundaryCond_t
     double cond[3];
     bool DOG_zero;
     void set_cond(double* vector);
+    void print();
     boundaryCond_t();
 };
 
@@ -35,7 +36,20 @@ void boundaryCond_t::set_cond(double* vector)
   }
   return;
 }
-  
+
+void boundaryCond_t::print()
+{
+  cout << "Type = " << type << endl;
+  cout << "geom_dim = " << geom_dim << endl;
+  cout << "geom_ID = " << geom_ID << endl;
+  cout << "Condition Vector = (" ;
+  for(int i=0; i<3; i++)
+  {
+    cout << cond[i] << " " ;
+  }
+  cout << "\b)" << endl;
+  cout << "DOG_zero = " << DOG_zero << endl;
+}
 
 boundaryCond_t::boundaryCond_t ()
 {
@@ -72,13 +86,12 @@ void set_BC(string& cmd, string& action,paramList& list)
   boundaryCond_t BC;
 
   string delim = " ";
-  size_t oldpos = 0;
   size_t pos = action.find(delim);
   size_t null_pos = std::string::npos;
   int inst = 0;
   while(pos!=null_pos)
   {
-    string value = action.substr(oldpos, pos);
+    string value = action.substr(0, pos);
     inst++;
     if(inst==1)
     {
@@ -93,9 +106,7 @@ void set_BC(string& cmd, string& action,paramList& list)
       vector[inst-3] = std::atof(value.c_str());
     }
     else { print_error("ERROR READING BOUNDARY CONDITION VALUES");}
-    // assign
-    oldpos = pos;
-    action.erase(oldpos, oldpos+delim.size());
+    action.erase(0, pos+delim.size());
     pos = action.find(delim);
   }
 
@@ -187,9 +198,16 @@ void read_control(const char* ctrl, paramList& list)
   {
     parse_control(ctrlFile, list);
     ctrlFile.close();
+    cout << "Boundary Conditions set: " << endl;
+    for(int i=0; i<(int)list.BCs.size(); i++)
+    {
+      boundaryCond_t BC = list.BCs[i];
+      BC.print();
+      cout << endl;
+    }
   }
   else
-  { cout << "Failed to open " << ctrl << endl; }
+  { print_error( "ERROR OPENING CONTROL FILE"); }
   return;
 }
 
