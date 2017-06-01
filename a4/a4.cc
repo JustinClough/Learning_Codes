@@ -191,16 +191,16 @@ void set_BC(string& cmd, string& action,paramList& list)
     else if (inst==4)
     {
       BC.value = std::atof(value.c_str());
+      if(BC.value == 0)
+      {
+        zero_flag = true;
+      }
     }
     else { print_error("ERROR READING BOUNDARY CONDITION VALUES");}
     action.erase(0, pos+delim.size());
     pos = action.find(delim);
   }
 
-  if(BC.value == 0)
-  {
-    zero_flag = true;
-  }
 
   if(cmd.compare("NEUMANN")==0)
   {
@@ -302,26 +302,21 @@ void read_control(const char* ctrl, paramList& list)
 void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts)
 {
   double refine = list.refinement;
-  std::vector<pGeomEnt> geom_corners;
   double coords[3] = {0,0,0};
 
-  gmi_model* gmi_m = (gmi_model*)(list.geom);
-  cout << "zero" << endl;
-  gmi_iter* it = gmi_begin(gmi_m, 1);
-  double p[2] = {0.0, 0.0};
-  apf::Vector3 x;
-  cout << "one" << endl;
-  if(gmi_can_eval(gmi_m))
-  {
-    gmi_ent* gmi_e = gmi_next(gmi_m, it);
-    cout << "two" << endl;
-    gmi_eval(gmi_m, gmi_e, p, &x[0]);
-    cout << "three" << endl;
-  }
-  //print_comps(x);
+  gModel* g_mod = (gModel*)(list.geom); // Cast pGeom to gModel*
+  gmi_model* m = g_mod->getGmi();  // Assign hidden gmi_mod
+
+  gmi_iter* it = gmi_begin( m, 0);
+
+  gmi_ent* g_ent = gmi_next( m, it);
   
-  //int numXVerts =  
-  //int numYVerts = 
+  double p[2] = {0.0, 0.0};
+  double x[3] = {0.0, 0.0, 0.0};
+
+  gmi_eval( m, g_ent, p, x);
+
+  
   
   return;
 }
@@ -329,7 +324,7 @@ void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts)
 void create_elems(paramList& list)
 {
   std::vector<pMeshEnt> verts;
-  create_mesh_verts(list, verts);
+  //create_mesh_verts(list, verts);
   
   return;
 }
