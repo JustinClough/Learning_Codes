@@ -1,16 +1,17 @@
 ########################################
 # Comments follow after hash (#) character
+# Comments must start at the begining of lines
 # Template begins after line of all hashes
-# Input must be in order shown
 # Input options are seperated by dashes
 # Input options are strings unless 
 #   noted otherwise
 ########################################
 ELEMENT_ORDER linear - quadratic
 ELEMENT_SHAPE four_sided - three_sided
+ELEMENT_SIZE <Max allowable size relative to min geom length (double)>
 GEOM_FILE <Geom_file_name>.dmg
-NEUMANN <Geom dim (int)> <Geom ID (int)> <Traction vector (X Y Z)>
-DIRICHLET <Geom dim (int)> <Geom ID (int)> <Position vector (X Y Z)>
+NEUMANN <Geom dim (int)> <Geom ID (int)> <Direction (X, Y, Z)> <value>
+DIRICHLET <Geom dim (int)> <Geom ID (int)> <Direction (X, Y, Z) for DOG> <value>
 
 ########################################
 # Example Below:
@@ -19,5 +20,5 @@ DIRICHLET <Geom dim (int)> <Geom ID (int)> <Position vector (X Y Z)>
 ELEMENT_ORDER linear
 ELEMENT_SHAPE four_sided
 GEOM_FILE /lore/clougj/FiniteElementProgramming/a4/rectangle.dmg
-NEUMANN   1 2 1 0 0 
-DIRICHLET 1 4 0 0 0 
+NEUMANN   1 2 X 10.1
+DIRICHLET 1 4 X 0 
