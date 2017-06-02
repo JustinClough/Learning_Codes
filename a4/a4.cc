@@ -14,6 +14,9 @@
 //PUMI Headers
 #include <PCU.h>
 #include <pumi.h>
+#include "gmi_mesh.h"
+#include "gmi_sim.h"
+#include <SimUtil.h>
 
 //STL Headers
 #include <iostream>
@@ -48,12 +51,15 @@ class paramList
     int numSides;
     double refinement;
     pGeom geom;
+    gmi_model* gmi_geom;    
     pMesh mesh;
     std::vector<boundaryCond_t> BCs;
     void assign_BC(boundaryCond_t BonCon)
     { BCs.push_back(BonCon); }
     void print();
 };
+
+void print_test();
 
 void print_error( string message);
 
@@ -99,6 +105,9 @@ int main(int argc, char** argv)
 void finish(paramList& list)
 {
   pumi_mesh_delete(list.mesh);
+  gmi_sim_stop();
+  Sim_unregisterAllKeys();
+  SimUtil_stop();
   pumi_finalize();
   MPI_Finalize();
   return;
@@ -108,6 +117,11 @@ void start(int argc, char** argv)
 {
   MPI_Init(&argc,&argv);
   pumi_start();
+  SimUtil_start();
+  Sim_readLicenseFile(0);
+  gmi_sim_start();
+  gmi_register_mesh();
+  gmi_register_sim();
   return;
 }
 
@@ -251,6 +265,10 @@ void line_parse(string& line, size_t& pos, paramList& list)
   {
     list.geom = pumi_geom_load(action.c_str(), "mesh");
   }
+  else if (cmd.compare("SIM_GEOM_FILE")==0)
+  {
+    list.gmi_geom = gmi_sim_load( 0, action.c_str());
+  }
   else if (cmd.compare("NEUMANN")==0 || cmd.compare("DIRICHLET")==0)
   {
     set_BC(cmd, action, list);
@@ -304,19 +322,29 @@ void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts)
   double refine = list.refinement;
   double coords[3] = {0,0,0};
 
-  gModel* g_mod = (gModel*)(list.geom); // Cast pGeom to gModel*
-  gmi_model* m = g_mod->getGmi();  // Assign hidden gmi_mod
+  gmi_model* m = list.gmi_geom;
 
   gmi_iter* it = gmi_begin( m, 0);
 
-  gmi_ent* g_ent = gmi_next( m, it);
-  
-  double p[2] = {0.0, 0.0};
+  gmi_ent* g_ent;
+
+  double p[2] = {1.0, 1.0};
   double x[3] = {0.0, 0.0, 0.0};
 
-  gmi_eval( m, g_ent, p, x);
+  if(gmi_can_eval(m))
+  {
+    for(int i=0; i<4; i++)
+    {
+      gmi_ent* g_ent = gmi_next( m, it);
+      gmi_eval( m, g_ent, p, x);
+    }
+  }
+  else
+  {
+    print_error("CANNOT EVALUATE MODEL");
+  }
 
-  
+
   
   return;
 }
@@ -324,7 +352,7 @@ void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts)
 void create_elems(paramList& list)
 {
   std::vector<pMeshEnt> verts;
-  //create_mesh_verts(list, verts);
+  create_mesh_verts(list, verts);
   
   return;
 }
@@ -346,5 +374,11 @@ void print_comps(double* comps)
     cout << comps[i] << " " ;
   }
   cout << "\b)\n" << endl;
+  return;
+}
+
+void print_test()
+{
+  cout << "Hello World" << endl;
   return;
 }

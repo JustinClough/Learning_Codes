@@ -10,6 +10,7 @@ ELEMENT_ORDER linear - quadratic
 ELEMENT_SHAPE four_sided - three_sided
 ELEMENT_SIZE <Max allowable size relative to min geom length (double)>
 GEOM_FILE <Geom_file_name>.dmg
+SIM_GEOM_FILE <Geom_file_name>.smd
 NEUMANN <Geom dim (int)> <Geom ID (int)> <Direction (X, Y, Z)> <value>
 DIRICHLET <Geom dim (int)> <Geom ID (int)> <Direction (X, Y, Z) for DOG> <value>
 
