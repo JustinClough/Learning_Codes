@@ -320,22 +320,18 @@ void read_control(const char* ctrl, paramList& list)
 void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts)
 {
   double refine = list.refinement;
-  double coords[3] = {0,0,0};
 
   gmi_model* m = list.gmi_geom;
-
   gmi_iter* it = gmi_begin( m, 0);
-
   gmi_ent* g_ent;
-
-  double p[2] = {1.0, 1.0};
-  double x[3] = {0.0, 0.0, 0.0};
-
   if(gmi_can_eval(m))
   {
-    for(int i=0; i<4; i++)
+    double p[2] = {1.0, 1.0};
+    double x[3] = {0.0, 0.0, 0.0};
+    int i = 0;
+    while((g_ent=gmi_next(m,it)))
     {
-      gmi_ent* g_ent = gmi_next( m, it);
+      i++;
       gmi_eval( m, g_ent, p, x);
     }
   }
