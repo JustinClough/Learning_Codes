@@ -3,19 +3,21 @@
 * Reads geometry and problem definition
 * from control file. Assumes:
 *   - a rectangular geometry in the XY plane at Z=0. 
+*   - edges of geometry alinged with coordiate axes
 *   - all potential dof associate with node points
 *   - number of dof per node is the same for all nodes
-*
-*
-*
 */
 
 
 //PUMI Headers
 #include <PCU.h>
 #include <pumi.h>
+
+// GMI Headers
 #include "gmi_mesh.h"
 #include "gmi_sim.h"
+
+// Simmetrix Headers
 #include <SimUtil.h>
 
 //STL Headers
@@ -26,6 +28,7 @@
 #include <string>
 #include <sstream>
 #include <cstdlib>
+#include <math.h>
 
 using std::cout;
 using std::endl;
@@ -59,28 +62,19 @@ class paramList
     void print();
 };
 
+void get_bounding_coords(gmi_model* m, double* min, double* max);
 void print_test();
-
+void compare_coords(double* a, double* min, double* max);
 void print_error( string message);
-
 void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts);
-
 void print_comps(double* comps);
-
 void set_BC(string& cmd, string& action,paramList& list);
-
 void line_parse(string& line, size_t& pos, paramList& list);
-
 void parse_control(std::ifstream& file, paramList& list);
-
 void read_control(const char* ctrl, paramList& list);
-
 void create_elems(paramList& list);
-
 void create_mesh(paramList& list);
-
 void start(int argc, char** argv);
-
 void finish(paramList& list);
 
 int main(int argc, char** argv)
@@ -99,6 +93,7 @@ int main(int argc, char** argv)
   create_mesh(list);
 
   finish(list);
+  cout << "Success!" << endl;
   return 0;
 }
 
@@ -317,31 +312,69 @@ void read_control(const char* ctrl, paramList& list)
   return;
 }
 
-void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts)
+void compare_coords(double* a, double* min, double* max)
 {
-  double refine = list.refinement;
+  static bool called = false;
+  if (!called)
+  {
+    min = a;
+    max = a;
+    called = true;
+  }
+  else
+  {
+    for(int i=0; i<3; i++)
+    {
+      if(a[i]<min[i])
+      {
+        min[i] = a[i];
+      }
+      if(a[i]>max[i])
+      {
+        max[i] = a[i];
+      }
+    }
+  }
+  return;
+}
 
-  gmi_model* m = list.gmi_geom;
+void get_bounding_coords(gmi_model* m, double* min, double* max)
+{
   gmi_iter* it = gmi_begin( m, 0);
   gmi_ent* g_ent;
   if(gmi_can_eval(m))
   {
-    double p[2] = {1.0, 1.0};
+    double p[2] = {0.0, 0.0};
     double x[3] = {0.0, 0.0, 0.0};
-    int i = 0;
     while((g_ent=gmi_next(m,it)))
     {
-      i++;
       gmi_eval( m, g_ent, p, x);
+      compare_coords(x, min, max);
     }
   }
   else
-  {
-    print_error("CANNOT EVALUATE MODEL");
-  }
+  { print_error("CANNOT EVALUATE MODEL"); }
+  return;
+}
 
+void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts)
+{
+  double min[] = {0.0, 0.0, 0.0};
+  double max[] = {0.0, 0.0, 0.0};
+  gmi_model* m = list.gmi_geom;
+  get_bounding_coords(m, min, max);
 
-  
+  double refine = list.refinement;
+  double length = max[0] - min[0];
+  double height = max[1] - min[1];
+
+  double spacing_x = length*refine;
+  double spacing_y = height*refine;
+  int numXVerts = (int)ceil(length/spacing_x);
+  int numYVerts = (int)ceil(height/spacing_y);
+  numXVerts++;  
+  numYVerts++;
+
   return;
 }
 
