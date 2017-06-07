@@ -122,6 +122,7 @@ class paramList
     void print();
 };
 
+double get_sq_magnitude( double* Coords);
 void make_element( paramList& list, pMeshEnt* downward);
 void write_mesh( pMesh mesh, const char* name);
 double coord_get_mag( double* coord);
@@ -713,4 +714,15 @@ void reorder_mesh(paramList& list)
 {
 
   return;
+}
+
+double get_sq_magnitude( double* Coords)
+{
+  double sq_mag = 0.0;
+  // Calculate sum of squares of components 
+  for (int i=0; i<3; i++)
+  {
+    sq_mag = sq_mag + (Coords[i])*(Coords[i]); 
+  }
+  return sq_mag;
 }
