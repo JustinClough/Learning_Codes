@@ -45,37 +45,10 @@ class Line
   public:
     std::deque<pMeshEnt> q;
     std::set<pMeshEnt> set;
-    void put_back(pMeshEnt e, pNumbering num)
-    {
-      if( (set.count(e) == 0) && (!pumi_ment_isNumbered( e, num)))
-      {
-        q.push_back(e);
-        set.insert(e);
-      }
-    }
-    pMeshEnt drop_front()
-    {
-      pMeshEnt e = q.front();
-      q.pop_front();
-      set.erase(e);
-      return e;
-    }
-    bool visited( pMeshEnt e, pNumbering num)
-    {
-      bool isin;
-      if(set.count(e) > 0)
-      {
-        isin = true;
-      }
-     return (pumi_ment_isNumbered( e, num) || isin);
-    }
-    void add_list( std::vector<pMeshEnt> list, pNumbering num)
-    {
-      for(int i=0; i< (int) list.size(); i++)
-      {
-        put_back(list[i], num);
-      }
-    }
+    void put_back(pMeshEnt e, pNumbering num);
+    pMeshEnt drop_front();
+    bool visited( pMeshEnt e, pNumbering num);
+    void add_list( std::vector<pMeshEnt> list, pNumbering num);
 };
 
 class classification_t
@@ -782,3 +755,38 @@ pMeshEnt find_start( pGeom geom, pMesh mesh)
   std::cout << "Found starting vertex." << std::endl;
   return Start_Vert;
 } //END find_start( pGeom geom, pMesh mesh);
+
+void Line::put_back(pMeshEnt e, pNumbering num)
+{
+  if( (set.count(e) == 0) && (!pumi_ment_isNumbered( e, num)))
+  {
+    q.push_back(e);
+    set.insert(e);
+  }
+}
+
+pMeshEnt Line::drop_front()
+{
+  pMeshEnt e = q.front();
+  q.pop_front();
+  set.erase(e);
+  return e;
+}
+
+bool Line::visited( pMeshEnt e, pNumbering num)
+{
+  bool isin;
+  if(set.count(e) > 0)
+  {
+    isin = true;
+  }
+  return (pumi_ment_isNumbered( e, num) || isin);
+}
+
+void Line::add_list( std::vector<pMeshEnt> list, pNumbering num)
+{
+  for(int i=0; i< (int) list.size(); i++)
+  {
+    put_back(list[i], num);
+  }
+}
