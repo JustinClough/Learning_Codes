@@ -66,6 +66,8 @@ class paramList
     int dimension;
     int order;
     int numSides;
+    int numXVerts;
+    int numYVerts;
     double refinement;
     pGeom geom;
     gmi_model* gmi_geom;    
@@ -76,6 +78,7 @@ class paramList
     void print();
 };
 
+pMeshEnt make_element( paramList& list, pMeshEnt* downward);
 void write_mesh( pMesh mesh, const char* name);
 double coord_get_mag( double* coord);
 void coord_get_diff(double* coord1, double* coord2, double* ans);
@@ -421,6 +424,8 @@ void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts)
   // Add one since 'one vert needed for space of zero width'
   numXVerts++;  
   numYVerts++;
+  list.numXVerts = numXVerts;
+  list.numYVerts = numYVerts; 
 
   pMeshEnt vert;
   int dim;
@@ -506,6 +511,20 @@ void create_elems(paramList& list)
 {
   std::vector<pMeshEnt> verts;
   create_mesh_verts(list, verts);
+  
+  for(int j=0; j<list.numYVerts-1-1;j++)
+  {
+    for(int i=0; i<list.numXVerts-1; i++)
+    {
+      pMeshEnt downward[4];
+      int base = i+j*list.numXVerts;
+      downward[0] = verts[base];
+      downward[1] = verts[base+1];
+      downward[2] = verts[base+list.numXVerts+1];
+      downward[3] = verts[base+list.numXVerts];
+      make_element(list, downward);
+    }
+  }
   
   return;
 }
@@ -619,4 +638,21 @@ void write_mesh(pMesh mesh, const char* name)
 
   pumi_mesh_write( mesh, name, "vtk");
   return;
+}
+
+pMeshEnt make_element( paramList& list, pMeshEnt* downward)
+{
+  pMeshEnt ent;
+  if(list.numSides == 3)
+  {
+
+  }
+  else if (list.numSides == 4)
+  {
+
+  } 
+  else 
+  { print_error("ERROR: UNDEFINED NUMBER OF ELEMENT SIDES");}
+
+  return ent;
 }
