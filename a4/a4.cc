@@ -122,6 +122,7 @@ class paramList
     void print();
 };
 
+pMeshEnt find_start( pGeom geom, pMesh mesh);
 double get_sq_magnitude( double* Coords);
 void make_element( paramList& list, pMeshEnt* downward);
 void write_mesh( pMesh mesh, const char* name);
@@ -726,3 +727,58 @@ double get_sq_magnitude( double* Coords)
   }
   return sq_mag;
 }
+
+pMeshEnt find_start( pGeom geom, pMesh mesh)
+{
+  std::vector<pMeshEnt> model_Verts;
+  std::vector<pMeshEnt> Verts;
+  pMeshEnt Start_Vert;
+  double Coords[3] = {0,0,0};
+  double Sum_Coords[3] = {0,0,0}; 
+  double Ave_Coords[3] = {0,0,0};
+  double Dif_Coords[3] = {0,0,0};
+  double distance = 0.0;
+  double g_distance = 0.0;
+  double n = 0;
+
+  for(pGeomIter it=geom->begin(0); it!=geom->end(0); ++it)
+  {
+    pumi_gent_getRevClas( *it, model_Verts);
+    Verts.push_back(model_Verts[0]);
+    // Update vertex set stats
+    pumi_node_getCoord( model_Verts[0], 0, Coords);
+    model_Verts.clear();
+    for(int i=0; i<3; i++)
+    {
+      Sum_Coords[i] = Coords[i];
+    }
+    n = n + 1.0;
+  }
+  // Get average location of all model vertices
+  for(int i=0; i<3; i++)
+  {
+    Ave_Coords[i] = Sum_Coords[i]/n;
+  }
+
+  for( int i=0; i< (int)Verts.size(); i++)
+  {
+    pumi_node_getCoord( Verts[i], 0, Coords);
+    // Compare this vertex's coordinates to the average; get the distance
+    for(int j=0; j<3; j++)
+    {
+      Dif_Coords[j] = Ave_Coords[j] - Coords[j];
+    } 
+    distance = get_sq_magnitude( Dif_Coords );
+    // If this vertex is further from the center of all vertices than all others
+    //  (ties go to the home team, not runner)
+    if( distance > g_distance)
+    {
+      Start_Vert = Verts[i];
+      g_distance = distance;
+    }
+  }
+  Verts.clear();
+
+  std::cout << "Found starting vertex." << std::endl;
+  return Start_Vert;
+} //END find_start( pGeom geom, pMesh mesh);
