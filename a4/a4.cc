@@ -9,9 +9,13 @@
 */
 
 
-//PUMI Headers
+// PUMI Headers
 #include <PCU.h>
 #include <pumi.h>
+
+// APF Headers
+#include <apfNumbering.h>
+#include <apfShape.h>
 
 // GMI Headers
 #include "gmi_mesh.h"
@@ -25,6 +29,8 @@
 #include <fstream>
 #include <set>
 #include <vector>
+#include <deque>
+#include <iterator>
 #include <string>
 #include <sstream>
 #include <cstdlib>
@@ -33,6 +39,44 @@
 using std::cout;
 using std::endl;
 using std::string;
+
+class Line
+{
+  public:
+    std::deque<pMeshEnt> q;
+    std::set<pMeshEnt> set;
+    void put_back(pMeshEnt e, pNumbering num)
+    {
+      if( (set.count(e) == 0) && (!pumi_ment_isNumbered( e, num)))
+      {
+        q.push_back(e);
+        set.insert(e);
+      }
+    }
+    pMeshEnt drop_front()
+    {
+      pMeshEnt e = q.front();
+      q.pop_front();
+      set.erase(e);
+      return e;
+    }
+    bool visited( pMeshEnt e, pNumbering num)
+    {
+      bool isin;
+      if(set.count(e) > 0)
+      {
+        isin = true;
+      }
+     return (pumi_ment_isNumbered( e, num) || isin);
+    }
+    void add_list( std::vector<pMeshEnt> list, pNumbering num)
+    {
+      for(int i=0; i< (int) list.size(); i++)
+      {
+        put_back(list[i], num);
+      }
+    }
+};
 
 class classification_t
 {
@@ -96,6 +140,7 @@ void create_elems(paramList& list);
 void create_mesh(paramList& list);
 void start(int argc, char** argv);
 void finish(paramList& list);
+void reorder_mesh(paramList& list);
 pGeomEnt get_ent( paramList& list, double* pos, int dim);
 
 int main(int argc, char** argv)
@@ -112,6 +157,7 @@ int main(int argc, char** argv)
 
   read_control(argv[1], list);
   create_mesh(list);
+  reorder_mesh(list);
 
   finish(list);
   cout << "Success!" << endl;
@@ -659,6 +705,12 @@ void make_element( paramList& list, pMeshEnt* downward)
   } 
   else 
   { print_error("ERROR: UNDEFINED NUMBER OF ELEMENT SIDES");}
+
+  return;
+}
+
+void reorder_mesh(paramList& list)
+{
 
   return;
 }
