@@ -76,6 +76,7 @@ class paramList
     void print();
 };
 
+void write_mesh( pMesh mesh, const char* name);
 double coord_get_mag( double* coord);
 void coord_get_diff(double* coord1, double* coord2, double* ans);
 void get_bounding_coords(gmi_model* m, double* min, double* max);
@@ -443,31 +444,55 @@ void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts)
         }
         else if(j==(numYVerts-1)) // top point
         {
+          dim = 0;
+          pGeomEnt g_ent = get_ent( list,  position, dim);
+          vert = pumi_mesh_createVtx( list.mesh, g_ent , position);
         }
         else // anywhere else on the line
         {
+          dim = 1;
+          pGeomEnt g_ent = get_ent( list,  position, dim);
+          vert = pumi_mesh_createVtx( list.mesh, g_ent , position);
         }
       }
       else if( i==(numXVerts-1)) // right edge
       {
         if(j==0) // bottom point
         {
+          dim = 0;
+          pGeomEnt g_ent = get_ent( list,  position, dim);
+          vert = pumi_mesh_createVtx( list.mesh, g_ent , position);
         }
         else if(j==(numYVerts-1)) // top point
         {
+          dim = 0;
+          pGeomEnt g_ent = get_ent( list,  position, dim);
+          vert = pumi_mesh_createVtx( list.mesh, g_ent , position);
         }
         else // anywhere else on the line
         {
+          dim = 1;
+          pGeomEnt g_ent = get_ent( list,  position, dim);
+          vert = pumi_mesh_createVtx( list.mesh, g_ent , position);
         }
       }
       else if ( j== 0 ) // bottom edge, not including end points
       {
+        dim = 1;
+        pGeomEnt g_ent = get_ent( list,  position, dim);
+        vert = pumi_mesh_createVtx( list.mesh, g_ent , position);
       }
       else if ( j== (numYVerts-1)) // top edge, not including end points
       {
+        dim = 1;
+        pGeomEnt g_ent = get_ent( list,  position, dim);
+        vert = pumi_mesh_createVtx( list.mesh, g_ent , position);
       }
       else // somewhere on the face
       {
+        dim = 2;
+        pGeomEnt g_ent = get_ent( list,  position, dim);
+        vert = pumi_mesh_createVtx( list.mesh, g_ent , position);
       }
 
       verts.push_back(vert);
@@ -490,7 +515,7 @@ void create_mesh(paramList& list)
   list.mesh = pumi_mesh_create(list.geom, 2);
   create_elems(list);
   pumi_mesh_freeze(list.mesh);
-
+  write_mesh( list.mesh, "mesh");
   return;
 }
 
@@ -584,5 +609,14 @@ void classification_t::get_min_mag( gmi_ent* ent)
     }
   }
   ent = min_ent;
+  return;
+}
+void write_mesh(pMesh mesh, const char* name)
+{
+  cout << "Number of Vertices: " << pumi_mesh_getNumEnt(mesh, 0) << "\n";
+  cout << "Number of Edges: " << pumi_mesh_getNumEnt(mesh, 1) << "\n";
+  cout << "Number of Faces: " << pumi_mesh_getNumEnt(mesh, 2) << "\n";
+
+  pumi_mesh_write( mesh, name, "vtk");
   return;
 }
