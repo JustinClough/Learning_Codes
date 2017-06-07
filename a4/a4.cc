@@ -78,7 +78,7 @@ class paramList
     void print();
 };
 
-pMeshEnt make_element( paramList& list, pMeshEnt* downward);
+void make_element( paramList& list, pMeshEnt* downward);
 void write_mesh( pMesh mesh, const char* name);
 double coord_get_mag( double* coord);
 void coord_get_diff(double* coord1, double* coord2, double* ans);
@@ -512,7 +512,7 @@ void create_elems(paramList& list)
   std::vector<pMeshEnt> verts;
   create_mesh_verts(list, verts);
   
-  for(int j=0; j<list.numYVerts-1-1;j++)
+  for(int j=0; j<list.numYVerts-1;j++)
   {
     for(int i=0; i<list.numXVerts-1; i++)
     {
@@ -640,19 +640,25 @@ void write_mesh(pMesh mesh, const char* name)
   return;
 }
 
-pMeshEnt make_element( paramList& list, pMeshEnt* downward)
+void make_element( paramList& list, pMeshEnt* downward)
 {
   pMeshEnt ent;
+  pGeomIter it = (list.geom)->begin(2);
+  pGeomEnt g_ent = *it;
   if(list.numSides == 3)
   {
-
+    for (int i=0; i<2; i++)
+    {
+    pMeshEnt down[] = {downward[0], downward[1+i], downward[2+i]};
+    pumi_mesh_createElem(list.mesh, g_ent, PUMI_TRIANGLE, down);
+    }
   }
   else if (list.numSides == 4)
   {
-
+    pumi_mesh_createElem(list.mesh, g_ent, PUMI_QUAD, downward);
   } 
   else 
   { print_error("ERROR: UNDEFINED NUMBER OF ELEMENT SIDES");}
 
-  return ent;
+  return;
 }
