@@ -34,6 +34,19 @@ using std::cout;
 using std::endl;
 using std::string;
 
+class classification_t
+{
+  private:
+    std::vector<gmi_ent*> ents;
+    std::vector<double> mags;
+  public:
+    void push_back(gmi_ent* ent, double mag);
+    void get(int i, gmi_ent* ent, double mag);
+    void clear();
+    int size();
+    void get_min_mag( gmi_ent* ent);
+};
+
 class boundaryCond_t
 {
   public:
@@ -43,6 +56,7 @@ class boundaryCond_t
     int direction;
     double value;
     bool DOG_zero;
+    bool DOG;
     void print();
     boundaryCond_t();
 };
@@ -62,6 +76,8 @@ class paramList
     void print();
 };
 
+double coord_get_mag( double* coord);
+void coord_get_diff(double* coord1, double* coord2, double* ans);
 void get_bounding_coords(gmi_model* m, double* min, double* max);
 void print_test();
 void compare_coords(double* a, double* min, double* max);
@@ -76,6 +92,7 @@ void create_elems(paramList& list);
 void create_mesh(paramList& list);
 void start(int argc, char** argv);
 void finish(paramList& list);
+pGeomEnt get_ent( paramList& list, double* pos, int dim);
 
 int main(int argc, char** argv)
 {
@@ -132,6 +149,7 @@ void boundaryCond_t::print()
 
 boundaryCond_t::boundaryCond_t ()
 {
+  DOG = false;
   DOG_zero = false;
 }
 
@@ -218,6 +236,7 @@ void set_BC(string& cmd, string& action,paramList& list)
   else if (cmd.compare("DIRICHLET")==0)
   {
     BC.type = 'D';
+    BC.DOG = true;
   }
   else { print_error("ERROR READING BOUNDARY CONDITION TYPE");}
 
@@ -343,8 +362,7 @@ void get_bounding_coords(gmi_model* m, double* min, double* max)
   gmi_iter* it = gmi_begin( m, 0);
   gmi_ent* g_ent;
   if(gmi_can_eval(m))
-  {
-    double p[2] = {0.0, 0.0};
+  { double p[2] = {0.0, 0.0};
     double x[3] = {0.0, 0.0, 0.0};
     while((g_ent=gmi_next(m,it)))
     {
@@ -354,7 +372,35 @@ void get_bounding_coords(gmi_model* m, double* min, double* max)
   }
   else
   { print_error("CANNOT EVALUATE MODEL"); }
+  gmi_end(m, it);
   return;
+}
+
+pGeomEnt get_ent( paramList& list, double* pos, int dim)
+{
+  gmi_ent* gmiEnt;
+  gmi_model* model = list.gmi_geom;
+  gmi_iter* it = gmi_begin( model, dim);
+  double to[] = {0.0, 0.0, 0.0};
+  double to_p[] = {0.0,0.0};
+  classification_t classif;
+  while((gmiEnt = gmi_next( model, it)))
+  {
+    double ans[] = {0.0, 0.0, 0.0};
+    double res[] = {0.0, 0.0, 0.0};
+    double diff[] = {0.0, 0.0, 0.0};
+    gmi_closest_point(model, gmiEnt, pos, to, to_p);
+    gmi_eval(model, gmiEnt, to_p, res);
+    coord_get_diff(pos, res, diff); 
+    double mag = coord_get_mag(diff);
+    classif.push_back(gmiEnt, mag);
+  }
+  gmi_end(model, it);
+  gmi_ent* answer_gmiEnt;
+  classif.get_min_mag(answer_gmiEnt);
+  classif.clear();
+  
+  return (list.geom)->getGeomEnt( dim, answer_gmiEnt);
 }
 
 void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts)
@@ -367,13 +413,66 @@ void create_mesh_verts(paramList& list, std::vector<pMeshEnt>& verts)
   double refine = list.refinement;
   double length = max[0] - min[0];
   double height = max[1] - min[1];
-
   double spacing_x = length*refine;
   double spacing_y = height*refine;
   int numXVerts = (int)ceil(length/spacing_x);
   int numYVerts = (int)ceil(height/spacing_y);
+  // Add one since 'one vert needed for space of zero width'
   numXVerts++;  
   numYVerts++;
+
+  pMeshEnt vert;
+  int dim;
+  for(int i=0; i<numXVerts; i++)
+  {
+    for(int j=0; j<numYVerts; j++)
+    {
+      double x_pos = i*spacing_x;
+      double y_pos = j*spacing_y;
+      double z_pos = 0.0;
+      double position[] = {x_pos, y_pos, z_pos};
+
+      // Check for geom point or edge cases
+      if(i==0) // left edge
+      {
+        if(j==0) // bottom point
+        {
+          dim = 0;
+          pGeomEnt g_ent = get_ent( list,  position, dim);
+          vert = pumi_mesh_createVtx( list.mesh, g_ent , position);
+        }
+        else if(j==(numYVerts-1)) // top point
+        {
+        }
+        else // anywhere else on the line
+        {
+        }
+      }
+      else if( i==(numXVerts-1)) // right edge
+      {
+        if(j==0) // bottom point
+        {
+        }
+        else if(j==(numYVerts-1)) // top point
+        {
+        }
+        else // anywhere else on the line
+        {
+        }
+      }
+      else if ( j== 0 ) // bottom edge, not including end points
+      {
+      }
+      else if ( j== (numYVerts-1)) // top edge, not including end points
+      {
+      }
+      else // somewhere on the face
+      {
+      }
+
+      verts.push_back(vert);
+    }
+  }
 
   return;
 }
@@ -409,5 +508,81 @@ void print_comps(double* comps)
 void print_test()
 {
   cout << "Hello World" << endl;
+  return;
+}
+
+double coord_get_mag( double* coord)
+{
+  double ans = 0.0;
+  for(int i=0; i<3; i++)
+  {
+    ans += (coord[i]*coord[i]);
+  }
+  ans = sqrt(ans);
+  return ans;
+}
+
+void coord_get_diff(double* coord1, double* coord2, double* ans)
+{
+  for(int i=0; i<3; i++)
+  { 
+    ans[i] = coord1[i] - coord2[i];
+  }
+  return;
+}
+
+void classification_t::push_back( gmi_ent* ent, double mag)
+{
+  ents.push_back(ent);
+  mags.push_back(mag);
+  return;
+}
+
+void classification_t::get(int i, gmi_ent* ent, double mag)
+{
+  ent = ents[i];
+  mag = mags[i];
+  return;
+}
+
+void classification_t::clear()
+{
+  ents.clear();
+  mags.clear();
+  return;
+}
+
+int classification_t::size()
+{
+  int s1 = ents.size();
+  int s2 = mags.size();
+  if(s1 == s2)
+  {
+    return s1;
+  }
+  else
+  {
+    print_error("ERROR: CLASSIFICATION LENGTH MIS-MATCH");
+    return 0;
+  }
+}
+
+void classification_t::get_min_mag( gmi_ent* ent)
+{
+  gmi_ent* min_ent;
+  double min_mag;
+  get(0, min_ent, min_mag);
+  gmi_ent* ent_now;
+  double mag_now;
+  for(int i=0;i<size(); i++)
+  {
+    get(i, ent_now, mag_now);
+    if (mag_now<min_mag)
+    {
+      min_mag = mag_now;
+      min_ent = ent_now;
+    }
+  }
+  ent = min_ent;
   return;
 }
