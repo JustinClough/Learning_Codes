@@ -34,3 +34,6 @@ a3/migrated/
 #Latex support files
 **.aux
 **.log
+
+#Eigen
+**igen**
