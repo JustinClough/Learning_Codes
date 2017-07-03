@@ -1,0 +1,13 @@
+ELEMENT_ORDER linear
+ELEMENT_SHAPE three_sided
+ELEMENT_SIZE 0.1
+GEOM_FILE /lore/clougj/FiniteElementProgramming/a4/rectangle.dmg
+SIM_GEOM_FILE /lore/clougj/FiniteElementProgramming/a4/rectangle.smd
+# BC 1: 1 Newton in X direction, 
+NEUMANN 1 2 X 1.0
+# BC 2: No X movement at left edge
+DIRICHLET 1 4 X 0 
+# BC 3: No Y movement at left edge
+DIRICHLET 1 4 Y 0 
+# BC 4: 2.5 Newtons in Y direction
+NEUMANN 1 2 Y 2.5

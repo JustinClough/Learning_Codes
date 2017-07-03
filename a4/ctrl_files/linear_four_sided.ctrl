@@ -1,7 +1,7 @@
 ELEMENT_ORDER linear
 ELEMENT_SHAPE four_sided
-ELEMENT_SIZE 0.1
-GEOM_FILE /lore/clougj/FiniteElementProgramming/a4/rectangle.dmg
+ELEMENT_SIZE 1
+# GEOM_FILE /lore/clougj/FiniteElementProgramming/a4/rectangle.dmg
 SIM_GEOM_FILE /lore/clougj/FiniteElementProgramming/a4/rectangle.smd
 # BC 1: 1 Newton in X direction, 
 NEUMANN 1 2 X 1.0
