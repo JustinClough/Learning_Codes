@@ -1,1 +1,1 @@
-./build/a4 linear_four_sided.ctrl 2>&1 | tee output.txt
+./build/a4 ctrl_files/linear_four_sided.ctrl 2>&1 | tee output.txt

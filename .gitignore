@@ -37,3 +37,9 @@ a3/migrated/
 
 #Eigen
 **igen**
+
+#a4 models and meshes
+a4/models_meshes/
+
+# vim sessions
+**.vim
