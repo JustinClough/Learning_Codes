@@ -43,3 +43,6 @@ a4/models_meshes/
 
 # vim sessions
 **.vim
+
+#test directories
+test/
