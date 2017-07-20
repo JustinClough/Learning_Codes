@@ -21,7 +21,7 @@ int main( int argc, char** argv)
   Teuchos::ParameterList p;
   auto pp = Teuchos::Ptr<Teuchos::ParameterList> (&p);
 
-  // load the mesh and create a discretization
+  // Get info from argv's
   A4_ALWAYS_ASSERT(argc == 10);
   A4::print("USING MODEL: %s", argv[1]);
   A4::print("USING MESH: %s", argv[2]);

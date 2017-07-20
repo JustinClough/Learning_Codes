@@ -23,6 +23,7 @@
 \begin{document}
 \maketitle
 
+\newpage
 \section{Introduction} \label{sec:intro}
 introduction text here.
 
@@ -47,16 +48,20 @@ Psuedo code text here.
 \section{Testing} \label{sec:testing}
 Testing text here.
 
-\subsection{Linear Triangular Elements} \label{subsec:linTri}
+\subsection{Linear Tetrahedron Elements} \label{subsec:linTet}
 Linear Tri element text here.
 
-\subsection{Linear Quadrilateral Elements} \label{subsec:linQuad}
+Convergence of linear tet elements here.
+
+\subsection{Linear Hexahedron Elements} \label{subsec:linHex}
 Linear quad text here.
 
-\subsection{Quadratic Triangular Elements} \label{subsec:quadTri}
+\subsection{Quadratic Tetrahedron Elements} \label{subsec:quadTet}
 Quadratic Tri element text here.
 
-\subsection{Quadratice Quadtrilateral Elements} \label{subsec:quadQuad}
+Convergence of quad tets here.
+
+\subsection{Quadratic Hexahedron Elements} \label{subsec:quadHex}
 Quadratice quad element text here.
 
 \section{Conclusion} \label{sec:conclusion}
@@ -64,11 +69,79 @@ conclusion text here.
 
 \newpage
 \appendix
-\section{Code} \label{sec:code}
+\section{Source Code} \label{sec:code}
 
-\subsection{a4.cc} \label{subsec:main_cpp}
-\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/a4.cc}
+\subsection{a4.cc} \label{subsec:a4.cc}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/a4.cc}
 
-%%TODO: Include control files
+\subsection{A4\_BodyLoads.hpp} \label{subsec:BLhpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_BodyLoads.hpp}
+
+\subsection{A4\_BodyLoads.cpp} \label{subsec:BLcpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_BodyLoads.cpp}
+
+\subsection{A4\_Control.hpp} \label{subsec:Cont.hpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_Control.hpp}
+
+\subsection{A4\_Control.cpp} \label{subsec:Cont.cpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_Control.cpp}
+
+\subsection{A4\_DBCs.hpp} \label{subsec:DBCs.hpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_DBCs.hpp}
+
+\subsection{A4\_DBCs.cpp} \label{subsec:DBCs.cpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_DBCs.cpp}
+
+\subsection{A4\_Disc.hpp} \label{subsec:Disc.hpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_Disc.hpp}
+
+\subsection{A4\_Disc.cpp} \label{subsec:Disc.cpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_Disc.cpp}
+
+\subsection{A4\_ElasticStiffness.hpp} \label{subsec:ElasticStiffness.hpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_ElasticStiffness.hpp}
+
+\subsection{A4\_ElasticStiffness.cpp} \label{subsec:ElasticStiffness.cpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_ElasticStiffness.cpp}
+
+\subsection{A4\_FESolver.hpp} \label{subsec:FESolver.hpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_FESolver.hpp}
+
+\subsection{A4\_FESolver.cpp} \label{subsec:FESolver.cpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_FESolver.cpp}
+
+\subsection{A4\_LinAlg.hpp} \label{subsec:LinAlg.hpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_LinAlg.hpp}
+
+\subsection{A4\_LinAlg.cpp} \label{subsec:LinAlg.cpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_LinAlg.cpp}
+
+\subsection{A4\_LinSolve.hpp} \label{subsec:LinSolve.hpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_LinSolve.hpp}
+
+\subsection{A4\_LinSolve.cpp} \label{subsec:LinSolve.cpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_LinSolve.cpp}
+
+\subsection{A4\_NBCs.hpp} \label{subsec:NBCs.hpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_NBCs.hpp}
+
+\subsection{A4\_NBCs.cpp} \label{subsec:NBCs.cpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_NBCs.cpp}
+
+\subsection{A4\_PostProc.hpp} \label{subsec:PostProc.hpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_PostProc.hpp}
+
+\subsection{A4\_PostProc.cpp} \label{subsec:PostProc.cpp}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_PostProc.cpp}
+
+\newpage
+\section{Example Association and .yaml file}\label{sec:ExAsYaml}
+
+\subsection{Associations File} \label{subsec:ExAssoc}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/test/box3D.txt}
+
+\subsection{Example .yaml File} \label{subsec:ExYaml}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/test/fem.yaml}
+
 
 \end{document}
