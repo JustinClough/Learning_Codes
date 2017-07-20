@@ -18,6 +18,7 @@
 }
 \usepackage{graphicx}
 \graphicspath{ {images/} }
+\usepackage{nameref}
 
 
 \begin{document}
@@ -25,25 +26,74 @@
 
 \newpage
 \section{Introduction} \label{sec:intro}
-introduction text here.
+The purpose of this project was to develop a Finite
+Element Analysis (FEA) code that solves linear 
+elliptic problems. This project does so for 
+three dimensional solid mechanic problems. The user 
+provides the code with the following information 
+(an example input script is shown in 
+Appendix \ref{subsec:ExIn}):
+
+\begin{itemize}
+  \item A geometric model of the domain in the 
+        form of a \emph{.dmg} file.
+  \item The corresponding mesh of the domain in the 
+        from of a \emph{.smb} file.
+  \item An associations file which define geometric
+        node sets in the form of a \emph{.txt} file. The
+        details of this file are explained in detail in 
+        section \ref{sec:techDes}.
+  \item A control file which define material properties,
+        boundary conditions, and linear algebra details in 
+        the form of a \emph{.yaml} file.
+  \item A file name to write the solution to as an array of
+        characters.
+  \item The order of numerical integration as an integer.
+  \item The body load in the form of three floating point 
+        number.
+\end{itemize}
+
+Based on these input parameters, the code assembles and
+solves the relevant finite element problem to retrieve 
+the displacement at each mesh Degree of Freedom (DOF).
+It then calculates the Cauchy stress tensor for each 
+integration point of each element. It finally writes 
+the displacement, traction, and Cauchy stress fields to 
+file in \emph{.vtk} format. 
+
+The rest of this report is separated into the following
+section. The technical description of the code, which 
+includes an overview of the Finite Element Method (FEM),
+the numerical integration techniques used, and the
+linear algebra assembly and solution methods is shown in 
+section \ref{sec:techDes}. A description of the code, which 
+includes an outline of classes created and a pseudo code
+is shown in section \ref{sec:codeDes}. The tests performed
+are described in section \ref{sec:testing}. Finally, 
+conclusions and closing comments are made 
+in \ref{sec:conclusion}. The source code and headers
+are appended to this report in Appendix \ref{sec:code}.
 
 \section{Technical Description} \label{sec:techDes}
-design text here.
+intro to design text here.
 
 \subsection{Finite Element Method} \label{subsec:fem}
-FEM text here.
+FE text here.
 
 \subsection{Numerical Integration} \label{subsec:numInt}
 Numerical integration text here.
 
-\subsection{Code Description} \label{subsec:codeDes}
-Psuedo code intro text here.
+\subsection{Linear Algebra} \label{subsec:LinAlg}
+Linear algebra text here
 
-\subsubsection{Class Description} \label{ssubsec:class}
+\section{Code Description} \label{sec:codeDes}
+Pseudo code intro text here.
+
+\subsection{Class Description} \label{subsec:class}
 Class description text here.
 
-\subsubsection{Psuedo Code} \label{ssubsec:psuedo}
-Psuedo code text here.
+\subsection{Pseudo Code} \label{subsec:pseudo}
+Pseudo code text here.
 
 \section{Testing} \label{sec:testing}
 Testing text here.
@@ -62,14 +112,17 @@ Quadratic Tri element text here.
 Convergence of quad tets here.
 
 \subsection{Quadratic Hexahedron Elements} \label{subsec:quadHex}
-Quadratice quad element text here.
+Quadratic quad element text here.
 
 \section{Conclusion} \label{sec:conclusion}
 conclusion text here.
 
+\subsection{Closing Comments} \label{sec:comments}
+closing comments here.
+
 \newpage
 \appendix
-\section{Source Code} \label{sec:code}
+\section{Source Code and Headers} \label{sec:code}
 
 \subsection{a4.cc} \label{subsec:a4.cc}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/a4.cc}
@@ -135,13 +188,16 @@ conclusion text here.
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_PostProc.cpp}
 
 \newpage
-\section{Example Association and .yaml file}\label{sec:ExAsYaml}
+\section{Example Input Files}\label{sec:ExInput}
 
 \subsection{Associations File} \label{subsec:ExAssoc}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/test/box3D.txt}
 
 \subsection{Example .yaml File} \label{subsec:ExYaml}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/test/fem.yaml}
+
+\subsection{Example Input Script} \label{subsec:ExIn}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/test/run_test.sh}
 
 
 \end{document}
