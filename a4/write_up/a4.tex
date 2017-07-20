@@ -28,100 +28,100 @@
 \newpage
 \section{Introduction} \label{sec:intro}
 The purpose of this project was to develop a Finite
-Element Analysis (FEA) code that solves linear 
-elliptic problems. This project does so for 
-three dimensional solid mechanic problems. The user 
-provides the code with the following information 
-(an example input script is shown in 
+Element Analysis (FEA) code that solves linear
+elliptic problems. This project does so for
+three dimensional solid mechanic problems. The user
+provides the code with the following information
+(an example input script is shown in
 Appendix \ref{subsec:ExIn}):
 
 \begin{itemize}
-  \item A geometric model of the domain in the 
+  \item A geometric model of the domain in the
         form of a \emph{.dmg} file.
-  \item The corresponding mesh of the domain in the 
+  \item The corresponding mesh of the domain in the
         from of a \emph{.smb} file.
   \item An associations file which define geometric
         node sets in the form of a \emph{.txt} file. The
-        details of this file are explained in detail in 
+        details of this file are explained in detail in
         section \ref{sec:techDes}.
   \item A control file which define material properties,
-        boundary conditions, and linear algebra details in 
+        boundary conditions, and linear algebra details in
         the form of a \emph{.yaml} file.
   \item A file name to write the solution to as an array of
         characters.
   \item The order of numerical integration as an integer.
-  \item The body load in the form of three floating point 
+  \item The body load in the form of three floating point
         number.
 \end{itemize}
 
 Based on these input parameters, the code assembles and
-solves the relevant finite element problem to retrieve 
+solves the relevant finite element problem to retrieve
 the displacement at each mesh Degree of Freedom (DOF).
-It then calculates the Cauchy stress tensor for each 
-integration point of each element. It finally writes 
-the displacement, traction, and Cauchy stress fields to 
-file in \emph{.vtk} format. 
+It then calculates the Cauchy stress tensor for each
+integration point of each element. It finally writes
+the displacement, traction, and Cauchy stress fields to
+file in \emph{.vtk} format.
 
 The rest of this report is separated into the following
-section. The technical description of the code, which 
+section. The technical description of the code, which
 includes an overview of the Finite Element Method (FEM),
 the numerical integration techniques used, and the
-linear algebra assembly and solution methods is shown in 
-section \ref{sec:techDes}. A description of the code, which 
+linear algebra assembly and solution methods is shown in
+section \ref{sec:techDes}. A description of the code, which
 includes an outline of classes created and a pseudo code
 is shown in section \ref{sec:codeDes}. The tests performed
-are described in section \ref{sec:testing}. Finally, 
-conclusions and closing comments are made 
+are described in section \ref{sec:testing}. Finally,
+conclusions and closing comments are made
 in \ref{sec:conclusion}. The source code and headers
 are appended to this report in Appendix \ref{sec:code}.
 
 \section{Technical Description} \label{sec:techDes}
 The purpose of the code is to approximate the displacement
-$u$ subjected to the conditions shown in Equations 
+$u$ subjected to the conditions shown in Equations
 \ref{eq:StrongForm} through \ref{eq:Compliance}.
 
-\begin{align} 
-\sigma_{ij},_{j} + f_i &= 0  &  &\text{on} \quad  \Omega         
+\begin{align}
+\sigma_{ij},_{j} + f_i &= 0  &  &\text{on} \quad  \Omega
   \label{eq:StrongForm}                                          \\
-u_i &= g_i                   &  &\text{on} \quad \Gamma^{g}_{i}  
+u_i &= g_i                   &  &\text{on} \quad \Gamma^{g}_{i}
   \label{eq:DBC}                                                 \\
-\sigma_{ij} \cdot n_j &= h_i &  &\text{on} \quad \Gamma^{h}_{i}  
+\sigma_{ij} \cdot n_j &= h_i &  &\text{on} \quad \Gamma^{h}_{i}
   \label{eq:NBC}                                                 \\
-\varepsilon_{ij} &= u_{i},_{j}&  &\quad                          
+\varepsilon_{ij} &= u_{i},_{j}&  &\quad
   \label{eq:strainDef}                                           \\
-\sigma_{ij} &= c_{ijkm} \varepsilon_{km} & &\quad                 
+\sigma_{ij} &= c_{ijkm} \varepsilon_{km} & &\quad
   \label{eq:Compliance}
 \end{align}
 
 \noindent
-where $\sigma$ is the Cauchy stress tensor in 
-the domain $\Omega$, $f$ is the 
+where $\sigma$ is the Cauchy stress tensor in
+the domain $\Omega$, $f$ is the
 vector-valued traction, and $\varepsilon$ is the strain.
 The subscripts indicate the spatial dimension of the vector or
 tensor they follow and range from 1 to $n_{sd}$, the number
-of spatial dimensions; summation is implied for repeated 
+of spatial dimensions; summation is implied for repeated
 indices.  The domain $\Omega$ is bounded by boundaries
-$\Gamma^{g}$ and $\Gamma^{h}$ as shown 
+$\Gamma^{g}$ and $\Gamma^{h}$ as shown
 in Equations \ref{eq:OmegaUnion} through \ref{eq:GammaUnion}.
 
-\begin{align} 
-\Omega &= \hat{\Omega} \cup \Gamma 
+\begin{align}
+\Omega &= \hat{\Omega} \cup \Gamma
   \label{eq:OmegaUnion}               \\
-\Gamma &= \bigcup_{i=1}^{n_{sd}} \Gamma^{g}_{i} \cup \Gamma^{h}_{i} 
+\Gamma &= \bigcup_{i=1}^{n_{sd}} \Gamma^{g}_{i} \cup \Gamma^{h}_{i}
   \label{eq:GammaUnion}
-\end{align} 
+\end{align}
 
 \noindent
-where $\Gamma$ is the total boundary of domain $\Omega$ 
-and $\hat{\Omega}$ is the internal portion of $\Omega$. 
-The super scripts, $g$ and $h$ correspond 
-to the Dirichlet and Neumann boundary conditions shown in Equations 
-\ref{eq:DBC} and \ref{eq:NBC}, respectively. The Dirichlet and 
-Neumann boundary conditions are not defined on the same location 
+where $\Gamma$ is the total boundary of domain $\Omega$
+and $\hat{\Omega}$ is the internal portion of $\Omega$.
+The super scripts, $g$ and $h$ correspond
+to the Dirichlet and Neumann boundary conditions shown in Equations
+\ref{eq:DBC} and \ref{eq:NBC}, respectively. The Dirichlet and
+Neumann boundary conditions are not defined on the same location
 for the same spatial dimension, as shown in Equation \ref{eq:DNconf}.
 
 \begin{equation} \label{eq:DNconf}
-\Gamma^{g}_{i} \cup \Gamma^{h}_{j} = \varnothing \quad \text{if} \quad i=j 
+\Gamma^{g}_{i} \cup \Gamma^{h}_{j} = \varnothing \quad \text{if} \quad i=j
 \end{equation}
 
 The compliance tensor, $c$ relates the stain and stress by
