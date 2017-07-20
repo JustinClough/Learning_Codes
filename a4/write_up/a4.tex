@@ -100,7 +100,8 @@ vector-valued traction, and $\varepsilon$ is the strain.
 The subscripts indicate the spatial dimension of the vector or
 tensor they follow and range from 1 to $n_{sd}$, the number
 of spatial dimensions; summation is implied for repeated
-indices.  The domain $\Omega$ is bounded by boundaries
+indices. The vector $n$ is the outward normal on the pertinent surface
+The domain $\Omega$ is bounded by boundaries
 $\Gamma^{g}$ and $\Gamma^{h}$ as shown
 in Equations \ref{eq:OmegaUnion} through \ref{eq:GammaUnion}:
 
@@ -342,7 +343,35 @@ closing comments here.
 
 \subsection{Strong to Weak Form Derivation} \label{sec:WeakDer}
 
-n
+Given:
+\begin{equation*}
+\sigma_{ij},_{j} - f_{i} = 0 \quad \text{and} \quad
+w_{i} \in H^1, w_{i}\Big|_{\Gamma^{g}_{i}} = 0
+    \quad \forall \quad i=1(1)n_{sd}
+\end{equation*}
 
+\noindent
+Solution:
+\begin{equation*}
+\sigma_{ij},_{j} = c_{ijkm} \varepsilon_{km} = c_{ijkm} u_{k},_{m}
+\end{equation*}
+
+\begin{align*}
+\int_{\Omega} w_{i} c_{ijkm} u_{k},_{mj} - \int_{\Omega} w_{i} f_{i} &= 0 \\
+-c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\partial\Omega = \Gamma} 
+  + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m}
+  &=\int_{\Omega} w_{i} f_{i}  \\
+-c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{g}_{i}} 
+-c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{h}_{i}} 
+  + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m}
+  &=\int_{\Omega} w_{i} f_{i}  \\
+0
+-c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{h}_{i}} 
+  + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m}
+  &=\int_{\Omega} w_{i} f_{i}  \\
+-w_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
+  + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m}
+  &=\int_{\Omega} w_{i} f_{i}  \\
+\end{align*}
 
 \end{document}
