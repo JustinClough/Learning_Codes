@@ -8,6 +8,7 @@
 #include "A4_ElasticStiffness.hpp"
 #include "A4_DBCs.hpp"
 #include "A4_NBCs.hpp"
+#include "A4_BodyLoads.hpp"
 #include "A4_PostProc.hpp"
 
 namespace A4 {
@@ -23,12 +24,22 @@ static ParameterList get_valid_params()
   return p;
 }
 
-FESolver::FESolver(Disc* d, ParameterList const& p)
-    : disc(d),
-      params(p),
-      la(d)
+FESolver::FESolver(
+  Disc* d, 
+  ParameterList const& p, 
+  int order, 
+  double load[3]):
+    disc(d),
+    params(p),
+    la(d)
 {
   params.validateParameters(get_valid_params(), 0);
+  int_order = order;
+  g[0] = load[0];
+  g[1] = load[1];
+  g[2] = load[2];
+  
+
 }
 
 FESolver::~FESolver()
@@ -40,7 +51,6 @@ void FESolver::assemble_LHS()
 
   // get the mesh and problem parameters
   auto mesh = disc->get_apf_mesh();
-  auto int_order = 2;
   double E = params.get<double>("E");
   double nu = params.get<double>("nu");
 
@@ -89,9 +99,8 @@ void FESolver::assemble_LHS()
 
 void FESolver::assemble_RHS()
 {
-  apply_nbcs( disc, &la, params);
-  //TODO
-  // apply_imgTractions();
+  apply_nbcs( disc, &la, params, int_order);
+  apply_body_loads( disc, &la, int_order, g);
   return;
 }
 
@@ -111,6 +120,12 @@ void FESolver::solve()
 void FESolver::set_disp_to_field( apf::Field* f)
 {
   set_to_field( f, la.owned->U, disc);
+  return;
+}
+
+void FESolver::set_force_to_field( apf::Field* f)
+{
+  set_to_field( f, la.owned->F, disc);
   return;
 }
 

@@ -27,7 +27,9 @@ class FESolver
     /// @brief Construct the solver object.
     /// @param d The relevant discretization object.
     /// @param p The valid FEM solve parameters.
-    FESolver(Disc* d, ParameterList const& p);
+    /// @param order The integration order.
+    /// @param load  The body load (x,y,z).
+    FESolver(Disc* d, ParameterList const& p, int order, double load[3]);
 
     /// @brief Destroy the FEM object.
     ~FESolver();
@@ -38,6 +40,10 @@ class FESolver
     /// @brief Assign the contents of the solution to the field.
     /// @param f The field to write displacements to.
     void set_disp_to_field( apf::Field* f);
+
+    /// @brief Assign the contents of the forcing vector to the field.
+    /// @param f The field to write tractions to.
+    void set_force_to_field( apf::Field* f);
 
     /// @brief Cacluate the Cauchy stress and assign to field.
     /// @param f The field to write Cauchy stress to.
@@ -51,6 +57,9 @@ class FESolver
     Disc* disc;
     ParameterList params;
     LinAlg la;
+    int int_order;
+
+    double g[3];
 
     ElasticStiffness* LHS;
 };

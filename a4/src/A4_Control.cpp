@@ -57,16 +57,8 @@ static void call_pcu_free()
   is_pcu_initd = false;
 }
 
-static void assert_initd()
-{
-  A4_DEBUG_ASSERT_VERBOSE(
-      is_goal_initd,
-      "goal::initialize() not called");
-}
-
 void finalize()
 {
-  assert_initd();
   if (is_pcu_initd) call_pcu_free();
   if (is_kokkos_initd) call_kokkos_free();
   if (is_mpi_initd) call_mpi_free();
@@ -75,7 +67,6 @@ void finalize()
 
 void print(const char* message, ...)
 {
-  assert_initd();
   if (PCU_Comm_Self()) return void();
   va_list ap;
   va_start(ap, message);
@@ -86,7 +77,6 @@ void print(const char* message, ...)
 
 void fail(const char* why, ...)
 {
-  assert_initd();
   va_list ap;
   va_start(ap, why);
   vfprintf(stderr, why, ap);
@@ -97,14 +87,12 @@ void fail(const char* why, ...)
 
 void assert_fail(const char* why, ...)
 {
-  assert_initd();
   fprintf(stderr, "%s", why);
   abort();
 }
 
 double time()
 {
-  assert_initd();
   return PCU_Time();
 }
 

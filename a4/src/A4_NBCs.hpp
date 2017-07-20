@@ -19,10 +19,13 @@ class LinAlg;
 /// @param d  The discretization of node sets.
 /// @param la The relavent linear algebra data.
 /// @param p  The parameterlist defining bcs. 
+/// @param inte_order
+///           The numerical integration order of accuracy.
 void apply_nbcs(
   Disc* d,
   LinAlg* la,
-  ParameterList const& p);
+  ParameterList const& p,
+  int inte_order);
 
 class elemTrac : 
   public apf::Integrator

@@ -76,9 +76,9 @@ void elemTrac::outElement()
 void apply_nbcs(
   Disc* d,
   LinAlg* la,
-  ParameterList const& p)
+  ParameterList const& p,
+  int inte_order)
 {
-  int inte_order = 2;
   std::vector<LO> lids;
   auto nbcs = p.sublist( "traction bcs");
   auto mesh = d->get_apf_mesh();
