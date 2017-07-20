@@ -202,7 +202,7 @@ The relations shown in Equations \ref{eq:StrongForm} through
 The weak form is shown in Equation \ref{eq:WeakForm}:
 
 \begin{equation} \label{eq:WeakForm}
-\int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{l} d\Omega =
+\int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega =
   \int_{\Omega} w_{i} f_{i} d\Omega +
   w_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
 \end{equation}
@@ -350,11 +350,12 @@ w_{i} \in H^1, w_{i}\Big|_{\Gamma^{g}_{i}} = 0
     \quad \forall \quad i=1(1)n_{sd}
 \end{equation*}
 
-\noindent
-Solution:
 \begin{equation*}
 \sigma_{ij},_{j} = c_{ijkm} \varepsilon_{km} = c_{ijkm} u_{k},_{m}
 \end{equation*}
+
+\noindent
+Solution:
 
 \begin{align*}
 \int_{\Omega} w_{i} c_{ijkm} u_{k},_{mj} - \int_{\Omega} w_{i} f_{i} &= 0 \\
@@ -372,6 +373,9 @@ Solution:
 -w_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
   + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m}
   &=\int_{\Omega} w_{i} f_{i}  \\
+\int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega &=
+  \int_{\Omega} w_{i} f_{i} d\Omega +
+  w_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
 \end{align*}
 
 \end{document}
