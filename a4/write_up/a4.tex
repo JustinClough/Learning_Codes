@@ -234,7 +234,7 @@ a(w^{h} , v^{h})
 
 \begin{align} 
 a( X, Y ) &= 
-  \int_{\Omega} c_{ijkm} X_{i},_{j} Y_{j},_{m} d\Omega 
+  \int_{\Omega} c_{ijkm} X_{i},_{j} Y_{k},_{m} d\Omega 
     \label{eq:GalerkinCont}                                           \\
 b( X, Y ) &= 
   \int_{\Omega} X_{i} Y_{i} d\Omega 
@@ -249,8 +249,17 @@ g^{h}_{i}\Big|_{\Gamma^{g}_{i}} = g_{i}
 \end{align}
 
 \noindent
-A more complete derivation is available in Appendix \ref{sec:GalerkinDer}.
-In Equation \ref{eq:GalerkinForm},
+A derivation form the weak from to this Galerkin form 
+is available in Appendix \ref{sec:GalerkinDer}.
+In Equation \ref{eq:GalerkinForm}, $u^{h}$ is the discrete
+approximation of $u$ on a discretized $\Omega$. Similarly,
+$w^{h}$ is the discrete approximation of $w$ on the same 
+discretized $\Omega$. From this Galerkin form, a matrix 
+form of the problem can be created which is expressed in 
+Equation \ref{eq:MatrixForm}.
+
+
+
 
 \subsection{Numerical Integration} \label{subsec:numInt}
 Numerical integration text here.
@@ -401,7 +410,7 @@ Solution:
   + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega
   &=\int_{\Omega} w_{i} f_{i} d\Omega \\
 0
--c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{h}_{i}} 
+ -c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{h}_{i}} 
   + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega
   &=\int_{\Omega} w_{i} f_{i} d\Omega \\
 -w_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
@@ -412,25 +421,42 @@ Solution:
   w_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
 \end{align*}
 
+\newpage
 \subsection{Weak to Galerkin Form Derivation} \label{sec:GalerkinDer}
 
 Given:
 \begin{align*}
 a( X, Y ) &= 
-  \int_{\Omega} c_{ijkm} X_{i},_{j} Y_{j},_{m} d\Omega \\
+  \int_{\Omega} c_{ijkm} X_{i},_{j} Y_{k},_{m} d\Omega \\
 b( X, Y ) &= 
   \int_{\Omega} X_{i} Y_{i} d\Omega \\
-u^{h}_{i} &= 
+u^{h}_{i} = 
   v^{h}_{i} + g^{h}_{i} 
+  \quad
+  g^{h}_{i}\Big|_{\Gamma^{g}_{i}} &= g_{i} 
+  \quad 
+  v^{h}_{i}\Big|_{\Gamma^{g}_{i}} = 0
 \end{align*}
 
-
+\noindent
 Solution:
 
 \begin{align*}
 \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega 
  &= \int_{\Omega} w_{i} f_{i} d\Omega
   + w_{i}\Big|_{\Gamma^{h}_{i}} h_{i} \\
+a(w, u)
+ &= b(w , f) 
+  + w_{i}\Big|_{\Gamma^{h}_{i}} h_{i}  \\
+\text{let} \quad u &\approx u^{h} = v^{h} + g^{h} \\
+ \quad w &\approx w^{h} \\
+a(w^{h} , u^{h} ) 
+ &= b(w^{h}, f) 
+  + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i}  \\
+a(w^{h} , v^{h} ) 
+  + a(w^{h} , g^{h} ) 
+ &= b(w^{h}, f) 
+  + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i}  \\
 a(w^{h} , v^{h})
  &= b(w^{h} , f) 
   + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i} 
