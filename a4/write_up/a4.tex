@@ -194,7 +194,7 @@ as shown in Equations \ref{eq:LameLambda} and \ref{eq:LameMu}:
 
 \noindent
 where $E$ and $\nu$ are the Young's Modulus and Poisson Ratio
-of the material.
+of the material, respectively.
 
 \subsection{Finite Element Method} \label{subsec:fem}
 The relations shown in Equations \ref{eq:StrongForm} through
@@ -217,7 +217,40 @@ w_{i} \in H^1, w_{i}\Big|_{\Gamma^{g}_{i}} = 0
 \end{equation}
 
 \noindent
-A derivation form the strong form is shown in Appendix \ref{sec:WeakDer}.
+In Equation \ref{eq:WConsts}, $H^{1}$ is the order-one Hilbert space.
+A derivation from the strong form is shown in Appendix \ref{sec:WeakDer}.
+This weak form can then be approximated by a Galerkin form. 
+The Galerkin form of this problem is shown in Equation 
+\ref{eq:GalerkinForm} and is subject to the constraints and definitions
+shown in Equations \ref{eq:GalerkinCont}
+through  \ref{eq:GalerkinContFin}.
+
+\begin{equation} \label{eq:GalerkinForm}
+a(w^{h} , v^{h})
+  = b(w^{h} , f) 
+  + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i} 
+  - a(w^{h} , g^{h})
+\end{equation}
+
+\begin{align} 
+a( X, Y ) &= 
+  \int_{\Omega} c_{ijkm} X_{i},_{j} Y_{j},_{m} d\Omega 
+    \label{eq:GalerkinCont}                                           \\
+b( X, Y ) &= 
+  \int_{\Omega} X_{i} Y_{i} d\Omega 
+    \label{eq:GalerkinForce}                                          \\
+u^{h}_{i} &= 
+  v^{h}_{i} + g^{h}_{i} 
+  \label{eq:GalerkinUh}                                               \\
+g^{h}_{i}\Big|_{\Gamma^{g}_{i}} = g_{i} 
+  \quad & \quad
+  v^{h}_{i}\Big|_{\Gamma^{g}_{i}} = 0
+  \label{eq:GalerkinContFin}                                       %\\
+\end{align}
+
+\noindent
+A more complete derivation is available in Appendix \ref{sec:GalerkinDer}.
+In Equation \ref{eq:GalerkinForm},
 
 \subsection{Numerical Integration} \label{subsec:numInt}
 Numerical integration text here.
@@ -358,24 +391,62 @@ w_{i} \in H^1, w_{i}\Big|_{\Gamma^{g}_{i}} = 0
 Solution:
 
 \begin{align*}
-\int_{\Omega} w_{i} c_{ijkm} u_{k},_{mj} - \int_{\Omega} w_{i} f_{i} &= 0 \\
+\int_{\Omega} w_{i} c_{ijkm} u_{k},_{mj} d\Omega - 
+  \int_{\Omega} w_{i} f_{i} d\Omega &= 0 \\
 -c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\partial\Omega = \Gamma} 
-  + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m}
-  &=\int_{\Omega} w_{i} f_{i}  \\
+  + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega
+  &=\int_{\Omega} w_{i} f_{i} d\Omega  \\
 -c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{g}_{i}} 
 -c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{h}_{i}} 
-  + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m}
-  &=\int_{\Omega} w_{i} f_{i}  \\
+  + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega
+  &=\int_{\Omega} w_{i} f_{i} d\Omega \\
 0
 -c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{h}_{i}} 
-  + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m}
-  &=\int_{\Omega} w_{i} f_{i}  \\
+  + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega
+  &=\int_{\Omega} w_{i} f_{i} d\Omega \\
 -w_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
-  + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m}
-  &=\int_{\Omega} w_{i} f_{i}  \\
+  + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega
+  &=\int_{\Omega} w_{i} f_{i} d\Omega \\
 \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega &=
   \int_{\Omega} w_{i} f_{i} d\Omega +
   w_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
 \end{align*}
 
+\subsection{Weak to Galerkin Form Derivation} \label{sec:GalerkinDer}
+
+Given:
+\begin{align*}
+a( X, Y ) &= 
+  \int_{\Omega} c_{ijkm} X_{i},_{j} Y_{j},_{m} d\Omega \\
+b( X, Y ) &= 
+  \int_{\Omega} X_{i} Y_{i} d\Omega \\
+u^{h}_{i} &= 
+  v^{h}_{i} + g^{h}_{i} 
+\end{align*}
+
+
+Solution:
+
+\begin{align*}
+\int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega 
+ &= \int_{\Omega} w_{i} f_{i} d\Omega
+  + w_{i}\Big|_{\Gamma^{h}_{i}} h_{i} \\
+a(w^{h} , v^{h})
+ &= b(w^{h} , f) 
+  + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i} 
+  - a(w^{h} , g^{h})
+\end{align*}
+
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
