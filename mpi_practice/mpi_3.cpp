@@ -26,7 +26,7 @@ int main( int argc, char** argv)
 
   int n = 1 + myRank;
   
-  int myArray [ n] = {0};
+  int* myArray = new int [n];
   for( int i = 0; i < n; i++)
   {
     myArray[i] = myRank;
@@ -37,12 +37,17 @@ int main( int argc, char** argv)
   MPI_Allreduce( &n, &N, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
 
   // Determine the size of each sub-buffer
-  int buffSpacer[ worldSize] = {0};
-  MPI_Allgather( &n, 1, MPI_INT, &buffSpacer, 1, MPI_INT, MPI_COMM_WORLD);
+  int* buffSpacer = new int [worldSize];
+  for( int i = 0; i < worldSize; i++)
+  {
+    buffSpacer[i] = 0;
+  }
+  MPI_Allgather( &n, 1, MPI_INT, buffSpacer, 1, MPI_INT, MPI_COMM_WORLD);
   if( myRank == 0 )
   {
     print_array( buffSpacer, worldSize);
   }
+
 /*
   MPI_Allgather( 
             void* send_data,
@@ -58,12 +63,12 @@ int main( int argc, char** argv)
   // (no empty spaces between one sub array and 
   // the next) we set the displacement array to 
   // be equivalent to the receive-count array
-  int displ[ worldSize] = {0};
+  int* displ = new int [worldSize];
   for( size_t i = 0; i < worldSize; i++)
   {
     if ( i == 0)
     { 
-      // Do nothing, start filling ourArray at first slot
+      displ[i] = 0;
     }
     else
     {
@@ -72,8 +77,8 @@ int main( int argc, char** argv)
   }
 
   // Finally, collect all data into ourArray
-  int ourArray[ N] = {0};
-  MPI_Allgatherv( &myArray, n, MPI_INT, &ourArray, buffSpacer, displ, 
+  int* ourArray = new int [N];
+  MPI_Allgatherv( myArray, n, MPI_INT, ourArray, buffSpacer, displ, 
       MPI_INT, MPI_COMM_WORLD);
 /*
   MPI_Allgatherv(
@@ -90,6 +95,11 @@ int main( int argc, char** argv)
   {
     print_array( ourArray, (size_t) N);
   }
+  
+  delete myArray;
+  delete buffSpacer;
+  delete displ;
+  delete ourArray;
 
   MPI_Finalize();
 
