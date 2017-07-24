@@ -212,7 +212,7 @@ where $w$ is a weighting function subject to the constraints
 expressed in Equation \ref{eq:WConsts}.
 
 \begin{equation} \label{eq:WConsts}
-w_{i} \in H^1, w_{i}\Big|_{\Gamma^{g}_{i}} = 0
+w_{i} \in H^1,\quad w_{i}\Big|_{\Gamma^{g}_{i}} = 0
     \quad \forall \quad i=1(1)n_{sd}
 \end{equation}
 
@@ -252,7 +252,7 @@ g^{h}_{i}\Big|_{\Gamma^{g}_{i}} = g_{i}
 A derivation form the weak from to this Galerkin form 
 is available in Appendix \ref{sec:GalerkinDer}.
 In Equation \ref{eq:GalerkinForm}, $u^{h}$ is the discrete
-approximation of $u$ on a discretized $\Omega$. Similarly,
+approximation of $u$ on a discretized $\Omega$, $\Omega_h$. Similarly,
 $w^{h}$ is the discrete approximation of $w$ on the same 
 discretized $\Omega$. The discrete approximation of
 the displacement, $u^{h}$, is the sum of unknown, $v^{h}$, 
@@ -276,7 +276,7 @@ g^{h}_i &= \sum_{A=1}^{n} g^{A}_i N^{A}
 
 \noindent
 where $n$ is the number of discrete evaluation points, or nodes,
-of $\hat{\Omega}$. The $c^{A}$'s are aribrary multipliers. From this, a matrix 
+of $\Omega_h$. The $c^{A}_{i}$'s are arbitrary multipliers. From this, a matrix 
 form of the problem can be created which is expressed in 
 Equation \ref{eq:MatrixForm}:
 
@@ -301,9 +301,9 @@ C &\in \eta_g
 \end{align}
 
 \noindent
-In Equation set \ref{eq:nodesConds}, $\eta$ is the set of all nodes on $\hat{\Omega}$ 
+In Equation set \ref{eq:nodesConds}, $\eta$ is the set of all nodes on $\Omega_h$ 
 and $\eta_g$ is the subset of $\eta$ on which Dirichlet boundary conditions are 
-perscribed. Equation \ref{eq:MatrixForm} can then be rewritten as shown in
+prescribed. Equation \ref{eq:MatrixForm} can then be rewritten as shown in
 Equation \ref{eq:KdF}.
 
 \begin{equation} \label{eq:KdF}
@@ -311,14 +311,15 @@ Equation \ref{eq:KdF}.
 \end{equation}
 
 \noindent
-In Equation \ref{eq:KdF}, $[K]$ is the stiffness matrix componenet 
+In Equation \ref{eq:KdF}, $[K]$ is the stiffness matrix component 
 relating the degree of freedom of the node at row $A$ to the degree of freedom 
 of the node at column $B$. The vector $\{d\}$ is comprised of all unknown 
-nodal displacements of the degrees of freedom in $\hat{\Omega}$. The 
-vector $\{F\}$ is comprised of all the nodal force components in $\hat{\Omega}$.
+nodal displacements of the degrees of freedom in $\Omega_h$. The 
+vector $\{F\}$ is comprised of all the nodal force components in $\Omega_h$.
 A derivation from the Galerkin form shown in Equation \ref{eq:GalerkinForm}
-to the matrix form shown in \ref{eq:MatrixForm} is available in Appendix
-\ref{sec:MatrixDer}. 
+to the matrix form shown in Equation \ref{eq:MatrixForm} is available in Appendix
+\ref{sec:MatrixDer}. For situations where $\Omega_h$ is discretized with 
+multiple elements, stiffness and force values are summed at each node.
 
 \subsection{Numerical Integration} \label{subsec:numInt}
 Need to talk about shape functions here.
