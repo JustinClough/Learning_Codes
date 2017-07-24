@@ -229,7 +229,7 @@ through  \ref{eq:GalerkinContFin}.
 a(w^{h} , v^{h})
   = b(w^{h} , f) 
   + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i} 
-  - a(w^{h} , g^{h})
+  - a(w^{h}\Big|_{\Gamma^{g}_{i}} , g^{h})
 \end{equation}
 
 \begin{align} 
@@ -254,14 +254,74 @@ is available in Appendix \ref{sec:GalerkinDer}.
 In Equation \ref{eq:GalerkinForm}, $u^{h}$ is the discrete
 approximation of $u$ on a discretized $\Omega$. Similarly,
 $w^{h}$ is the discrete approximation of $w$ on the same 
-discretized $\Omega$. From this Galerkin form, a matrix 
+discretized $\Omega$. The discrete approximation of
+the displacement, $u^{h}$, is the sum of unknown, $v^{h}$, 
+and given, $g^{h}$, displacement values. 
+
+As part of the discretization of $\Omega$, shape functions
+($N^{A}(x)$'s) are used to interpolate values. Here, $x$
+is a vector describing any position in $\Omega$ and has members $x_i$. 
+Details of the shape functions used discussed in section \ref{subsec:numInt}.
+These shape functions are then used shown in in Equations
+\ref{eq:shapeStart} through \ref{eq:shapeEnd}:
+
+\begin{align}
+w^{h}_i &= \sum_{A=1}^{n} c^{A}_i N^{A} 
+  \label{eq:shapeStart}                       \\
+v^{h}_i &= \sum_{A=1}^{n} d^{A}_i N^{A} 
+  \label{eq:shapeUnks}                         \\
+g^{h}_i &= \sum_{A=1}^{n} g^{A}_i N^{A} 
+  \label{eq:shapeEnd}
+\end{align}
+
+\noindent
+where $n$ is the number of discrete evaluation points, or nodes,
+of $\hat{\Omega}$. The $c^{A}$'s are aribrary multipliers. From this, a matrix 
 form of the problem can be created which is expressed in 
-Equation \ref{eq:MatrixForm}.
+Equation \ref{eq:MatrixForm}:
 
+\begin{equation} \label{eq:MatrixForm}
+a( N^A, N^B) d^{B}_{i} = 
+  b( N^A, f) +
+  N^A\Big|_{\Gamma_{i}^{h}} h_i -
+  a( N^A\Big|_{\Gamma_{i}^{g}} , N^C\Big|_{\Gamma_{i}^{g}} ) g_{i}^C
+\end{equation} 
 
+\noindent 
+where $A$, $B$, and $C$ represent the set of nodes as described in 
+Equation \ref{eq:nodesConds}.
 
+\begin{align}
+A &\in \eta - \eta_g
+  \nonumber         \\
+B &\in \eta - \eta_g
+  \nonumber         \\
+C &\in \eta_g
+  \label{eq:nodesConds}
+\end{align}
+
+\noindent
+In Equation set \ref{eq:nodesConds}, $\eta$ is the set of all nodes on $\hat{\Omega}$ 
+and $\eta_g$ is the subset of $\eta$ on which Dirichlet boundary conditions are 
+perscribed. Equation \ref{eq:MatrixForm} can then be rewritten as shown in
+Equation \ref{eq:KdF}.
+
+\begin{equation} \label{eq:KdF}
+[ K_{AB} ] \{ d_B \} = \{ F_A \} 
+\end{equation}
+
+\noindent
+In Equation \ref{eq:KdF}, $[K]$ is the stiffness matrix componenet 
+relating the degree of freedom of the node at row $A$ to the degree of freedom 
+of the node at column $B$. The vector $\{d\}$ is comprised of all unknown 
+nodal displacements of the degrees of freedom in $\hat{\Omega}$. The 
+vector $\{F\}$ is comprised of all the nodal force components in $\hat{\Omega}$.
+A derivation from the Galerkin form shown in Equation \ref{eq:GalerkinForm}
+to the matrix form shown in \ref{eq:MatrixForm} is available in Appendix
+\ref{sec:MatrixDer}. 
 
 \subsection{Numerical Integration} \label{subsec:numInt}
+Need to talk about shape functions here.
 Numerical integration text here.
 
 \subsection{Linear Algebra} \label{subsec:LinAlg}
@@ -463,16 +523,56 @@ a(w^{h} , v^{h})
   - a(w^{h} , g^{h})
 \end{align*}
 
+\newpage
+\subsection{Galerkin to Matrix Form Derivation} \label{sec:MatrixDer}
+
+Given:
+\begin{equation*}
+a(w^{h} , v^{h})
+ = b(w^{h} , f) 
+  + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i} 
+  - a(w^{h} , g^{h})
+\end{equation*}
+
+\begin{align*}
+w^{h}_i &= \sum_{A=1}^{n} c^{A}_i N^{A}  \\
+v^{h}_i &= \sum_{A=1}^{n} d^{A}_i N^{A}  \\
+g^{h}_i &=  \sum_{A=1}^{n} g^{A}_i N^{A}
+\end{align*}
+
+\noindent
+Solution:
+
+\begin{equation*}
+a(c^{A} N^{A}, d^{B} N^{B})
+ = b( c^{A} N^{A} , f) 
+  + c^{A} N^{A}\Big|_{\Gamma^{h}_{i}} h_{i} 
+  - a( c^{A} N^{A}, g^{C} N^{C})
+\end{equation*}
+
+\begin{equation*}
+c^{A} a(N^{A}, N^{B})d^{B} 
+ = c^{A} b( N^{A} , f) 
+  + c^{A} N^{A}\Big|_{\Gamma^{h}_{i}} h_{i} 
+  - c^{A}a( N^{A}, N^{C})g^{C} 
+\end{equation*}
+
+\begin{equation*}
+a(N^{A}, N^{B})d^{B} 
+ = b( N^{A} , f) 
+  + N^{A}\Big|_{\Gamma^{h}_{i}} h_{i} 
+  - a( N^{A}, N^{C})g^{C} 
+\end{equation*}
+
+\begin{align*}
+\text{Let}\quad K_{AB} &= a(N^{A}, N^{B}) \\
+F_A &= b( N^{A} , f) 
+  + N^{A}\Big|_{\Gamma^{h}_{i}} h_{i} 
+  - a( N^{A}, N^{C})g^{C} 
+\end{align*}
+
+\begin{equation*}
+[ K_{AB} ] \{ d_B \} = \{ F_A \} 
+\end{equation*} 
+
 \end{document}
-
-
-
-
-
-
-
-
-
-
-
-
