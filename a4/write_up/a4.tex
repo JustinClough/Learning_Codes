@@ -43,7 +43,7 @@ Appendix \ref{subsec:ExIn}):
   \item An associations file which define geometric
         node sets in the form of a \emph{.txt} file. The
         details of this file are explained in detail in
-        section \ref{sec:techDes}.
+        section \ref{sec:codeDes}.
   \item A control file which define material properties,
         boundary conditions, and linear algebra details in
         the form of a \emph{.yaml} file.
@@ -322,8 +322,95 @@ to the matrix form shown in Equation \ref{eq:MatrixForm} is available in Appendi
 multiple elements, stiffness and force values are summed at each node.
 
 \subsection{Numerical Integration} \label{subsec:numInt}
-Need to talk about shape functions here.
-Numerical integration text here.
+Gaussian quadrature was used to approximate all integrated 
+values in this project. This includes stiffness terms
+for the elemental stiffness matrices and the elemental force vector components
+from both traction boundary conditions. 
+A numerical approximation of an integral takes the form shown in 
+Equation \ref{eq:NumInte}:
+
+\begin{equation} \label{eq:NumInte}
+\int_{\Omega} p(x) d\Omega 
+  = \sum_{n_{int}=1}^{N_{int}} p(x\Big|_{n_{int}}) W_{n_{int}} + R 
+  \approx \sum_{n_{int}=1}^{N_{int}} p(x\Big|_{n_{int}}) W_{n_{int}}
+\end{equation}
+
+\noindent
+where $p(x)$ is the function to integrate, $N_{int}$ is the total number 
+of integration points, $W_{n_{int}}$ is the weight at each integration point, 
+and $R$ is the error in approximating the continuous integral numerically.
+This error decreases as a higher order of integration is used and was
+approximated as zero to evaluate calculations.
+The integration point weights and locations are dependent on the order of
+approximation and the approximation method. Gaussian quadrature was
+used for this project. The approximation shown in Equation \ref{eq:NumInte}
+for three dimensions is shown in Equation \ref{eq:3DNumInte}.
+
+\begin{equation} \label{eq:3DNumInte}
+\iiint_{\Omega} p(x_1, x_2, x_3) d\Omega \approx 
+  \sum_{n^1_{int}=1}^{N^1_{int}} 
+  \sum_{n^2_{int}=1}^{N^2_{int}} 
+  \sum_{n^3_{int}=1}^{N^3_{int}} 
+  p(x_1\Big|_{n^1_{int}}, 
+  x_2\Big|_{n^2_{int}}, 
+  x_3\Big|_{n^3_{int}})
+  W_{n^1_{int}}
+  W_{n^2_{int}}
+  W_{n^3_{int}}
+\end{equation}
+
+The numerical integration took place on a parametric space, $\Box$, that represented each 
+element and used a mapping to return to the domain, $\Omega_h$. 
+The mapping between real and parametric domains is described in 
+Equations \ref{eq:Mapping} through \ref{eq:jacobian}.
+
+\begin{align} 
+x   &= (x_1, x_2, x_3) \in \hat{\Omega}
+  \label{eq:Mapping} \\
+\xi &= (\xi_1, \xi_2, \xi_3) \in \Box \\
+J &= det
+  \begin{bmatrix}
+    \frac{\partial x_1}{\partial \xi_1} & 
+      \frac{\partial x_1}{\partial \xi_2} & 
+      \frac{\partial x_1}{\partial \xi_3} \\
+    \frac{\partial x_2}{\partial \xi_1} & 
+      \frac{\partial x_2}{\partial \xi_2} & 
+      \frac{\partial x_2}{\partial \xi_3} \\
+    \frac{\partial x_3}{\partial \xi_1} & 
+      \frac{\partial x_3}{\partial \xi_2} & 
+      \frac{\partial x_3}{\partial \xi_3} \\
+  \end{bmatrix}
+  \label{eq:jacobian}
+\end{align}
+
+\noindent
+The variable $J$ is the Jacobian determinant and represents
+the volumetric dilation from $\Box$ to $\Omega_h$ for a given location $\xi$.
+Combining the mapping shown in Equations \ref{eq:Mapping} through
+\ref{eq:jacobian} with the three dimensional numerical 
+integration technique shown in Equation \ref{eq:3DNumInte} yield
+Equation \ref{eq:J_numInt}.
+
+\begin{multline} \label{eq:J_numInt}
+\iiint_{\Omega} p(x_1, x_2, x_3) d\Omega
+  \approx \\
+  \sum_{n^1_{int}=1}^{N^1_{int}} 
+  \sum_{n^2_{int}=1}^{N^2_{int}} 
+  \sum_{n^3_{int}=1}^{N^3_{int}} 
+  p(
+  \xi_1\Big|_{n^1_{int}}, 
+  \xi_2\Big|_{n^2_{int}}, 
+  \xi_3\Big|_{n^3_{int}})
+  J(
+  \xi_1\Big|_{n^1_{int}}, 
+  \xi_2\Big|_{n^2_{int}}, 
+  \xi_3\Big|_{n^3_{int}})
+  W_{n^1_{int}}
+  W_{n^2_{int}}
+  W_{n^3_{int}}
+\end{multline}
+
+
 
 \subsection{Linear Algebra} \label{subsec:LinAlg}
 Linear algebra text here
