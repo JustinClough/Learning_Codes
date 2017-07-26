@@ -39,6 +39,22 @@ int main( int argc, char** argv)
   // Load mesh and create discretization object
   gmi_register_mesh();
   apf::Mesh2* m = apf::loadMdsMesh(argv[1], argv[2]);
+
+  if( order == 1)
+  {
+    // No changes
+  }
+  else if( order == 2)
+  {
+    auto shape = apf::getSerendipity();
+    m->changeShape( shape);
+  }
+  else
+  {
+    std::cout << "Order" << order << " not supported" << std::endl;
+    std::abort();
+  }
+
   auto disc = new A4::Disc(m, argv[3]);
 
   // Create linear algebra solver and solve system
@@ -64,7 +80,7 @@ int main( int argc, char** argv)
 
   // Write solution
   char* fileName = argv[5];
-  apf::writeVtkFiles( fileName, m, 3);
+  apf::writeVtkFiles( fileName, m, m->getDimension());
 
   // delete fields
   apf::destroyField( disp);

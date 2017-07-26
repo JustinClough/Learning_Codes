@@ -1,5 +1,11 @@
 #include "A4_PostProc.hpp"
 
+/*
+  TODO:
+  * Get measure of error
+
+*/
+
 namespace A4{
 
 void set_to_field( apf::Field* f, RCP<Vector> v, Disc* d)
@@ -7,6 +13,7 @@ void set_to_field( apf::Field* f, RCP<Vector> v, Disc* d)
   auto u = v->get1dView();
   auto owned_nmbr = d->get_owned_numbering();
   apf::Vector3 value;
+  int nsd = d->get_apf_mesh()->getDimension();
 
   apf::DynamicArray<apf::Node> nodes;
   apf::getNodes( owned_nmbr, nodes);
@@ -15,7 +22,7 @@ void set_to_field( apf::Field* f, RCP<Vector> v, Disc* d)
     auto node = nodes[n];
     auto e = node.entity;
     auto nodeth = node.node;
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < nsd; i++)
     {
       auto row = d->get_owned_lid( node, i);
       value[i] = u[row];
@@ -41,25 +48,32 @@ void get_elemental_solution(
   return;
 }
 
-void nye_to_matrix_3x3(
+void nye_to_matrix_planeStress(
     apf::DynamicVector& v,
     apf::Matrix3x3& m)
 {
   // Diagonal
   m[0][0] = v(0);
   m[1][1] = v(1);
-  m[2][2] = v(2);
 
   // Upper tri
-  m[1][2] = v(3);
-  m[0][2] = v(4);
-  m[0][1] = v(5);
+  m[0][1] = v(2);
 
   // Lower tri
-  m[2][1] = v(3);
-  m[2][0] = v(4);
-  m[1][0] = v(5);
+  m[1][0] = v(2);
 
+  return;
+}
+
+void zero_3x3( apf::Matrix3x3 m)
+{
+  for( int i = 0; i < 3; i++)
+  {
+    for( int j = 0; j < 3; j++)
+    {
+      m[i][j] = 0;
+    }
+  }
   return;
 }
 
@@ -82,13 +96,13 @@ void set_elemental_stress(
   apf::Vector3 para;
   apf::NewArray<apf::Vector3> dN;
   apf::DynamicMatrix B;
-  B.setSize( 6, lids.size());
+  B.setSize( 3, lids.size());
   B.zero();
 
   apf::DynamicVector u_e (lids.size());
   u_e.zero();
   get_elemental_solution( u_e, U, lids);
-  apf::DynamicVector s_e (6);
+  apf::DynamicVector s_e (3);
 
 
   int num_ips = apf::countIntPoints( elem, inte_order);
@@ -101,25 +115,18 @@ void set_elemental_stress(
     size_t num_nodes = shape->getEntityShape(mesh->getType(ent))->countNodes();
     for( size_t j = 0; j < num_nodes; ++j)
     {
-      B(0,3*j)   = dN[j][0];
+      B(0,2*j)     = dN[j][0];
 
-      B(1,3*j+1) = dN[j][1];
+      B(1,2*j+1)   = dN[j][1];
 
-      B(2,3*j+2) = dN[j][2];
-
-      B(3,3*j)   = dN[j][1];
-      B(3,3*j+1) = dN[j][0];
-
-      B(4,3*j+1) = dN[j][2];
-      B(4,3*j+2) = dN[j][1];
-
-      B(5,3*j)   = dN[j][2];
-      B(5,3*j+2) = dN[j][0];
+      B(2,2*j)     = dN[j][1];
+      B(2,2*j+1)   = dN[j][0];
     }
     apf::multiply( B, u_e, s_e);
     s_e *= E;
     apf::Matrix3x3 sigma;
-    nye_to_matrix_3x3( s_e, sigma);
+    zero_3x3( sigma);
+    nye_to_matrix_planeStress( s_e, sigma);
     apf::setMatrix( f, ent, i, sigma);
   }
 
