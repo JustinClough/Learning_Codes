@@ -88,6 +88,7 @@ void BodyLoad::atPoint(
   apf::getBF( shape, elem, p, N);
   apf::DynamicVector f_tmp (num_elem_dofs);
   f_tmp.zero();
+  fe.zero();
   int ind = 0;
 
   for( int i =0; i < num_elem_nodes; ++i)
@@ -95,12 +96,11 @@ void BodyLoad::atPoint(
     for( int j = 0; j < num_dims; ++j)
     {
       ind = i*num_dims+j;
-      f_tmp[ind] += N[i]*g[i]*w*dv;
+      f_tmp[ind] += N[i]*g[j]*w*dv;
     }
   }
 
   fe += f_tmp;
-
   return;
 }
 

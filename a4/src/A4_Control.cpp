@@ -41,7 +41,7 @@ void initialize(bool init_mpi, bool init_kokkos, bool init_pcu)
 
 static void call_mpi_free()
 {
-  //MPI_Finalize();
+  MPI_Finalize();
   is_mpi_initd = false;
 }
 

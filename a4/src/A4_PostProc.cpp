@@ -19,7 +19,7 @@ void set_to_field( apf::Field* f, RCP<Vector> v, Disc* d)
     {
       auto row = d->get_owned_lid( node, i);
       value[i] = u[row];
-    }
+    } 
     apf::setVector( f, e, nodeth, value);
   }
   apf::synchronize( f);

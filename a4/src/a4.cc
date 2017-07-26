@@ -54,7 +54,7 @@ int main( int argc, char** argv)
   char force_name[] = "Traction";
   apf::Field* force = apf::createFieldOn( m, force_name, apf::VECTOR);
   apf::zeroField( force);
-  solver->set_force_to_field( disp);
+  solver->set_force_to_field( force);
 
   char stress_name[] = "Cauchy Stress";
   apf::Field* stress_f = apf::createIPField( 
@@ -68,6 +68,7 @@ int main( int argc, char** argv)
 
   // delete fields
   apf::destroyField( disp);
+  apf::destroyField( force);
   apf::destroyField( stress_f);
 
   // delete discretization and solver objects
