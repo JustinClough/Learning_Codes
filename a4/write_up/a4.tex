@@ -21,6 +21,7 @@
 \usepackage{nameref}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage[linesnumbered,ruled]{algorithm2e}
 
 \begin{document}
 \maketitle
@@ -398,31 +399,421 @@ Equation \ref{eq:J_numInt}.
   \sum_{n^2_{int}=1}^{N^2_{int}} 
   \sum_{n^3_{int}=1}^{N^3_{int}} 
   p(
-  \xi_1\Big|_{n^1_{int}}, 
-  \xi_2\Big|_{n^2_{int}}, 
-  \xi_3\Big|_{n^3_{int}})
-  J(
-  \xi_1\Big|_{n^1_{int}}, 
-  \xi_2\Big|_{n^2_{int}}, 
-  \xi_3\Big|_{n^3_{int}})
+  x_1(\xi\Big|_{n^1_{int}}),
+  x_2(\xi\Big|_{n^2_{int}}),
+  x_3(\xi\Big|_{n^3_{int}}))
+  J( \xi\Big|_{n^3_{int}})
   W_{n^1_{int}}
   W_{n^2_{int}}
   W_{n^3_{int}}
 \end{multline}
 
+Shape functions were used to interpolate quantities between the
+nodes of $\Omega_h$. 
 
+%TODO
 
 \subsection{Linear Algebra} \label{subsec:LinAlg}
-Linear algebra text here
+The entirety of the stiffness matrix was not stored as it is 
+sparsely populated. Instead, the matrix was stored as a collection
+of arrays using compressed row storage. 
+Each array represented a row in the stiffness matrix. 
+The elements of each array stored the non-zero value and column index of the 
+matrix element it represented. This project made use 
+of the implementation available through \texttt{TPetra}.
+
+The Generalized Minimal Residual (GMRES) method was used to solve 
+the system described in Equation \ref{eq:KdF}. Specifically
+the implementation from the \texttt{Belos} package was used.  
+The GMRES is an iterative method; for this project a maximum 
+iteration limit of 200 was used with a tolerance of $10^{-10}$.
 
 \section{Code Description} \label{sec:codeDes}
-Pseudo code intro text here.
+Code description here.
 
 \subsection{Class Description} \label{subsec:class}
 Class description text here.
 
 \subsection{Pseudo Code} \label{subsec:pseudo}
-Pseudo code text here.
+The main code is shown in Algorithm \ref{al:main}. For all 
+algorithms presented in the this section, namespaces 
+are not shown for brevity. Algorithm blocks which 
+show the pseudo codes for subroutines written for this 
+project are shown after Algorithm \ref{al:main}. 
+Pseudo code for functions and methods not written for this 
+project but borrowed from other libraries, like \texttt{PUMI},
+\texttt{APF}, and \texttt{Trilinos}, are not shown.
+
+\vspace{\baselineskip}
+\begin{algorithm} [H] 
+  \underline{main} $(int \quad argc, \quad char** \quad argv)$ 
+  \BlankLine
+    \tcc
+    {
+      Create a parameter list object and populate with information
+      from yaml file.
+    }
+    ParameterList p\;
+    updateParametersFromYaml( $<$yamlFile$>$, p)\;
+    \tcc
+    { 
+      Load the mesh from file.
+    }
+    m = loadMdsMesh( $<$modelFileName$>$.dmg, $<$meshFileName$>$.smb)\;
+    \tcc
+    { 
+      Create a discretization-class object based on the mesh
+      and the associations file.
+    }
+    d = createDiscretization( m, $<$associationsFile$>$)\;
+    \tcc
+    {
+      Create a solver-class object, then solve the FE system.
+      The system is solved using the GMRES method discussed
+      in subsection \ref{subsec:LinAlg} using the
+      \texttt{Belos} software package.
+    }
+    s = createSystemSolver( d, p, integration\_order, body\_load)\;
+    s$\rightarrow$ solve()\;
+    \tcc
+    {
+      Create and populate fields with solution information. 
+      Write to Vtk file. (Note: 3 is the dimension in writeVtkFiles.)
+    }
+    s$\rightarrow$ set\_displacement\_to\_field()\;
+    s$\rightarrow$ set\_traction\_to\_field()\;
+    s$\rightarrow$ set\_stress\_to\_field()\;
+    writeVtkFiles( $<$FileName$>$, m, 3)\;
+    \tcc
+    {
+      Allocated memory space is freed.
+    }
+    return 0 \;
+  \caption{The main function for this project. The function takes 10 
+            arguments which are described in section \ref{sec:intro}.}
+  \label{al:main}
+\end{algorithm}
+
+\vspace{\baselineskip}
+\begin{algorithm}[H]
+  \underline{createDiscretization} $(mesh* \quad m, char* \quad <associationsFile>)$
+  \BlankLine
+  \tcc
+  {
+    Verify the mesh is usable; abort program otherwise.
+  }
+  m$\rightarrow$ verify()\;
+  \tcc
+  {
+    Compute maps and node sets for creating the linear algebra data types
+    and assigning boundary conditions.
+  }
+  compute\_maps()\;
+  compute\_sets()\;
+  return\;
+  \caption{Constructor for the discretization object.}
+  \label{al:creatDisc}
+\end{algorithm}
+
+\vspace{\baselineskip}
+\begin{algorithm}
+  \underline{discretization::compute\_maps} $()$
+  \BlankLine
+  get\_number\_nodes( mesh)\;
+  numbering = create\_new\_numbering( mesh)\;
+  \For{Each Node}
+  {
+    \tcc
+    {
+      Assign each node a unique global identification number.
+    }
+    assign\_node\_ID( this\_node, numbering)\;
+  }
+  create\_map\_outline( numbering)\;
+  \For{Each Node}
+  {
+    \For{Each Nodal Degree of Freedom}
+    {
+      assign\_map\_value()\;
+    }
+  }
+  return;
+  \caption{Member function of the discretization object that constructs
+            the maps needed to create the sparse stiffness matrix, solution,
+            and forcing vector.}
+  \label{al:compMaps}
+\end{algorithm}
+
+\vspace{\baselineskip}
+\begin{algorithm}
+  \underline{discretization::compute\_sets} $()$
+  \BlankLine
+  \For{Each Set Declared in yaml}
+  {
+    \For{Each Mesh Entity of Defined Dimension}
+    {
+      get\_classification( mesh\_entity)\;
+      \If{ Geometric Entity Needs Set From yaml}
+      {
+        \tcc
+        {
+          Add this mesh entity to a list for this set.
+        }
+      }
+    }
+  }
+  return\;
+  \caption{Member function of the discretization object that constructs
+            node sets for assigning boundary conditions.}
+  \label{al:compSets}
+\end{algorithm}
+
+\vspace{\baselineskip}
+\begin{algorithm}[H]
+  \underline{solver::solve} $()$
+  \BlankLine
+  \tcc
+  {
+    Assemble the unreduced stiffness matrix and forcing vector.
+  }
+  assemble\_Left\_Hand\_Side()\;
+  assemble\_Right\_Hand\_Side()\;
+  \tcc
+  {
+    Apply Dirichlet boundary conditions to the system.
+  }
+  apply\_Dirichlet\_BCs()\;
+  \tcc
+  {
+    Solve the $Kd=F$ system iteratively using GMRES method.
+  }
+  solve\_linear\_system()\;
+  return\;
+  \caption{Method for creating and then solving the finite element system.}
+  \label{al:solve}
+\end{algorithm}
+
+\vspace{\baselineskip}
+\begin{algorithm}[H]
+  \underline{solver::assemble\_Left\_Hand\_Side} $()$
+  \BlankLine
+  get\_material\_properties()\;
+  \For{Each Mesh Element}
+  {
+    integrate\_elastic\_stiffness()\;
+    get\_element\_node\_IDs()\;
+    \For{Each Nodal Degree of Freedom}
+    {
+      get\_global\_row\_number()\;
+      sum\_elemental\_into\_global\_stiffness()\;
+    }
+  }
+  return\;
+  \caption{Method for creating the unreduced stiffness matrix accounting
+          for the final system begin sparsely populated.}
+  \label{al:AssembleLHS}
+\end{algorithm}
+
+\vspace{\baselineskip}
+\begin{algorithm}[H]
+  \underline{solver::assemble\_Right\_Hand\_Side} $()$
+  \BlankLine
+  \tcc
+  {
+    Neumann boundary conditions are first evaluated, 
+    then body loads. This order is arbitrary.
+  }
+  \For{Each Neumann Boundary Condition from yaml}
+  {
+    get\_traction\_vector()\;
+    \tcc
+    {
+      The sets computed earlier in Algorithm \ref{al:compSets}
+      are used here to quickly 
+      retrieve the list of mesh entities on the boundary 
+      that need to be evaluated.
+    }
+    get\_boundary\_mesh\_entities()\;
+    \For{Each Mesh Entity}
+    {
+      integrate\_traction()\;
+      get\_element\_node\_IDs()\;
+      \For{Each Nodal Degree of Freedom}
+      {
+        get\_global\_row\_number()\;
+        sum\_elemental\_into\_global\_forcing()\;
+      }
+    }
+  }
+  \For{Each Mesh Region}
+  {
+    integrate\_body\_load()\;
+    get\_element\_node\_IDs()\;
+    \For{Each Nodal Degree of Freedom}
+    {
+      get\_global\_row\_number()\;
+      sum\_elemental\_into\_global\_forcing()\;
+    }
+  }
+  return\;
+  \caption{Method for creating the forcing vector based on Neumann boundary 
+            conditions and body loads.}
+  \label{al:AssembleRHS}
+\end{algorithm}
+
+\vspace{\baselineskip}
+\begin{algorithm} 
+  \underline{integrate\_body\_load} $()$
+  \BlankLine
+  \For{Each Integration Point}
+  {
+    p = get\_parametric\_location()\;
+    w = get\_point\_weight(p)\;
+    dv= get\_det\_J(p)\;
+    N = get\_basis\_func(p)\;
+    \For{Each Element Node}
+    {
+      \For{Each Degree of Freedom}
+      {
+        $f_{tmp}(i) \leftarrow f_{tmp}(i) + N(i) * g(i) * w * dv$ \;
+        \tcc
+        {
+          Where "g" is the vector of body loads.
+        }
+      }
+    }
+
+    $F_e \leftarrow F_e + f_{tmp}$\;
+  }
+  return;
+  \caption{Integration method to construct elemental forcing vector
+            contributions due to Neumann boundary conditions.}
+  \label{al:BLC_int}
+\end{algorithm}
+
+\vspace{\baselineskip}
+\begin{algorithm} 
+  \underline{integrate\_traction} $()$
+  \BlankLine
+  \For{Each Integration Point}
+  {
+    p = get\_parametric\_location()\;
+    w = get\_point\_weight(p)\;
+    dv= get\_det\_J(p)\;
+    N = get\_basis\_func(p)\;
+    \For{Each Element Node}
+    {
+      \For{Each Degree of Freedom}
+      {
+        $f_{tmp}(i) \leftarrow f_{tmp}(i) + N(i) * T(i) * w * dv$ \;
+        \tcc
+        {
+          Where "T" is the vector of tractions.
+        }
+      }
+    }
+
+    $F_e \leftarrow F_e + f_{tmp}$\;
+  }
+  return\;
+  \caption{Integration method to construct elemental forcing vector
+            contributions due to Neumann boundary conditions.}
+  \label{al:NBC_int}
+\end{algorithm}
+
+\vspace{\baselineskip}
+\begin{algorithm}
+  \underline{integrate\_elastic\_stiffness} $()$
+  \BlankLine
+  D = fill\_material\_elasticity\_tensor()\;
+  \For{Each Integration Point}
+  {
+    p = get\_parametric\_location()\;
+    w = get\_point\_weight(p)\;
+    dv= get\_det\_J(p)\;
+    B = get\_basis\_func\_gradient(p)\;
+    $k_{tmp}$ $\leftarrow$ $B^{T}*D*B*w*dv$\;
+    $K_e \leftarrow K_e + k_{tmp}$\;
+  }
+  return\;
+  \caption{Integration method to construct elemental stiffness matrices.}
+  \label{al:KE_int}
+\end{algorithm}
+
+\vspace{\baselineskip}
+\begin{algorithm}[H]
+  \underline{solver::apply\_Dirichlet\_BCs} $()$
+  \BlankLine
+  \For{Each Dirichlet Boundary Condition from yaml}
+  {
+    get\_displacement\_vector()\;
+    \tcc
+    {
+      The sets computed earlier in Algorithm \ref{al:compSets}
+      are used here to
+      retrieve the list of mesh entities on the boundary 
+      that need to be evaluated.
+    }
+    get\_boundary\_mesh\_entities()\;
+    \For{Each Mesh Entity}
+    {
+      get\_element\_node\_IDs();
+      \For{Each Nodal Degree of Freedom}
+      {
+        \tcc
+        {
+          All row entries but the diagonal term for this 
+          row of the stiffness matrix are set to zero. The
+          diagonal term is set to one and the old diagonal 
+          term is multiplied by the displacement component
+          for this degree of freedom and placed into the 
+          forcing vector.
+        }
+        tmp = get\_global\_stiffness\_diagonal()\;
+        \For{Each Non-Zero Row Entry}
+        {
+          \If{ $row == column$}
+          {
+            set\_stiffness(row, column, 1.0)\;
+            set\_force( row, tmp*displacement)\;
+          }
+          \Else
+          {
+            set\_stiffness(row, column, 0.0)\;
+          }
+        }
+      }
+    }
+  }
+  return\;
+  \caption{Method for adjusting stiffness matrix and force vector for 
+            Dirichlet boundary conditions.}
+  \label{al:ApplyDBCs}
+\end{algorithm}
+
+\vspace{\baselineskip}
+\begin{algorithm}[H]
+  \underline{solver::set\_$<*>$\_to\_field} $()$
+  \BlankLine
+  get\_mesh\_nodes();
+  \For{Each Node}
+  {
+    \For{Each Nodal Degree of Freedom}
+    {
+      \tcc
+      {
+        The value that the field represents (displacement,
+        traction, or stress) is gotten here.
+      }
+      get\_solution\_component()\;
+      set\_component\_to\_field()\;
+    }
+  }
+  \caption{Generic function for setting a vector or matrix solution to a field
+            that can then be written to a Vtk file for use with ParaView.}
+  \label{al:set_to_field}
+\end{algorithm}
+\vspace{\baselineskip}
 
 \section{Testing} \label{sec:testing}
 Testing text here.
