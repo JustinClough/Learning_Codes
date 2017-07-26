@@ -46,3 +46,6 @@ a4/models_meshes/
 
 #test directories
 test/
+
+#latex style package
+*.sty
