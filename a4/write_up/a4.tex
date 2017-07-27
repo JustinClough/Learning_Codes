@@ -23,6 +23,9 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[linesnumbered,ruled]{algorithm2e}
+\usepackage{tikz}
+\usetikzlibrary{calc,patterns,decorations.pathmorphing,decorations.markings}
+
 
 \begin{document}
 \maketitle
@@ -1336,7 +1339,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
   {
     \For{Each Spatial Dimension}
     {
-      row = get\_DOF\_ID();
+      row = get\_DOF\_ID()\;
       \tcc
       {
         The analytical solution is discussed further in
@@ -1354,22 +1357,71 @@ project but borrowed from other libraries, like \texttt{PUMI},
 \vspace{\baselineskip}
 
 \section{Testing} \label{sec:testing}
-Testing text here.
+The code written for this project was tested with triangular and 
+quadrilateral elements. Each type of element was also 
+tested in a linear and quadratic level of accuracy;
+linear in that shape functions and numerical integration 
+order were linear - quadratic in that the shape functions and
+numerical integration order were quadratic.
+The same 1 by 1 unit length model was used for all tests for 
+consistency. The same base Dirichlet boundary counditions were used
+for all tests as well; the leftmost and bottommost edge 
+constrained to perpendicular motion as shown in Figure \ref{fig:DiriBC}.
+Each element type and accuracy level combination was tested with
+the following three scenarios:
 
-\subsection{Linear Tetrahedron Elements} \label{subsec:linTet}
+\begin{enumerate}
+  \item  stuff
+
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+\begin{tikzpicture}[every node/.style={draw,outer sep=0pt,thick}]
+  \tikzstyle{ground}=
+    [fill,pattern=north east lines,draw=none,minimum width=0.75cm,minimum height=0.3cm]
+
+\begin{scope}[xshift=7cm]
+  % Creates the rectangle
+  \node (M) [minimum width=2.5cm, minimum height=2.5cm] {};
+
+  % Creates the bottom ground
+  \node (ground) [ground,anchor=north,yshift=-0.25cm,minimum width=3.0cm] 
+          at (M.south) {};
+  \draw (ground.north east) -- (ground.north west);
+
+  % Create the bottom rollers
+  \draw [thick] (M.south west) ++ ( 0.2cm,-0.125cm) circle (0.125cm)  
+                (M.south east) ++ (-0.2cm,-0.125cm) circle (0.125cm);
+
+  % Create the left ground
+  \node (wall) [ground, rotate=-90, minimum width=3cm,yshift=-0.38cm]
+          at (M.west) {};
+  \draw (wall.north east) -- (wall.north west);
+
+  % Create the left rollers
+  \draw [thick] (M.north west) ++ (-0.125cm,-0.2cm) circle (0.125cm)  
+                (M.south west) ++ (-0.125cm, 0.2cm) circle (0.125cm);
+\end{scope}
+
+\end{tikzpicture}
+  \caption{Base Dirichlet boundary conditions.}
+  \label{fig:DiriBC}
+\end{figure} 
+
+
+\subsection{Linear Triangular Elements} \label{subsec:linTris}
 Linear Tri element text here.
 
 Convergence of linear tet elements here.
 
-\subsection{Linear Hexahedron Elements} \label{subsec:linHex}
-Linear quad text here.
-
-\subsection{Quadratic Tetrahedron Elements} \label{subsec:quadTet}
+\subsection{Quadratic Triangular Elements} \label{subsec:quadTris}
 Quadratic Tri element text here.
 
-Convergence of quad tets here.
+\subsection{Linear Quadrilateral Elements} \label{subsec:linQuads}
+Linear quad text here.
 
-\subsection{Quadratic Hexahedron Elements} \label{subsec:quadHex}
+\subsection{Quadratic Quadrilaterals Elements} \label{subsec:quadQuads}
 Quadratic quad element text here.
 
 \section{Conclusion} \label{sec:conclusion}
