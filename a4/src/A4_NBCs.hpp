@@ -18,7 +18,7 @@ class LinAlg;
 /// @brief Precribe Neumann boundary conditions.
 /// @param d  The discretization of node sets.
 /// @param la The relavent linear algebra data.
-/// @param p  The parameterlist defining bcs. 
+/// @param p  The parameterlist defining bcs.
 /// @param inte_order
 ///           The numerical integration order of accuracy.
 void apply_nbcs(
@@ -27,13 +27,13 @@ void apply_nbcs(
   ParameterList const& p,
   int inte_order);
 
-class elemTrac : 
+class elemTrac :
   public apf::Integrator
 {
   public:
 
     /// @brief Construct the traction stiffness integrator.
-    /// @param d     The discretization object. 
+    /// @param d     The discretization object.
     /// @param la    The linear algebra object.
     /// @param order Order of numerical integration accuracy.
     /// @param val   The component value of traction.
@@ -44,7 +44,7 @@ class elemTrac :
       double val,
       int eqNumber);
 
-    /// @brief Prepare each new element. 
+    /// @brief Prepare each new element.
     /// @param elem The mesh element.
     void inElement( apf::MeshElement* element);
 
@@ -56,8 +56,8 @@ class elemTrac :
     ///  - this->process(apf::Mesh* m) or
     ///  - this->process(apf::MeshElement* elem)
     /// will provide the input parameters.
-    void atPoint( 
-      apf::Vector3 const& p, 
+    void atPoint(
+      apf::Vector3 const& p,
       double w,
       double dv);
 

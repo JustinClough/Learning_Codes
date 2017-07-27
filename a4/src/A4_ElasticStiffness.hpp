@@ -50,7 +50,7 @@ class ElasticStiffness : public apf::Integrator
     int num_dims;
     int num_elem_nodes;
     int num_elem_dofs;
-    
+
     apf::DynamicMatrix D;
     apf::DynamicMatrix B;
     apf::DynamicMatrix DB;

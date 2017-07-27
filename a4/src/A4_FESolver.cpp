@@ -25,9 +25,9 @@ static ParameterList get_valid_params()
 }
 
 FESolver::FESolver(
-  Disc* d, 
-  ParameterList const& p, 
-  int order, 
+  Disc* d,
+  ParameterList const& p,
+  int order,
   double load[3]):
     disc(d),
     params(p),
@@ -38,7 +38,7 @@ FESolver::FESolver(
   g[0] = load[0];
   g[1] = load[1];
   g[2] = load[2];
-  
+
 
 }
 
@@ -69,7 +69,7 @@ void FESolver::assemble_LHS()
 
     // create a mesh element to pass to the integrator
     apf::MeshElement* me = apf::createMeshElement(mesh, ent);
-    
+
     // integrate over the current element
     LHS->process( me);
 

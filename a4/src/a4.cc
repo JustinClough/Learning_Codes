@@ -73,7 +73,7 @@ int main( int argc, char** argv)
   solver->set_force_to_field( force);
 
   char stress_name[] = "Cauchy Stress";
-  apf::Field* stress_f = apf::createIPField( 
+  apf::Field* stress_f = apf::createIPField(
       m, stress_name, apf::MATRIX, (m->getShape())->getOrder());
   apf::zeroField( stress_f);
   solver->set_stress_to_field( stress_f);
@@ -83,7 +83,7 @@ int main( int argc, char** argv)
   apf::writeVtkFiles( fileName, m, m->getDimension());
 
   std::cout << "APPROXIMATION ERROR IS: " << solver->get_error() << std::endl;
-  
+
   // delete fields
   apf::destroyField( disp);
   apf::destroyField( force);

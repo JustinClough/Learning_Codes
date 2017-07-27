@@ -49,7 +49,7 @@ class FESolver
     /// @param f The field to write Cauchy stress to.
     void set_stress_to_field( apf::Field* f);
 
-    /// @brief Calculates the error in displacement 
+    /// @brief Calculates the error in displacement
     ///        approximation with an L2 norm.
     double get_error();
 

@@ -38,7 +38,7 @@ void elemTrac::inElement( apf::MeshElement* element)
 
   fe.setSize(num_elem_dofs);
   fe.zero();
-  
+
   return;
 }
 
@@ -71,7 +71,7 @@ void elemTrac::outElement()
   elem = 0;
   return;
 }
-  
+
 
 void apply_nbcs(
   Disc* d,
@@ -82,7 +82,7 @@ void apply_nbcs(
   std::vector<LO> lids;
   auto nbcs = p.sublist( "traction bcs");
   auto mesh = d->get_apf_mesh();
-  
+
   for( auto it = nbcs.begin(); it != nbcs.end(); ++it)
   {
     auto entry = nbcs.entry(it);

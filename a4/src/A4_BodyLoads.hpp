@@ -23,7 +23,7 @@ class LinAlg;
 /// @brief Precribe body loads.
 /// @param d  The discretization of node sets.
 /// @param la The relavent linear algebra data.
-/// @param order 
+/// @param order
 ///           The order of numerical integration accuracy.
 /// @param g  The value of the body load.
 void apply_body_loads(
@@ -48,18 +48,18 @@ class BodyLoad :
         apf::Vector3 load);
 
 
-    /// @brief Prepares each new element. 
+    /// @brief Prepares each new element.
     /// elem The new element to be processed.
-    void inElement( 
+    void inElement(
         apf::MeshElement* me);
 
     /// @brief Work done at each integration point.
     /// @param p  The parametric integration point coordinates.
     /// @param w  The integration point weight.
     /// @param dv The differential volume at the integration point.A
-    void atPoint( 
+    void atPoint(
         apf::Vector3 const& p,
-        double w, 
+        double w,
         double dv);
 
     /// @brief Free and finalize data once done with the element.
@@ -71,12 +71,12 @@ class BodyLoad :
       return fe;
     }
 
-  private: 
+  private:
     int order;
     apf::Mesh* m;
     apf::FieldShape* shape;
     apf::MeshElement* elem;
-    
+
     apf::Vector3 g;
     apf::NewArray<double> N;
     apf::DynamicVector fe;

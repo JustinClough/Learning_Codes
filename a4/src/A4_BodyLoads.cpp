@@ -63,7 +63,7 @@ BodyLoad::BodyLoad(
   return;
 }
 
-void BodyLoad::inElement( 
+void BodyLoad::inElement(
     apf::MeshElement* me)
 {
   elem = me;
@@ -73,16 +73,16 @@ void BodyLoad::inElement(
   num_dims = m->getDimension();
   num_elem_nodes = es->countNodes();
   num_elem_dofs = num_dims * num_elem_nodes;
-  
+
   fe.setSize( num_elem_dofs);
   fe.zero();
-  
+
   return;
 }
 
 void BodyLoad::atPoint(
         apf::Vector3 const& p,
-        double w, 
+        double w,
         double dv)
 {
   apf::getBF( shape, elem, p, N);

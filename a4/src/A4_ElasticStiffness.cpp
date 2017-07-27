@@ -58,7 +58,7 @@ void ElasticStiffness::inElement(apf::MeshElement* me)
 
 void ElasticStiffness::atPoint(apf::Vector3 const& p, double w, double dv)
 {
-  apf::getGradBF(shape, mesh_element, p, dN); 
+  apf::getGradBF(shape, mesh_element, p, dN);
   for (int i = 0; i < num_elem_nodes; ++i)
   {
     B(0,2*i)     = dN[i][0];
