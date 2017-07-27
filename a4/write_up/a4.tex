@@ -9,6 +9,7 @@
 \usepackage{multirow}
 \usepackage{listings}
 \lstset{
+    escapechar=`,
     language=C++,
     numbers=left,
     tabsize=2,
@@ -31,7 +32,7 @@
 The purpose of this project was to develop a Finite
 Element Analysis (FEA) code that solves linear
 elliptic problems. This project does so for
-three dimensional solid mechanic problems. The user
+two dimensional plane stress solid mechanic problems. The user
 provides the code with the following information
 (an example input script is shown in
 Appendix \ref{subsec:ExIn}):
@@ -170,28 +171,18 @@ The material stiffness tensor $D$ for this application
 is shown in Equation \ref{eq:MatStiff}:
 
 \begin{equation} \label{eq:MatStiff}
-  D =
+  D = \frac{E}{1-\nu^2}
   \begin{bmatrix}
-  \lambda+2\mu & \lambda      & \lambda      & 0 & 0 & 0 \\
-  \lambda      & \lambda+2\mu & \lambda      & 0 & 0 & 0 \\
-  \lambda      & \lambda      & \lambda+2\mu & 0 & 0 & 0 \\
-  0 & 0 & 0 & \mu & 0 & 0 \\
-  0 & 0 & 0 & 0 & \mu & 0 \\
-  0 & 0 & 0 & 0 & 0 & \mu
+  1 & \nu & 0 & 0 & 0 & 0 \\
+  \nu & 1 & 0 & 0 & 0 & 0 \\
+  0 & 0 & 0  & 0 & 0 & 0 \\
+  0 & 0 & 0 & 0 & 0 & 0 \\
+  0 & 0 & 0 & 0 & 0 & 0 \\
+  0 & 0 & 0 & 0 & 0 & \frac{1-\nu}{2}
   \end{bmatrix}
 \end{equation}
 
 \noindent
-where $\lambda$ and $\mu$ are the Lam\'e parameters.
-These parameters are based on the material properties $E$ and $\nu$
-as shown in Equations \ref{eq:LameLambda} and \ref{eq:LameMu}:
-
-\begin{align}
-\lambda &= \frac{ \nu E }{(1+\nu) (1-2\nu) }
-  \label{eq:LameLambda} \\
-\mu &= \frac{ E}{ 2( 1+\nu)}
-  \label{eq:LameMu}
-\end{align}
 
 \noindent
 where $E$ and $\nu$ are the Young's Modulus and Poisson Ratio
@@ -206,8 +197,7 @@ The weak form is shown in Equation \ref{eq:WeakForm}:
 \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega =
   \int_{\Omega} w_{i} f_{i} d\Omega +
   w_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
-\end{equation}
-
+\end{equation} 
 \noindent
 where $w$ is a weighting function subject to the constraints
 expressed in Equation \ref{eq:WConsts}.
@@ -409,9 +399,34 @@ Equation \ref{eq:J_numInt}.
 \end{multline}
 
 Shape functions were used to interpolate quantities between the
-nodes of $\Omega_h$. 
+nodes of $\Omega_h$ but were defined in the parametric space $\Box$.
+The functions used meet the constraint shown
+shown in Equation \ref{eq:shapeContr}.
 
-%TODO
+\begin{equation} \label{eq:shapeContr}
+N_i(\xi_j) = \delta_{ij}
+\end{equation}
+
+In Equation \ref{eq:shapeContr}, $\delta_{ij}$ is the Kronecker delta, 
+$N_i$ is the shape function of the $i$th node, and $\xi_j$ is the 
+parametric coordinates of the $j$th node. Lagrange basis functions
+were used for shape functions for first order approximations; 
+serendipity shape functions were used for second order approximations.  Lagrange shape functions were formed by the method shown in 
+Equation \ref{eq:Lagr}.
+
+\begin{equation} \label{eq:Lagr}
+N_i(\xi) = 
+  \prod_
+  { \substack{ j =    1    \\ 
+               j \neq i } }
+  ^{j = n_{en}}
+  \frac
+  { \xi   - \xi_{j} }
+  { \xi_i - \xi_{j} }
+\end{equation}
+
+The number of nodes for each element is represented by $n_{en}$ in 
+Equation \ref{eq:Lagr}.
 
 \subsection{Linear Algebra} \label{subsec:LinAlg}
 The entirety of the stiffness matrix was not stored as it is 
@@ -429,10 +444,468 @@ The GMRES is an iterative method; for this project a maximum
 iteration limit of 200 was used with a tolerance of $10^{-10}$.
 
 \section{Code Description} \label{sec:codeDes}
-Code description here.
+The code written for this project was made in \texttt{C++} 
+and makes use of the \texttt{APF}, \texttt{GMI}, and 
+\texttt{Trilinos} libraries. The user interacts with
+the code at the command line and provides the following
+arguments (not including the executable name and path):
+
+\begin{enumerate}
+  \item \texttt{<model\_file>.dmg} which is the geometric model.
+  \item \texttt{<mesh\_file>.smb} which is the mesh of the 
+        geometric model.
+  \item \texttt{<associations>.txt} which dictates and names sets of
+        mesh nodes and entities to construct by classification on the
+        geometric model. This later allows the user to declare 
+        boundary conditions by name in the \texttt{.yaml} file.
+        An example \texttt{<associations>.txt} file is shown in
+        Appendix \ref{subsec:ExAssoc}.
+  \item \texttt{<Problem\_Statement>.yaml} which dictates material
+        properties (Young's modulus and Poisson's ratio),
+        boundary conditions (Dirichlet and Neumann), and parameters
+        for the linear solver such as method and tolerance. An
+        example \texttt{.yaml} file is shown in Appendix \ref{subsec:ExYaml}.
+  \item \texttt{Order} as an integer value. It is the order of 
+        both the shape functions used and numerical integration. 
+        Only one and two are supported in this project.
+  \item \texttt{Body\_Load} as three floating point numbers.
+        It represent the force per unit area acting on the model
+        as $(X, Y, Z)$ vector. For the plane stress application,
+        the $Z$ component is not used.
+\end{enumerate}
+
+\noindent
+The classes created for this code are presented 
+in Section \ref{subsec:class}.
+This includes a brief description of the class's purpose,
+its public member variables, and public member functions. 
+Extra utility features of classes are not shown in 
+Section \ref{subsec:class} for brevity.  Following this in 
+Section \ref{subsec:pseudo}, are Algorithm Blocks which list the 
+pseudo code for the entire project.
 
 \subsection{Class Description} \label{subsec:class}
-Class description text here.
+The class shown in Listing \ref{lst:Disc} is the discretization 
+class. It creates and stores sets of mesh entities and nodes that the user
+can later use when applying boundary conditions. It also 
+creates the maps from the degrees of freedom of the nodes 
+in the mesh to the rows in the linear algebra system.
+The header and source file for this class are shown in
+Appendix \ref{subsec:Disc.hpp} and \ref{subsec:Disc.cpp}, 
+respectively.
+
+\begin{lstlisting} [
+  caption=Discretization class member variables and functions.,
+  label=lst:Disc]
+class Disc{
+  // Public member functions and descriptions:
+  
+  // Constructor: 
+  //  Creates the discretization object based on the mesh 
+  //  and associations file. Creates the sets of nodes 
+  //  and maps as well.
+  Disc( mesh, assoc_file);
+
+  // Gets the set of mesh sides by name. 
+  // Returns a standard vector of the 
+  // mesh entities.
+  std::vector<apf::MeshEntity*>
+    get_sides( std::string set_name);
+
+  // Gets the set of mesh nodes by name. 
+  // Returns a standard vector of the 
+  // mesh nodes.  
+  std::vector<apf::Node*>
+    get_node( std::string set_name);
+
+  // Private member variables:
+  
+  // The mesh used for this problem.
+  apf::Mesh* mesh;
+
+  // The number of spatial dimensions.
+  int num_dims;
+
+  // A map from node set name to the set of nodes.
+  std::map<std::string, std::vector<apf::Node> > node_sets;
+  
+  // A map from side set name to the set of 
+  // mesh entities.
+  std::map<std::string, std::vector<apf::MeshEntity*> > side_sets;
+};
+\end{lstlisting}
+\vspace{\baselineskip}
+
+The class shown in Listing 
+\ref{lst:FESolver} is the 
+Finite Element Solver 
+class.  
+It creates, stores, and solves the linear system which represents
+the finite element problem. Creating the system includes creating the 
+global stiffness matrix and assigning boundary conditions to create 
+the correct stiffness matrix and forcing vector for the given
+problem statement and mesh. It then creates assigns the solution
+and secondary variables to a field. This field can then be written 
+to Vtk files which are then viewed in ParaView. It can also calculate the
+Root Mean Square (RMS) error of the approximated displacement solution.
+The header and source file for this class are shown in Appendix 
+\ref{subsec:FESolver.hpp} and 
+\ref{subsec:FESolver.cpp}, 
+respectively.
+
+\begin{lstlisting} [
+  caption=FESolver class members variables and functions.,
+  label=lst:FESolver]
+class FESolver{
+  // Public member functions and descriptions:
+  public:
+
+  // Constructor:
+  //  Constructs the solver object based on the maps and
+  //  sets created by the discretization object. Also 
+  //  stores data from the .yaml (parameterList), 
+  //  solution order, and body load.
+  FESolver( disc, parameterList, order, load);
+
+  // Fill in the global stiffness matrix, adjusts and 
+  // creates the forcing vector by applying boundary
+  // conditions and body loads. The details of this 
+  // function are shown in Algorithm `\ref{al:solve}`
+  void solve();
+
+  // Set the solution vector, displacement, to an
+  // apf::field. The details of this function are
+  // shown in Algorithm `\ref{al:set_to_field}`.
+  void set_disp_to_field( field);
+
+  // Set the force vector to an apf::field.
+  // The details of this function are shown in 
+  // Algorithm `\ref{al:set_to_field}`.
+  void set_force_to_field( field);
+
+  // Calculates and sets the stress to an apf::field.
+  // Details of this function are shown in
+  // Algorithm `\ref{al:CauchyStress}`.
+  void set_stress_to_field( field);
+
+  // Calculate the Root Mean Square error in the 
+  // solution by comparing to the analytical solution.
+  // Details of this function are shown in
+  // Algorithm `\ref{al:getError}`.
+  double get_error();
+
+  // Private member functions and descriptions:
+  private:
+
+  // Assembles the global stiffness matrix. 
+  // Does not consider boundary conditions.
+  // The details of this function are shown in 
+  // Algorithm `\ref{al:AssembleLHS}`.
+  void assemble_LHS();
+
+  // Assemble the forcing vector. 
+  // Considers Dirichlet and Neumann boundary 
+  // conditions and body loads. Also makes
+  // needed modifications to stiffness matrix 
+  // for Dirichlet conditions.
+  // The details of this function are shown in 
+  // Algorithm `\ref{al:AssembleRHS}`.
+  void assemble_RHS();
+
+  // Private variables and descriptions:
+
+  // Pointer to the discretization object
+  Disc* disc;
+
+  // Pointer to the parameter list that contains 
+  // material properties and boundary conditions.
+  ParameterList* params;
+
+  // The linear algebra object. This class is described
+  // in Listing `\ref{lst:LA}`.
+  LinAlg* la;
+
+  // The order of accuracy. Used for order of shape 
+  // functions and numerical integration. 
+  int order;
+
+  // The array of body load components.
+  double g[3];
+
+  // Pointer to the elemental stiffness integrator.
+  ElasticStiffness* LHS;
+};
+\end{lstlisting}
+\vspace{\baselineskip}
+
+The class shown in Listing 
+\ref{lst:LA} is the 
+Linear Algebra 
+class.  
+This class is an interface to the global stiffness matrix, forcing
+vector, and solution vector. The stiffness matrix uses the 
+compressed row storage matrix class from the \texttt{Tpetra}
+software package. The forcing vector and solution vector are 
+stored as defined by the Vector class also from the \texttt{Tpetra}
+software package.
+The header and source file for this class are shown in Appendix 
+\ref{subsec:LinAlg.hpp} and 
+\ref{subsec:LinAlg.cpp}, 
+respectively.
+
+\begin{lstlisting} [
+  caption=Linear Algebra class member variables and functions.,
+  label=lst:LA]
+class LinAlg{
+  public:
+  // Public member functions and descriptions:
+
+  // Constructor:
+  //  Allocates space for the stiffness matrix, K, 
+  //  solution vector, U, and force vector, F, based
+  //  on the maps created from the discretization 
+  //  object.
+  LinAlg( disc);
+
+  // Public member variables and descriptions:
+  // Type definitions used for brevity.
+
+  // The stiffness matrix.
+  Matrix K;
+  
+  // The solution vector.
+  Vector U;
+
+  // The forcing vector.
+  Vector F;
+};
+\end{lstlisting}
+\vspace{\baselineskip}
+
+The class shown in Listing 
+\ref{lst:K_e_inte} is the 
+Elemental stiffness integrator
+class.
+This class inherits from the \texttt{apf::Integrator} class
+which provided the frame work for processing mesh elements.
+This member functions of this class dictate the operations that 
+need to be done for each element and each integration point 
+of each element to create the elemental stiffness matrix.
+The header and source file for this class are shown in Appendix 
+\ref{subsec:ElasticStiffness.hpp} and 
+\ref{subsec:ElasticStiffness.cpp}, 
+respectively.
+
+\begin{lstlisting} [
+  caption=Integrator class for elemental stiffness matrices.,
+  label=lst:K_e_inte]
+class ElasticStiffness{
+  public:
+  // Public member functions and descriptions.
+
+  // Constructor:
+  //  Creates the integrator object based on the mesh,
+  //  order of integration, and material properties.
+  ElasticStiffness( mesh, order, E, nu);
+
+  // Prepares each new mesh element for evaluation.
+  void inElement( apf::MeshElement* element);
+
+  // Updates the elemental stiffness matrix for each 
+  // integration point. Takes the parametric location,
+  // weight, and differential volume of 
+  // the integration point. The details of this 
+  // function are shown in Algorithm `\ref{al:KE_int}`.
+  void atPoint( apf::Vector3 para, double w, double dv);
+
+  // Finalizes and frees data once done with each 
+  // element.
+  void outElement();
+
+  // Public member variables and descriptions:
+
+  // The elemental stiffness matrix.  
+  apf::DynamicMatrix Ke;
+
+  private:
+  // Private member variables and descriptions:
+
+  // Number of spatial dimensions
+  int num_dims;
+  
+  // Number of nodes per element
+  int num_elem_nodes;
+
+  // Number of degrees of freedom per element
+  int num_elem_dofs
+
+  // Material stiffness matrix. Plane stress is used.
+  apf::DynamicMatrix D;
+
+  // Gradient of shape functions, product with D, and transpose.
+  apf::DynamicMatrix B;
+  apf::DynamicMatrix DB;
+  apf::DynamicMatrix BT;
+
+  // Temporary stiffness matrix.
+  apf::DynamicMatrix K_tmp;
+
+  // The mesh, basis function shape, and current element.
+  apf::Mesh* mesh;
+  apf::FieldShape shape;
+  apf::MeshElement* mesh_element;
+};
+\end{lstlisting}
+\vspace{\baselineskip}
+
+The class shown in Listing 
+\ref{lst:NBC_e_inte} is the 
+Elemental traction integrator
+class.
+This class inherits from the \texttt{apf::Integrator} class
+which provided the frame work for processing mesh elements.
+This member functions of this class dictate the operations that 
+need to be done for each element and each integration point 
+of each element to create the elemental force vector contributions.
+This class works for only one element and one component of 
+the traction at at time. This means that if a traction with
+components of $(t_x, t_y, 0)$ was prescribed on a boundary, 
+this class would need to be used for each element on the boundary
+twice; once for $t_x$ and once for $t_y$.
+The header and source file for this class are shown in Appendix 
+\ref{subsec:NBCs.hpp} and 
+\ref{subsec:NBCs.cpp}, 
+respectively.
+
+\begin{lstlisting} [
+  caption=Integrator class for elemental force vectors from tractions.,
+  label=lst:NBC_e_inte]
+class elemTrac{
+  public:
+  // Public member functions and descriptions.
+
+  // Constructor:
+  //  Creates the integrator object based on the mesh,
+  //  order of integration, traction value, and the 
+  //  corresponding spatial dimension.
+  elemTrac( mesh, order, value, eqNum);
+
+  // Prepares each new mesh element for evaluation.
+  void inElement( apf::MeshElement* element);
+
+  // Updates the elemental force vector for each 
+  // integration point. Takes the parametric location,
+  // weight, and differential volume of 
+  // the integration point. The details of this 
+  // function are shown in Algorithm `\ref{al:NBC_int}`.
+  void atPoint( apf::Vector3 para, double w, double dv);
+
+  // Finalizes and frees data once done with each 
+  // element.
+  void outElement();
+
+  // Public member variables and descriptions:
+
+  // The elemental force vector.
+  apf::DynamicVector fe;
+
+  private:
+  // Private member variables and descriptions:
+
+  // Number of spatial dimensions
+  int num_dims;
+  
+  // Number of nodes per element
+  int num_elem_nodes;
+
+  // Number of degrees of freedom per element
+  int num_elem_dofs
+
+  // Value of this traction component
+  double value;
+
+  // The mesh, basis function shape, and current element.
+  apf::Mesh* mesh;
+  apf::FieldShape shape;
+  apf::MeshElement* mesh_element;
+};
+\end{lstlisting}
+\vspace{\baselineskip}
+
+The class shown in Listing 
+\ref{lst:BL_e_inte} is the 
+Elemental body load integrator
+class.
+This class inherits from the \texttt{apf::Integrator} class
+which provided the frame work for processing mesh elements.
+This member functions of this class dictate the operations that 
+need to be done for each element and each integration point 
+of each element to create the elemental force vector contributions
+due to a body load.
+The header and source file for this class are shown in Appendix 
+\ref{subsec:BLhpp} and 
+\ref{subsec:BLcpp}, 
+respectively.
+
+\begin{lstlisting} [
+  caption=Integrator class for elemental force vectors from body loads.,
+  label=lst:BL_e_inte]
+class BodyLoad{
+  public:
+  // Public member functions and descriptions.
+  // Constructor:
+  //  Creates the integrator object based on the mesh,
+  //  order of integration, and body load vector.
+  elemTrac( mesh, order, g);
+
+  // Prepares each new mesh element for evaluation.
+  void inElement( apf::MeshElement* element);
+
+  // Updates the elemental force vector for each 
+  // integration point. Takes the parametric location,
+  // weight, and differential volume of 
+  // the integration point. The details of this 
+  // function are shown in Algorithm `\ref{al:BLC_int}`.
+  void atPoint( apf::Vector3 para, double w, double dv);
+
+  // Finalizes and frees data once done with each 
+  // element.
+  void outElement();
+
+  // Public member variables and descriptions:
+
+  // The elemental force vector contribution
+  apf::DynamicVector fe;
+
+  private:
+  // Private member variables and descriptions:
+
+  // Array of shape function values.
+  apf::NewArray<double> N;
+
+  // The order of numerical integration accuracy
+  int order;
+
+  // Number of spatial dimensions
+  int num_dims;
+  
+  // Number of nodes per element
+  int num_elem_nodes;
+
+  // Number of degrees of freedom per element
+  int num_elem_dofs
+
+  // Vector of the body load.
+  apf::Vector3 g;
+
+  // The mesh, basis function shape, and current element.
+  apf::Mesh* mesh;
+  apf::FieldShape shape;
+  apf::MeshElement* mesh_element;
+};
+  
+\end{lstlisting}
+\vspace{\baselineskip}
 
 \subsection{Pseudo Code} \label{subsec:pseudo}
 The main code is shown in Algorithm \ref{al:main}. For all 
@@ -451,8 +924,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
     \tcc
     {
       Create a parameter list object and populate with information
-      from yaml file.
-    }
+      from yaml file.  }
     ParameterList p\;
     updateParametersFromYaml( $<$yamlFile$>$, p)\;
     \tcc
@@ -484,6 +956,11 @@ project but borrowed from other libraries, like \texttt{PUMI},
     s$\rightarrow$ set\_traction\_to\_field()\;
     s$\rightarrow$ set\_stress\_to\_field()\;
     writeVtkFiles( $<$FileName$>$, m, 3)\;
+    \tcc
+    {
+      Calculate the RMS of the error and report to user.
+    }
+    s$\rightarrow$ get\_error()\;
     \tcc
     {
       Allocated memory space is freed.
@@ -656,7 +1133,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
     }
   }
   return\;
-  \caption{Method for creating the forcing vector based on Neumann boundary 
+  \caption{Method for creating the forcing vector based on Neumann boundary
             conditions and body loads.}
   \label{al:AssembleRHS}
 \end{algorithm}
@@ -675,7 +1152,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
     {
       \For{Each Degree of Freedom}
       {
-        $f_{tmp}(i) \leftarrow f_{tmp}(i) + N(i) * g(i) * w * dv$ \;
+        $f_{tmp} \leftarrow f_{tmp} + N * g * w * dv$ \;
         \tcc
         {
           Where "g" is the vector of body loads.
@@ -705,7 +1182,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
     {
       \For{Each Degree of Freedom}
       {
-        $f_{tmp}(i) \leftarrow f_{tmp}(i) + N(i) * T(i) * w * dv$ \;
+        $f_{tmp} \leftarrow f_{tmp} + N * T * w * dv$ \;
         \tcc
         {
           Where "T" is the vector of tractions.
@@ -809,9 +1286,29 @@ project but borrowed from other libraries, like \texttt{PUMI},
       set\_component\_to\_field()\;
     }
   }
-  \caption{Generic function for setting a vector or matrix solution to a field
+  \caption{Generic function for setting a vector solution to a field
             that can then be written to a Vtk file for use with ParaView.}
   \label{al:set_to_field}
+\end{algorithm}
+
+\vspace{\baselineskip}
+\begin{algorithm}[H]
+  \underline{set\_stress\_to\_field} $()$
+  \BlankLine
+  %TODO
+  \caption{Calculates the Cauchy stress and assigns matrix to field that
+           can then be written to a Vtk file for use with ParaView.}
+  \label{al:CauchyStress}
+\end{algorithm}
+
+\vspace{\baselineskip}
+\begin{algorithm}[H]
+  \underline{get\_error} $()$
+  \BlankLine
+  %TODO
+  \caption{Calculates the Root Mean Square error of the solution vector
+            as compared to the analytical solution.}
+  \label{al:getError}
 \end{algorithm}
 \vspace{\baselineskip}
 
@@ -844,83 +1341,126 @@ closing comments here.
 \appendix
 \section{Source Code and Headers} \label{sec:code}
 
+\newpage
 \subsection{a4.cc} \label{subsec:a4.cc}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/a4.cc}
 
+\newpage
 \subsection{A4\_BodyLoads.hpp} \label{subsec:BLhpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_BodyLoads.hpp}
 
+\newpage
 \subsection{A4\_BodyLoads.cpp} \label{subsec:BLcpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_BodyLoads.cpp}
 
+\newpage
 \subsection{A4\_Control.hpp} \label{subsec:Cont.hpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_Control.hpp}
 
+\newpage
 \subsection{A4\_Control.cpp} \label{subsec:Cont.cpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_Control.cpp}
 
+\newpage
 \subsection{A4\_DBCs.hpp} \label{subsec:DBCs.hpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_DBCs.hpp}
 
+\newpage
 \subsection{A4\_DBCs.cpp} \label{subsec:DBCs.cpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_DBCs.cpp}
 
+\newpage
 \subsection{A4\_Disc.hpp} \label{subsec:Disc.hpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_Disc.hpp}
 
+\newpage
 \subsection{A4\_Disc.cpp} \label{subsec:Disc.cpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_Disc.cpp}
 
+\newpage
 \subsection{A4\_ElasticStiffness.hpp} \label{subsec:ElasticStiffness.hpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_ElasticStiffness.hpp}
 
+\newpage
 \subsection{A4\_ElasticStiffness.cpp} \label{subsec:ElasticStiffness.cpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_ElasticStiffness.cpp}
 
+\newpage
 \subsection{A4\_FESolver.hpp} \label{subsec:FESolver.hpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_FESolver.hpp}
 
+\newpage
 \subsection{A4\_FESolver.cpp} \label{subsec:FESolver.cpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_FESolver.cpp}
 
+\newpage
 \subsection{A4\_LinAlg.hpp} \label{subsec:LinAlg.hpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_LinAlg.hpp}
 
+\newpage
 \subsection{A4\_LinAlg.cpp} \label{subsec:LinAlg.cpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_LinAlg.cpp}
 
+\newpage
 \subsection{A4\_LinSolve.hpp} \label{subsec:LinSolve.hpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_LinSolve.hpp}
 
+\newpage
 \subsection{A4\_LinSolve.cpp} \label{subsec:LinSolve.cpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_LinSolve.cpp}
 
+\newpage
 \subsection{A4\_NBCs.hpp} \label{subsec:NBCs.hpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_NBCs.hpp}
 
+\newpage
 \subsection{A4\_NBCs.cpp} \label{subsec:NBCs.cpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_NBCs.cpp}
 
+\newpage
 \subsection{A4\_PostProc.hpp} \label{subsec:PostProc.hpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_PostProc.hpp}
 
+\newpage
 \subsection{A4\_PostProc.cpp} \label{subsec:PostProc.cpp}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/A4_PostProc.cpp}
 
 \newpage
-\section{Example Input Files}\label{sec:ExInput}
+\section{Example Input and Control Files}\label{sec:ExInput}
 
 \subsection{Associations File} \label{subsec:ExAssoc}
-\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/test/box3D.txt}
+The associations files followed the following format:
+\newline
+$\{Set\_Type\} \quad  \{Name\} \quad  \{Number\_of\_Model\_Entites\} \quad $ 
+\newline
+$\{Model\_Entity\_Order\} \quad  \{Model\_Entity\_Tag\_Number\} \quad $
+\newline
+$\{Model\_Entity\_Order\} \quad  \{Model\_Entity\_Tag\_Number\} \quad $
+\newline
+$\vdots$
+\newline
+$\{Model\_Entity\_Order\} \quad  \{Model\_Entity\_Tag\_Number\} \quad $
+\newline
+$\{Set\_Type\} \quad  \{Name\} \quad  \{Number\_of\_Model\_Entites\} \quad $ 
+\newline
+$\vdots$
+\newline
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/test/plane2D.txt}
 
+\newpage
 \subsection{Example .yaml File} \label{subsec:ExYaml}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/test/fem.yaml}
 
+\newpage
 \subsection{Example Input Script} \label{subsec:ExIn}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/test/run_test.sh}
 
 \newpage
 \section{Derivations} \label{sec:Derivations}
+
+Nomenclature for all equations shown in this section 
+matches that described in the main body of this report. 
+See Section \ref{sec:techDes} for variable descriptions.
 
 \subsection{Strong to Weak Form Derivation} \label{sec:WeakDer}
 
