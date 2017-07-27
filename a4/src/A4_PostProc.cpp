@@ -1,5 +1,7 @@
 #include "A4_PostProc.hpp"
 
+#include <math.h>
+
 namespace A4{
 
 void set_to_field( apf::Field* f, RCP<Vector> v, Disc* d)
@@ -183,6 +185,7 @@ void compare_analytical_solution(
     }
 
   }
+  std::cout << std::endl;
   return;
 }
 
@@ -196,7 +199,10 @@ double get_L2_error(
   // Create a vector for the error
   auto e = U;
   compare_analytical_solution( g, e, d, E, nu);
-  return e->norm2();
+  double norm = e->norm2();
+  double length = (double)e->getGlobalLength();
+  double RMS = norm/(sqrt(length));
+  return RMS;
 }
 
 } // End namespace A4
