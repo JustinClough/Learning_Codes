@@ -27,5 +27,20 @@ void set_to_field( apf::Field* f, RCP<Vector> v, Disc* d);
 /// @param d The relevant discretization object.
 void set_Cauchy_stress( double E, apf::Field* f, RCP<Vector> U, Disc* d);
 
+
+/// @brief Computes the L_2 norm of the error in the 
+///        approximation of the solution U.
+/// @param g The body load vector.
+/// @param U The approximated solution vector.
+/// @param d The discretization object.
+/// @param E Young's modulus.
+/// @param nu Poisson's ratio.
+double get_L2_error( 
+    double* g, 
+    RCP<Vector> U, 
+    Disc* d, 
+    double E, 
+    double nu);
+
 } // End namespace A4
 #endif

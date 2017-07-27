@@ -136,4 +136,11 @@ void FESolver::set_stress_to_field( apf::Field* f)
   return;
 }
 
+double FESolver::get_error()
+{
+  double E = params.get<double>("E");
+  double nu = params.get<double>("nu");
+  return get_L2_error( g, la.owned->U, disc, E, nu);
+}
+
 }

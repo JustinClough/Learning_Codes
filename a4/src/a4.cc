@@ -82,6 +82,8 @@ int main( int argc, char** argv)
   char* fileName = argv[5];
   apf::writeVtkFiles( fileName, m, m->getDimension());
 
+  std::cout << "APPROXIMATION ERROR IS: " << solver->get_error() << std::endl;
+  
   // delete fields
   apf::destroyField( disp);
   apf::destroyField( force);

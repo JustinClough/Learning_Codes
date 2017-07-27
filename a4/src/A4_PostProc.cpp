@@ -1,11 +1,5 @@
 #include "A4_PostProc.hpp"
 
-/*
-  TODO:
-  * Get measure of error
-
-*/
-
 namespace A4{
 
 void set_to_field( apf::Field* f, RCP<Vector> v, Disc* d)
@@ -150,6 +144,59 @@ void set_Cauchy_stress( double E, apf::Field* f, RCP<Vector> U, Disc* d)
 
   apf::synchronize( f);
   return;
+}
+
+void compare_analytical_solution( 
+    double* g, 
+    RCP<Vector> Error, 
+    Disc* d, 
+    double E, 
+    double nu)
+{
+  auto e = Error->get1dView();
+  auto mesh = d->get_apf_mesh();
+  int nsd = mesh->getDimension();
+
+  auto o_n = d->get_owned_numbering();
+  apf::DynamicArray<apf::Node> nodes;
+  apf::getNodes( o_n, nodes);
+  for( size_t n = 0; n < nodes.size(); n++)
+  {
+    auto node = nodes[n];
+    auto ent = node.entity;
+    auto nodeth = node.node;
+    for( int i = 0; i < nsd; i++)
+    {
+      apf::Vector3 pos; 
+      mesh->getPoint( ent, nodeth, pos);
+      auto row = d->get_owned_lid( node, i);
+      double a = 0;
+      if( i == 0)
+      {
+        a = (g[0]/E) * (1 * pos[0] - pos[0] * pos[0]);
+      }
+      else if( i == 1)
+      {
+        a = (g[1]*(-nu)/E) * (1 * pos[0] - pos[0] * pos[0]); 
+      }
+      Error->sumIntoLocalValue( row, -a);
+    }
+
+  }
+  return;
+}
+
+double get_L2_error( 
+    double* g, 
+    RCP<Vector> U, 
+    Disc* d, 
+    double E, 
+    double nu)
+{
+  // Create a vector for the error
+  auto e = U;
+  compare_analytical_solution( g, e, d, E, nu);
+  return e->norm2();
 }
 
 } // End namespace A4
