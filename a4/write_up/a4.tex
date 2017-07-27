@@ -1217,7 +1217,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
   \label{al:KE_int}
 \end{algorithm}
 
-\vspace{\baselineskip}
+\clearpage
 \begin{algorithm}[H]
   \underline{solver::apply\_Dirichlet\_BCs} $()$
   \BlankLine
@@ -1234,7 +1234,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
     get\_boundary\_mesh\_entities()\;
     \For{Each Mesh Entity}
     {
-      get\_element\_node\_IDs();
+      get\_element\_node\_IDs()\;
       \For{Each Nodal Degree of Freedom}
       {
         \tcc
@@ -1251,12 +1251,22 @@ project but borrowed from other libraries, like \texttt{PUMI},
         {
           \If{ $row == column$}
           {
+            \tcc
+            {
+              Set stiffness diagonal to one. 
+              Set force to the product of the displacement
+              and stiffness.
+            }
             set\_stiffness(row, column, 1.0)\;
             set\_force( row, tmp*displacement)\;
           }
           \Else
           {
-            set\_stiffness(row, column, 0.0)\;
+            \tcc
+            {
+              Set off-diagonal components of row to zero.
+            }
+            set\_stiffness(row, column, 0.0)\; 
           }
         }
       }
@@ -1286,6 +1296,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
       set\_component\_to\_field()\;
     }
   }
+  return\;
   \caption{Generic function for setting a vector solution to a field
             that can then be written to a Vtk file for use with ParaView.}
   \label{al:set_to_field}
@@ -1295,7 +1306,22 @@ project but borrowed from other libraries, like \texttt{PUMI},
 \begin{algorithm}[H]
   \underline{set\_stress\_to\_field} $()$
   \BlankLine
-  %TODO
+  \For{Each Mesh Element}
+  {
+    \tcc
+    {
+      Get the displacement vector for this element.
+    }
+    u\_e = get\_elemental\_solution()\;
+    \For{Each Integration Point}
+    {
+      p = get\_parametric\_location()\;
+      B = get\_basis\_func\_gradient(p)\;
+      sigma $\leftarrow$ $E*B*u\_e$ \;
+    }
+    update\_field( sigma);
+  }
+  return\;
   \caption{Calculates the Cauchy stress and assigns matrix to field that
            can then be written to a Vtk file for use with ParaView.}
   \label{al:CauchyStress}
@@ -1305,9 +1331,24 @@ project but borrowed from other libraries, like \texttt{PUMI},
 \begin{algorithm}[H]
   \underline{get\_error} $()$
   \BlankLine
-  %TODO
-  \caption{Calculates the Root Mean Square error of the solution vector
-            as compared to the analytical solution.}
+  e = new\_vector();
+  \For{Each Mesh Node}
+  {
+    \For{Each Spatial Dimension}
+    {
+      row = get\_DOF\_ID();
+      \tcc
+      {
+        The analytical solution is discussed further in
+        Section \ref{sec:testing}.
+      }
+      a = get\_analytical\_solution()\;
+      e[row] = a - u\_e[row]\;
+    }
+  }
+  RMS $\leftarrow$ (e$\rightarrow$norm\_2())/sqrt(e$\rightarrow$length())\;
+  \caption{Calculates the Root Mean Square error of 
+            the solution vector as compared to the analytical solution.}
   \label{al:getError}
 \end{algorithm}
 \vspace{\baselineskip}
