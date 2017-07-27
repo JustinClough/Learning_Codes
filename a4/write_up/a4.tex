@@ -197,7 +197,7 @@ The weak form is shown in Equation \ref{eq:WeakForm}:
 \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega =
   \int_{\Omega} w_{i} f_{i} d\Omega +
   w_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
-\end{equation} 
+\end{equation}
 \noindent
 where $w$ is a weighting function subject to the constraints
 expressed in Equation \ref{eq:WConsts}.
@@ -210,76 +210,76 @@ w_{i} \in H^1,\quad w_{i}\Big|_{\Gamma^{g}_{i}} = 0
 \noindent
 In Equation \ref{eq:WConsts}, $H^{1}$ is the order-one Hilbert space.
 A derivation from the strong form is shown in Appendix \ref{sec:WeakDer}.
-This weak form can then be approximated by a Galerkin form. 
-The Galerkin form of this problem is shown in Equation 
+This weak form can then be approximated by a Galerkin form.
+The Galerkin form of this problem is shown in Equation
 \ref{eq:GalerkinForm} and is subject to the constraints and definitions
 shown in Equations \ref{eq:GalerkinCont}
 through  \ref{eq:GalerkinContFin}.
 
 \begin{equation} \label{eq:GalerkinForm}
 a(w^{h} , v^{h})
-  = b(w^{h} , f) 
-  + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i} 
+  = b(w^{h} , f)
+  + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
   - a(w^{h}\Big|_{\Gamma^{g}_{i}} , g^{h})
 \end{equation}
 
-\begin{align} 
-a( X, Y ) &= 
-  \int_{\Omega} c_{ijkm} X_{i},_{j} Y_{k},_{m} d\Omega 
+\begin{align}
+a( X, Y ) &=
+  \int_{\Omega} c_{ijkm} X_{i},_{j} Y_{k},_{m} d\Omega
     \label{eq:GalerkinCont}                                           \\
-b( X, Y ) &= 
-  \int_{\Omega} X_{i} Y_{i} d\Omega 
+b( X, Y ) &=
+  \int_{\Omega} X_{i} Y_{i} d\Omega
     \label{eq:GalerkinForce}                                          \\
-u^{h}_{i} &= 
-  v^{h}_{i} + g^{h}_{i} 
+u^{h}_{i} &=
+  v^{h}_{i} + g^{h}_{i}
   \label{eq:GalerkinUh}                                               \\
-g^{h}_{i}\Big|_{\Gamma^{g}_{i}} = g_{i} 
+g^{h}_{i}\Big|_{\Gamma^{g}_{i}} = g_{i}
   \quad & \quad
   v^{h}_{i}\Big|_{\Gamma^{g}_{i}} = 0
   \label{eq:GalerkinContFin}                                       %\\
 \end{align}
 
 \noindent
-A derivation form the weak from to this Galerkin form 
+A derivation form the weak from to this Galerkin form
 is available in Appendix \ref{sec:GalerkinDer}.
 In Equation \ref{eq:GalerkinForm}, $u^{h}$ is the discrete
 approximation of $u$ on a discretized $\Omega$, $\Omega_h$. Similarly,
-$w^{h}$ is the discrete approximation of $w$ on the same 
+$w^{h}$ is the discrete approximation of $w$ on the same
 discretized $\Omega$. The discrete approximation of
-the displacement, $u^{h}$, is the sum of unknown, $v^{h}$, 
-and given, $g^{h}$, displacement values. 
+the displacement, $u^{h}$, is the sum of unknown, $v^{h}$,
+and given, $g^{h}$, displacement values.
 
 As part of the discretization of $\Omega$, shape functions
 ($N^{A}(x)$'s) are used to interpolate values. Here, $x$
-is a vector describing any position in $\Omega$ and has members $x_i$. 
+is a vector describing any position in $\Omega$ and has members $x_i$.
 Details of the shape functions used discussed in section \ref{subsec:numInt}.
 These shape functions are then used shown in in Equations
 \ref{eq:shapeStart} through \ref{eq:shapeEnd}:
 
 \begin{align}
-w^{h}_i &= \sum_{A=1}^{n} c^{A}_i N^{A} 
+w^{h}_i &= \sum_{A=1}^{n} c^{A}_i N^{A}
   \label{eq:shapeStart}                       \\
-v^{h}_i &= \sum_{A=1}^{n} d^{A}_i N^{A} 
+v^{h}_i &= \sum_{A=1}^{n} d^{A}_i N^{A}
   \label{eq:shapeUnks}                         \\
-g^{h}_i &= \sum_{A=1}^{n} g^{A}_i N^{A} 
+g^{h}_i &= \sum_{A=1}^{n} g^{A}_i N^{A}
   \label{eq:shapeEnd}
 \end{align}
 
 \noindent
 where $n$ is the number of discrete evaluation points, or nodes,
-of $\Omega_h$. The $c^{A}_{i}$'s are arbitrary multipliers. From this, a matrix 
-form of the problem can be created which is expressed in 
+of $\Omega_h$. The $c^{A}_{i}$'s are arbitrary multipliers. From this, a matrix
+form of the problem can be created which is expressed in
 Equation \ref{eq:MatrixForm}:
 
 \begin{equation} \label{eq:MatrixForm}
-a( N^A, N^B) d^{B}_{i} = 
+a( N^A, N^B) d^{B}_{i} =
   b( N^A, f) +
   N^A\Big|_{\Gamma_{i}^{h}} h_i -
   a( N^A\Big|_{\Gamma_{i}^{g}} , N^C\Big|_{\Gamma_{i}^{g}} ) g_{i}^C
-\end{equation} 
+\end{equation}
 
-\noindent 
-where $A$, $B$, and $C$ represent the set of nodes as described in 
+\noindent
+where $A$, $B$, and $C$ represent the set of nodes as described in
 Equation \ref{eq:nodesConds}.
 
 \begin{align}
@@ -292,43 +292,43 @@ C &\in \eta_g
 \end{align}
 
 \noindent
-In Equation set \ref{eq:nodesConds}, $\eta$ is the set of all nodes on $\Omega_h$ 
-and $\eta_g$ is the subset of $\eta$ on which Dirichlet boundary conditions are 
+In Equation set \ref{eq:nodesConds}, $\eta$ is the set of all nodes on $\Omega_h$
+and $\eta_g$ is the subset of $\eta$ on which Dirichlet boundary conditions are
 prescribed. Equation \ref{eq:MatrixForm} can then be rewritten as shown in
 Equation \ref{eq:KdF}.
 
 \begin{equation} \label{eq:KdF}
-[ K_{AB} ] \{ d_B \} = \{ F_A \} 
+[ K_{AB} ] \{ d_B \} = \{ F_A \}
 \end{equation}
 
 \noindent
-In Equation \ref{eq:KdF}, $[K]$ is the stiffness matrix component 
-relating the degree of freedom of the node at row $A$ to the degree of freedom 
-of the node at column $B$. The vector $\{d\}$ is comprised of all unknown 
-nodal displacements of the degrees of freedom in $\Omega_h$. The 
+In Equation \ref{eq:KdF}, $[K]$ is the stiffness matrix component
+relating the degree of freedom of the node at row $A$ to the degree of freedom
+of the node at column $B$. The vector $\{d\}$ is comprised of all unknown
+nodal displacements of the degrees of freedom in $\Omega_h$. The
 vector $\{F\}$ is comprised of all the nodal force components in $\Omega_h$.
 A derivation from the Galerkin form shown in Equation \ref{eq:GalerkinForm}
 to the matrix form shown in Equation \ref{eq:MatrixForm} is available in Appendix
-\ref{sec:MatrixDer}. For situations where $\Omega_h$ is discretized with 
+\ref{sec:MatrixDer}. For situations where $\Omega_h$ is discretized with
 multiple elements, stiffness and force values are summed at each node.
 
 \subsection{Numerical Integration} \label{subsec:numInt}
-Gaussian quadrature was used to approximate all integrated 
+Gaussian quadrature was used to approximate all integrated
 values in this project. This includes stiffness terms
 for the elemental stiffness matrices and the elemental force vector components
-from both traction boundary conditions. 
-A numerical approximation of an integral takes the form shown in 
+from both traction boundary conditions.
+A numerical approximation of an integral takes the form shown in
 Equation \ref{eq:NumInte}:
 
 \begin{equation} \label{eq:NumInte}
-\int_{\Omega} p(x) d\Omega 
-  = \sum_{n_{int}=1}^{N_{int}} p(x\Big|_{n_{int}}) W_{n_{int}} + R 
+\int_{\Omega} p(x) d\Omega
+  = \sum_{n_{int}=1}^{N_{int}} p(x\Big|_{n_{int}}) W_{n_{int}} + R
   \approx \sum_{n_{int}=1}^{N_{int}} p(x\Big|_{n_{int}}) W_{n_{int}}
 \end{equation}
 
 \noindent
-where $p(x)$ is the function to integrate, $N_{int}$ is the total number 
-of integration points, $W_{n_{int}}$ is the weight at each integration point, 
+where $p(x)$ is the function to integrate, $N_{int}$ is the total number
+of integration points, $W_{n_{int}}$ is the weight at each integration point,
 and $R$ is the error in approximating the continuous integral numerically.
 This error decreases as a higher order of integration is used and was
 approximated as zero to evaluate calculations.
@@ -338,37 +338,37 @@ used for this project. The approximation shown in Equation \ref{eq:NumInte}
 for three dimensions is shown in Equation \ref{eq:3DNumInte}.
 
 \begin{equation} \label{eq:3DNumInte}
-\iiint_{\Omega} p(x_1, x_2, x_3) d\Omega \approx 
-  \sum_{n^1_{int}=1}^{N^1_{int}} 
-  \sum_{n^2_{int}=1}^{N^2_{int}} 
-  \sum_{n^3_{int}=1}^{N^3_{int}} 
-  p(x_1\Big|_{n^1_{int}}, 
-  x_2\Big|_{n^2_{int}}, 
+\iiint_{\Omega} p(x_1, x_2, x_3) d\Omega \approx
+  \sum_{n^1_{int}=1}^{N^1_{int}}
+  \sum_{n^2_{int}=1}^{N^2_{int}}
+  \sum_{n^3_{int}=1}^{N^3_{int}}
+  p(x_1\Big|_{n^1_{int}},
+  x_2\Big|_{n^2_{int}},
   x_3\Big|_{n^3_{int}})
   W_{n^1_{int}}
   W_{n^2_{int}}
   W_{n^3_{int}}
 \end{equation}
 
-The numerical integration took place on a parametric space, $\Box$, that represented each 
-element and used a mapping to return to the domain, $\Omega_h$. 
-The mapping between real and parametric domains is described in 
+The numerical integration took place on a parametric space, $\Box$, that represented each
+element and used a mapping to return to the domain, $\Omega_h$.
+The mapping between real and parametric domains is described in
 Equations \ref{eq:Mapping} through \ref{eq:jacobian}.
 
-\begin{align} 
+\begin{align}
 x   &= (x_1, x_2, x_3) \in \hat{\Omega}
   \label{eq:Mapping} \\
 \xi &= (\xi_1, \xi_2, \xi_3) \in \Box \\
 J &= det
   \begin{bmatrix}
-    \frac{\partial x_1}{\partial \xi_1} & 
-      \frac{\partial x_1}{\partial \xi_2} & 
+    \frac{\partial x_1}{\partial \xi_1} &
+      \frac{\partial x_1}{\partial \xi_2} &
       \frac{\partial x_1}{\partial \xi_3} \\
-    \frac{\partial x_2}{\partial \xi_1} & 
-      \frac{\partial x_2}{\partial \xi_2} & 
+    \frac{\partial x_2}{\partial \xi_1} &
+      \frac{\partial x_2}{\partial \xi_2} &
       \frac{\partial x_2}{\partial \xi_3} \\
-    \frac{\partial x_3}{\partial \xi_1} & 
-      \frac{\partial x_3}{\partial \xi_2} & 
+    \frac{\partial x_3}{\partial \xi_1} &
+      \frac{\partial x_3}{\partial \xi_2} &
       \frac{\partial x_3}{\partial \xi_3} \\
   \end{bmatrix}
   \label{eq:jacobian}
@@ -378,16 +378,16 @@ J &= det
 The variable $J$ is the Jacobian determinant and represents
 the volumetric dilation from $\Box$ to $\Omega_h$ for a given location $\xi$.
 Combining the mapping shown in Equations \ref{eq:Mapping} through
-\ref{eq:jacobian} with the three dimensional numerical 
+\ref{eq:jacobian} with the three dimensional numerical
 integration technique shown in Equation \ref{eq:3DNumInte} yield
 Equation \ref{eq:J_numInt}.
 
 \begin{multline} \label{eq:J_numInt}
 \iiint_{\Omega} p(x_1, x_2, x_3) d\Omega
   \approx \\
-  \sum_{n^1_{int}=1}^{N^1_{int}} 
-  \sum_{n^2_{int}=1}^{N^2_{int}} 
-  \sum_{n^3_{int}=1}^{N^3_{int}} 
+  \sum_{n^1_{int}=1}^{N^1_{int}}
+  \sum_{n^2_{int}=1}^{N^2_{int}}
+  \sum_{n^3_{int}=1}^{N^3_{int}}
   p(
   x_1(\xi\Big|_{n^1_{int}}),
   x_2(\xi\Big|_{n^2_{int}}),
@@ -407,17 +407,17 @@ shown in Equation \ref{eq:shapeContr}.
 N_i(\xi_j) = \delta_{ij}
 \end{equation}
 
-In Equation \ref{eq:shapeContr}, $\delta_{ij}$ is the Kronecker delta, 
-$N_i$ is the shape function of the $i$th node, and $\xi_j$ is the 
+In Equation \ref{eq:shapeContr}, $\delta_{ij}$ is the Kronecker delta,
+$N_i$ is the shape function of the $i$th node, and $\xi_j$ is the
 parametric coordinates of the $j$th node. Lagrange basis functions
-were used for shape functions for first order approximations; 
-serendipity shape functions were used for second order approximations.  Lagrange shape functions were formed by the method shown in 
+were used for shape functions for first order approximations;
+serendipity shape functions were used for second order approximations.  Lagrange shape functions were formed by the method shown in
 Equation \ref{eq:Lagr}.
 
 \begin{equation} \label{eq:Lagr}
-N_i(\xi) = 
+N_i(\xi) =
   \prod_
-  { \substack{ j =    1    \\ 
+  { \substack{ j =    1    \\
                j \neq i } }
   ^{j = n_{en}}
   \frac
@@ -425,38 +425,38 @@ N_i(\xi) =
   { \xi_i - \xi_{j} }
 \end{equation}
 
-The number of nodes for each element is represented by $n_{en}$ in 
+The number of nodes for each element is represented by $n_{en}$ in
 Equation \ref{eq:Lagr}.
 
 \subsection{Linear Algebra} \label{subsec:LinAlg}
-The entirety of the stiffness matrix was not stored as it is 
+The entirety of the stiffness matrix was not stored as it is
 sparsely populated. Instead, the matrix was stored as a collection
-of arrays using compressed row storage. 
-Each array represented a row in the stiffness matrix. 
-The elements of each array stored the non-zero value and column index of the 
-matrix element it represented. This project made use 
+of arrays using compressed row storage.
+Each array represented a row in the stiffness matrix.
+The elements of each array stored the non-zero value and column index of the
+matrix element it represented. This project made use
 of the implementation available through \texttt{TPetra}.
 
-The Generalized Minimal Residual (GMRES) method was used to solve 
+The Generalized Minimal Residual (GMRES) method was used to solve
 the system described in Equation \ref{eq:KdF}. Specifically
-the implementation from the \texttt{Belos} package was used.  
-The GMRES is an iterative method; for this project a maximum 
+the implementation from the \texttt{Belos} package was used.
+The GMRES is an iterative method; for this project a maximum
 iteration limit of 200 was used with a tolerance of $10^{-10}$.
 
 \section{Code Description} \label{sec:codeDes}
-The code written for this project was made in \texttt{C++} 
-and makes use of the \texttt{APF}, \texttt{GMI}, and 
+The code written for this project was made in \texttt{C++}
+and makes use of the \texttt{APF}, \texttt{GMI}, and
 \texttt{Trilinos} libraries. The user interacts with
 the code at the command line and provides the following
 arguments (not including the executable name and path):
 
 \begin{enumerate}
   \item \texttt{<model\_file>.dmg} which is the geometric model.
-  \item \texttt{<mesh\_file>.smb} which is the mesh of the 
+  \item \texttt{<mesh\_file>.smb} which is the mesh of the
         geometric model.
   \item \texttt{<associations>.txt} which dictates and names sets of
         mesh nodes and entities to construct by classification on the
-        geometric model. This later allows the user to declare 
+        geometric model. This later allows the user to declare
         boundary conditions by name in the \texttt{.yaml} file.
         An example \texttt{<associations>.txt} file is shown in
         Appendix \ref{subsec:ExAssoc}.
@@ -465,8 +465,8 @@ arguments (not including the executable name and path):
         boundary conditions (Dirichlet and Neumann), and parameters
         for the linear solver such as method and tolerance. An
         example \texttt{.yaml} file is shown in Appendix \ref{subsec:ExYaml}.
-  \item \texttt{Order} as an integer value. It is the order of 
-        both the shape functions used and numerical integration. 
+  \item \texttt{Order} as an integer value. It is the order of
+        both the shape functions used and numerical integration.
         Only one and two are supported in this project.
   \item \texttt{Body\_Load} as three floating point numbers.
         It represent the force per unit area acting on the model
@@ -475,23 +475,23 @@ arguments (not including the executable name and path):
 \end{enumerate}
 
 \noindent
-The classes created for this code are presented 
+The classes created for this code are presented
 in Section \ref{subsec:class}.
 This includes a brief description of the class's purpose,
-its public member variables, and public member functions. 
-Extra utility features of classes are not shown in 
-Section \ref{subsec:class} for brevity.  Following this in 
-Section \ref{subsec:pseudo}, are Algorithm Blocks which list the 
+its public member variables, and public member functions.
+Extra utility features of classes are not shown in
+Section \ref{subsec:class} for brevity.  Following this in
+Section \ref{subsec:pseudo}, are Algorithm Blocks which list the
 pseudo code for the entire project.
 
 \subsection{Class Description} \label{subsec:class}
-The class shown in Listing \ref{lst:Disc} is the discretization 
+The class shown in Listing \ref{lst:Disc} is the discretization
 class. It creates and stores sets of mesh entities and nodes that the user
-can later use when applying boundary conditions. It also 
-creates the maps from the degrees of freedom of the nodes 
+can later use when applying boundary conditions. It also
+creates the maps from the degrees of freedom of the nodes
 in the mesh to the rows in the linear algebra system.
 The header and source file for this class are shown in
-Appendix \ref{subsec:Disc.hpp} and \ref{subsec:Disc.cpp}, 
+Appendix \ref{subsec:Disc.hpp} and \ref{subsec:Disc.cpp},
 respectively.
 
 \begin{lstlisting} [
@@ -499,27 +499,27 @@ respectively.
   label=lst:Disc]
 class Disc{
   // Public member functions and descriptions:
-  
-  // Constructor: 
-  //  Creates the discretization object based on the mesh 
-  //  and associations file. Creates the sets of nodes 
+
+  // Constructor:
+  //  Creates the discretization object based on the mesh
+  //  and associations file. Creates the sets of nodes
   //  and maps as well.
   Disc( mesh, assoc_file);
 
-  // Gets the set of mesh sides by name. 
-  // Returns a standard vector of the 
+  // Gets the set of mesh sides by name.
+  // Returns a standard vector of the
   // mesh entities.
   std::vector<apf::MeshEntity*>
     get_sides( std::string set_name);
 
-  // Gets the set of mesh nodes by name. 
-  // Returns a standard vector of the 
-  // mesh nodes.  
+  // Gets the set of mesh nodes by name.
+  // Returns a standard vector of the
+  // mesh nodes.
   std::vector<apf::Node*>
     get_node( std::string set_name);
 
   // Private member variables:
-  
+
   // The mesh used for this problem.
   apf::Mesh* mesh;
 
@@ -528,29 +528,29 @@ class Disc{
 
   // A map from node set name to the set of nodes.
   std::map<std::string, std::vector<apf::Node> > node_sets;
-  
-  // A map from side set name to the set of 
+
+  // A map from side set name to the set of
   // mesh entities.
   std::map<std::string, std::vector<apf::MeshEntity*> > side_sets;
 };
 \end{lstlisting}
 \vspace{\baselineskip}
 
-The class shown in Listing 
-\ref{lst:FESolver} is the 
-Finite Element Solver 
-class.  
+The class shown in Listing
+\ref{lst:FESolver} is the
+Finite Element Solver
+class.
 It creates, stores, and solves the linear system which represents
-the finite element problem. Creating the system includes creating the 
-global stiffness matrix and assigning boundary conditions to create 
+the finite element problem. Creating the system includes creating the
+global stiffness matrix and assigning boundary conditions to create
 the correct stiffness matrix and forcing vector for the given
 problem statement and mesh. It then creates assigns the solution
-and secondary variables to a field. This field can then be written 
+and secondary variables to a field. This field can then be written
 to Vtk files which are then viewed in ParaView. It can also calculate the
 Root Mean Square (RMS) error of the approximated displacement solution.
-The header and source file for this class are shown in Appendix 
-\ref{subsec:FESolver.hpp} and 
-\ref{subsec:FESolver.cpp}, 
+The header and source file for this class are shown in Appendix
+\ref{subsec:FESolver.hpp} and
+\ref{subsec:FESolver.cpp},
 respectively.
 
 \begin{lstlisting} [
@@ -562,14 +562,14 @@ class FESolver{
 
   // Constructor:
   //  Constructs the solver object based on the maps and
-  //  sets created by the discretization object. Also 
-  //  stores data from the .yaml (parameterList), 
+  //  sets created by the discretization object. Also
+  //  stores data from the .yaml (parameterList),
   //  solution order, and body load.
   FESolver( disc, parameterList, order, load);
 
-  // Fill in the global stiffness matrix, adjusts and 
+  // Fill in the global stiffness matrix, adjusts and
   // creates the forcing vector by applying boundary
-  // conditions and body loads. The details of this 
+  // conditions and body loads. The details of this
   // function are shown in Algorithm `\ref{al:solve}`
   void solve();
 
@@ -579,7 +579,7 @@ class FESolver{
   void set_disp_to_field( field);
 
   // Set the force vector to an apf::field.
-  // The details of this function are shown in 
+  // The details of this function are shown in
   // Algorithm `\ref{al:set_to_field}`.
   void set_force_to_field( field);
 
@@ -588,7 +588,7 @@ class FESolver{
   // Algorithm `\ref{al:CauchyStress}`.
   void set_stress_to_field( field);
 
-  // Calculate the Root Mean Square error in the 
+  // Calculate the Root Mean Square error in the
   // solution by comparing to the analytical solution.
   // Details of this function are shown in
   // Algorithm `\ref{al:getError}`.
@@ -597,18 +597,18 @@ class FESolver{
   // Private member functions and descriptions:
   private:
 
-  // Assembles the global stiffness matrix. 
+  // Assembles the global stiffness matrix.
   // Does not consider boundary conditions.
-  // The details of this function are shown in 
+  // The details of this function are shown in
   // Algorithm `\ref{al:AssembleLHS}`.
   void assemble_LHS();
 
-  // Assemble the forcing vector. 
-  // Considers Dirichlet and Neumann boundary 
+  // Assemble the forcing vector.
+  // Considers Dirichlet and Neumann boundary
   // conditions and body loads. Also makes
-  // needed modifications to stiffness matrix 
+  // needed modifications to stiffness matrix
   // for Dirichlet conditions.
-  // The details of this function are shown in 
+  // The details of this function are shown in
   // Algorithm `\ref{al:AssembleRHS}`.
   void assemble_RHS();
 
@@ -617,7 +617,7 @@ class FESolver{
   // Pointer to the discretization object
   Disc* disc;
 
-  // Pointer to the parameter list that contains 
+  // Pointer to the parameter list that contains
   // material properties and boundary conditions.
   ParameterList* params;
 
@@ -625,8 +625,8 @@ class FESolver{
   // in Listing `\ref{lst:LA}`.
   LinAlg* la;
 
-  // The order of accuracy. Used for order of shape 
-  // functions and numerical integration. 
+  // The order of accuracy. Used for order of shape
+  // functions and numerical integration.
   int order;
 
   // The array of body load components.
@@ -638,19 +638,19 @@ class FESolver{
 \end{lstlisting}
 \vspace{\baselineskip}
 
-The class shown in Listing 
-\ref{lst:LA} is the 
-Linear Algebra 
-class.  
+The class shown in Listing
+\ref{lst:LA} is the
+Linear Algebra
+class.
 This class is an interface to the global stiffness matrix, forcing
-vector, and solution vector. The stiffness matrix uses the 
+vector, and solution vector. The stiffness matrix uses the
 compressed row storage matrix class from the \texttt{Tpetra}
-software package. The forcing vector and solution vector are 
+software package. The forcing vector and solution vector are
 stored as defined by the Vector class also from the \texttt{Tpetra}
 software package.
-The header and source file for this class are shown in Appendix 
-\ref{subsec:LinAlg.hpp} and 
-\ref{subsec:LinAlg.cpp}, 
+The header and source file for this class are shown in Appendix
+\ref{subsec:LinAlg.hpp} and
+\ref{subsec:LinAlg.cpp},
 respectively.
 
 \begin{lstlisting} [
@@ -661,9 +661,9 @@ class LinAlg{
   // Public member functions and descriptions:
 
   // Constructor:
-  //  Allocates space for the stiffness matrix, K, 
+  //  Allocates space for the stiffness matrix, K,
   //  solution vector, U, and force vector, F, based
-  //  on the maps created from the discretization 
+  //  on the maps created from the discretization
   //  object.
   LinAlg( disc);
 
@@ -672,7 +672,7 @@ class LinAlg{
 
   // The stiffness matrix.
   Matrix K;
-  
+
   // The solution vector.
   Vector U;
 
@@ -682,18 +682,18 @@ class LinAlg{
 \end{lstlisting}
 \vspace{\baselineskip}
 
-The class shown in Listing 
-\ref{lst:K_e_inte} is the 
+The class shown in Listing
+\ref{lst:K_e_inte} is the
 Elemental stiffness integrator
 class.
 This class inherits from the \texttt{apf::Integrator} class
 which provided the frame work for processing mesh elements.
-This member functions of this class dictate the operations that 
-need to be done for each element and each integration point 
+This member functions of this class dictate the operations that
+need to be done for each element and each integration point
 of each element to create the elemental stiffness matrix.
-The header and source file for this class are shown in Appendix 
-\ref{subsec:ElasticStiffness.hpp} and 
-\ref{subsec:ElasticStiffness.cpp}, 
+The header and source file for this class are shown in Appendix
+\ref{subsec:ElasticStiffness.hpp} and
+\ref{subsec:ElasticStiffness.cpp},
 respectively.
 
 \begin{lstlisting} [
@@ -711,20 +711,20 @@ class ElasticStiffness{
   // Prepares each new mesh element for evaluation.
   void inElement( apf::MeshElement* element);
 
-  // Updates the elemental stiffness matrix for each 
+  // Updates the elemental stiffness matrix for each
   // integration point. Takes the parametric location,
-  // weight, and differential volume of 
-  // the integration point. The details of this 
+  // weight, and differential volume of
+  // the integration point. The details of this
   // function are shown in Algorithm `\ref{al:KE_int}`.
   void atPoint( apf::Vector3 para, double w, double dv);
 
-  // Finalizes and frees data once done with each 
+  // Finalizes and frees data once done with each
   // element.
   void outElement();
 
   // Public member variables and descriptions:
 
-  // The elemental stiffness matrix.  
+  // The elemental stiffness matrix.
   apf::DynamicMatrix Ke;
 
   private:
@@ -732,7 +732,7 @@ class ElasticStiffness{
 
   // Number of spatial dimensions
   int num_dims;
-  
+
   // Number of nodes per element
   int num_elem_nodes;
 
@@ -758,23 +758,23 @@ class ElasticStiffness{
 \end{lstlisting}
 \vspace{\baselineskip}
 
-The class shown in Listing 
-\ref{lst:NBC_e_inte} is the 
+The class shown in Listing
+\ref{lst:NBC_e_inte} is the
 Elemental traction integrator
 class.
 This class inherits from the \texttt{apf::Integrator} class
 which provided the frame work for processing mesh elements.
-This member functions of this class dictate the operations that 
-need to be done for each element and each integration point 
+This member functions of this class dictate the operations that
+need to be done for each element and each integration point
 of each element to create the elemental force vector contributions.
-This class works for only one element and one component of 
+This class works for only one element and one component of
 the traction at at time. This means that if a traction with
-components of $(t_x, t_y, 0)$ was prescribed on a boundary, 
+components of $(t_x, t_y, 0)$ was prescribed on a boundary,
 this class would need to be used for each element on the boundary
 twice; once for $t_x$ and once for $t_y$.
-The header and source file for this class are shown in Appendix 
-\ref{subsec:NBCs.hpp} and 
-\ref{subsec:NBCs.cpp}, 
+The header and source file for this class are shown in Appendix
+\ref{subsec:NBCs.hpp} and
+\ref{subsec:NBCs.cpp},
 respectively.
 
 \begin{lstlisting} [
@@ -786,21 +786,21 @@ class elemTrac{
 
   // Constructor:
   //  Creates the integrator object based on the mesh,
-  //  order of integration, traction value, and the 
+  //  order of integration, traction value, and the
   //  corresponding spatial dimension.
   elemTrac( mesh, order, value, eqNum);
 
   // Prepares each new mesh element for evaluation.
   void inElement( apf::MeshElement* element);
 
-  // Updates the elemental force vector for each 
+  // Updates the elemental force vector for each
   // integration point. Takes the parametric location,
-  // weight, and differential volume of 
-  // the integration point. The details of this 
+  // weight, and differential volume of
+  // the integration point. The details of this
   // function are shown in Algorithm `\ref{al:NBC_int}`.
   void atPoint( apf::Vector3 para, double w, double dv);
 
-  // Finalizes and frees data once done with each 
+  // Finalizes and frees data once done with each
   // element.
   void outElement();
 
@@ -814,7 +814,7 @@ class elemTrac{
 
   // Number of spatial dimensions
   int num_dims;
-  
+
   // Number of nodes per element
   int num_elem_nodes;
 
@@ -832,19 +832,19 @@ class elemTrac{
 \end{lstlisting}
 \vspace{\baselineskip}
 
-The class shown in Listing 
-\ref{lst:BL_e_inte} is the 
+The class shown in Listing
+\ref{lst:BL_e_inte} is the
 Elemental body load integrator
 class.
 This class inherits from the \texttt{apf::Integrator} class
 which provided the frame work for processing mesh elements.
-This member functions of this class dictate the operations that 
-need to be done for each element and each integration point 
+This member functions of this class dictate the operations that
+need to be done for each element and each integration point
 of each element to create the elemental force vector contributions
 due to a body load.
-The header and source file for this class are shown in Appendix 
-\ref{subsec:BLhpp} and 
-\ref{subsec:BLcpp}, 
+The header and source file for this class are shown in Appendix
+\ref{subsec:BLhpp} and
+\ref{subsec:BLcpp},
 respectively.
 
 \begin{lstlisting} [
@@ -861,14 +861,14 @@ class BodyLoad{
   // Prepares each new mesh element for evaluation.
   void inElement( apf::MeshElement* element);
 
-  // Updates the elemental force vector for each 
+  // Updates the elemental force vector for each
   // integration point. Takes the parametric location,
-  // weight, and differential volume of 
-  // the integration point. The details of this 
+  // weight, and differential volume of
+  // the integration point. The details of this
   // function are shown in Algorithm `\ref{al:BLC_int}`.
   void atPoint( apf::Vector3 para, double w, double dv);
 
-  // Finalizes and frees data once done with each 
+  // Finalizes and frees data once done with each
   // element.
   void outElement();
 
@@ -888,7 +888,7 @@ class BodyLoad{
 
   // Number of spatial dimensions
   int num_dims;
-  
+
   // Number of nodes per element
   int num_elem_nodes;
 
@@ -903,23 +903,23 @@ class BodyLoad{
   apf::FieldShape shape;
   apf::MeshElement* mesh_element;
 };
-  
+
 \end{lstlisting}
 \vspace{\baselineskip}
 
 \subsection{Pseudo Code} \label{subsec:pseudo}
-The main code is shown in Algorithm \ref{al:main}. For all 
-algorithms presented in the this section, namespaces 
-are not shown for brevity. Algorithm blocks which 
-show the pseudo codes for subroutines written for this 
-project are shown after Algorithm \ref{al:main}. 
-Pseudo code for functions and methods not written for this 
+The main code is shown in Algorithm \ref{al:main}. For all
+algorithms presented in the this section, namespaces
+are not shown for brevity. Algorithm blocks which
+show the pseudo codes for subroutines written for this
+project are shown after Algorithm \ref{al:main}.
+Pseudo code for functions and methods not written for this
 project but borrowed from other libraries, like \texttt{PUMI},
 \texttt{APF}, and \texttt{Trilinos}, are not shown.
 
 \vspace{\baselineskip}
-\begin{algorithm} [H] 
-  \underline{main} $(int \quad argc, \quad char** \quad argv)$ 
+\begin{algorithm} [H]
+  \underline{main} $(int \quad argc, \quad char** \quad argv)$
   \BlankLine
     \tcc
     {
@@ -928,12 +928,12 @@ project but borrowed from other libraries, like \texttt{PUMI},
     ParameterList p\;
     updateParametersFromYaml( $<$yamlFile$>$, p)\;
     \tcc
-    { 
+    {
       Load the mesh from file.
     }
     m = loadMdsMesh( $<$modelFileName$>$.dmg, $<$meshFileName$>$.smb)\;
     \tcc
-    { 
+    {
       Create a discretization-class object based on the mesh
       and the associations file.
     }
@@ -949,7 +949,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
     s$\rightarrow$ solve()\;
     \tcc
     {
-      Create and populate fields with solution information. 
+      Create and populate fields with solution information.
       Write to Vtk file. (Note: 3 is the dimension in writeVtkFiles.)
     }
     s$\rightarrow$ set\_displacement\_to\_field()\;
@@ -966,7 +966,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
       Allocated memory space is freed.
     }
     return 0 \;
-  \caption{The main function for this project. The function takes 10 
+  \caption{The main function for this project. The function takes 10
             arguments which are described in section \ref{sec:intro}.}
   \label{al:main}
 \end{algorithm}
@@ -1097,7 +1097,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
   \BlankLine
   \tcc
   {
-    Neumann boundary conditions are first evaluated, 
+    Neumann boundary conditions are first evaluated,
     then body loads. This order is arbitrary.
   }
   \For{Each Neumann Boundary Condition from yaml}
@@ -1106,8 +1106,8 @@ project but borrowed from other libraries, like \texttt{PUMI},
     \tcc
     {
       The sets computed earlier in Algorithm \ref{al:compSets}
-      are used here to quickly 
-      retrieve the list of mesh entities on the boundary 
+      are used here to quickly
+      retrieve the list of mesh entities on the boundary
       that need to be evaluated.
     }
     get\_boundary\_mesh\_entities()\;
@@ -1139,7 +1139,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
 \end{algorithm}
 
 \vspace{\baselineskip}
-\begin{algorithm} 
+\begin{algorithm}
   \underline{integrate\_body\_load} $()$
   \BlankLine
   \For{Each Integration Point}
@@ -1169,7 +1169,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
 \end{algorithm}
 
 \vspace{\baselineskip}
-\begin{algorithm} 
+\begin{algorithm}
   \underline{integrate\_traction} $()$
   \BlankLine
   \For{Each Integration Point}
@@ -1228,7 +1228,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
     {
       The sets computed earlier in Algorithm \ref{al:compSets}
       are used here to
-      retrieve the list of mesh entities on the boundary 
+      retrieve the list of mesh entities on the boundary
       that need to be evaluated.
     }
     get\_boundary\_mesh\_entities()\;
@@ -1239,11 +1239,11 @@ project but borrowed from other libraries, like \texttt{PUMI},
       {
         \tcc
         {
-          All row entries but the diagonal term for this 
+          All row entries but the diagonal term for this
           row of the stiffness matrix are set to zero. The
-          diagonal term is set to one and the old diagonal 
+          diagonal term is set to one and the old diagonal
           term is multiplied by the displacement component
-          for this degree of freedom and placed into the 
+          for this degree of freedom and placed into the
           forcing vector.
         }
         tmp = get\_global\_stiffness\_diagonal()\;
@@ -1263,7 +1263,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
     }
   }
   return\;
-  \caption{Method for adjusting stiffness matrix and force vector for 
+  \caption{Method for adjusting stiffness matrix and force vector for
             Dirichlet boundary conditions.}
   \label{al:ApplyDBCs}
 \end{algorithm}
@@ -1431,7 +1431,7 @@ closing comments here.
 \subsection{Associations File} \label{subsec:ExAssoc}
 The associations files followed the following format:
 \newline
-$\{Set\_Type\} \quad  \{Name\} \quad  \{Number\_of\_Model\_Entites\} \quad $ 
+$\{Set\_Type\} \quad  \{Name\} \quad  \{Number\_of\_Model\_Entites\} \quad $
 \newline
 $\{Model\_Entity\_Order\} \quad  \{Model\_Entity\_Tag\_Number\} \quad $
 \newline
@@ -1441,7 +1441,7 @@ $\vdots$
 \newline
 $\{Model\_Entity\_Order\} \quad  \{Model\_Entity\_Tag\_Number\} \quad $
 \newline
-$\{Set\_Type\} \quad  \{Name\} \quad  \{Number\_of\_Model\_Entites\} \quad $ 
+$\{Set\_Type\} \quad  \{Name\} \quad  \{Number\_of\_Model\_Entites\} \quad $
 \newline
 $\vdots$
 \newline
@@ -1458,8 +1458,8 @@ $\vdots$
 \newpage
 \section{Derivations} \label{sec:Derivations}
 
-Nomenclature for all equations shown in this section 
-matches that described in the main body of this report. 
+Nomenclature for all equations shown in this section
+matches that described in the main body of this report.
 See Section \ref{sec:techDes} for variable descriptions.
 
 \subsection{Strong to Weak Form Derivation} \label{sec:WeakDer}
@@ -1479,17 +1479,17 @@ w_{i} \in H^1, w_{i}\Big|_{\Gamma^{g}_{i}} = 0
 Solution:
 
 \begin{align*}
-\int_{\Omega} w_{i} c_{ijkm} u_{k},_{mj} d\Omega - 
+\int_{\Omega} w_{i} c_{ijkm} u_{k},_{mj} d\Omega -
   \int_{\Omega} w_{i} f_{i} d\Omega &= 0 \\
--c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\partial\Omega = \Gamma} 
+-c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\partial\Omega = \Gamma}
   + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega
   &=\int_{\Omega} w_{i} f_{i} d\Omega  \\
--c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{g}_{i}} 
--c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{h}_{i}} 
+-c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{g}_{i}}
+-c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{h}_{i}}
   + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega
   &=\int_{\Omega} w_{i} f_{i} d\Omega \\
 0
- -c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{h}_{i}} 
+ -c_{ijkm}(w_{i} u_{k},_{mj})\Big|_{\Gamma^{h}_{i}}
   + \int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega
   &=\int_{\Omega} w_{i} f_{i} d\Omega \\
 -w_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
@@ -1505,15 +1505,15 @@ Solution:
 
 Given:
 \begin{align*}
-a( X, Y ) &= 
+a( X, Y ) &=
   \int_{\Omega} c_{ijkm} X_{i},_{j} Y_{k},_{m} d\Omega \\
-b( X, Y ) &= 
+b( X, Y ) &=
   \int_{\Omega} X_{i} Y_{i} d\Omega \\
-u^{h}_{i} = 
-  v^{h}_{i} + g^{h}_{i} 
+u^{h}_{i} =
+  v^{h}_{i} + g^{h}_{i}
   \quad
-  g^{h}_{i}\Big|_{\Gamma^{g}_{i}} &= g_{i} 
-  \quad 
+  g^{h}_{i}\Big|_{\Gamma^{g}_{i}} &= g_{i}
+  \quad
   v^{h}_{i}\Big|_{\Gamma^{g}_{i}} = 0
 \end{align*}
 
@@ -1521,24 +1521,24 @@ u^{h}_{i} =
 Solution:
 
 \begin{align*}
-\int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega 
+\int_{\Omega} c_{ijkm} w_{i},_{j} u_{k},_{m} d\Omega
  &= \int_{\Omega} w_{i} f_{i} d\Omega
   + w_{i}\Big|_{\Gamma^{h}_{i}} h_{i} \\
 a(w, u)
- &= b(w , f) 
+ &= b(w , f)
   + w_{i}\Big|_{\Gamma^{h}_{i}} h_{i}  \\
 \text{let} \quad u &\approx u^{h} = v^{h} + g^{h} \\
  \quad w &\approx w^{h} \\
-a(w^{h} , u^{h} ) 
- &= b(w^{h}, f) 
+a(w^{h} , u^{h} )
+ &= b(w^{h}, f)
   + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i}  \\
-a(w^{h} , v^{h} ) 
-  + a(w^{h} , g^{h} ) 
- &= b(w^{h}, f) 
+a(w^{h} , v^{h} )
+  + a(w^{h} , g^{h} )
+ &= b(w^{h}, f)
   + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i}  \\
 a(w^{h} , v^{h})
- &= b(w^{h} , f) 
-  + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i} 
+ &= b(w^{h} , f)
+  + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
   - a(w^{h} , g^{h})
 \end{align*}
 
@@ -1548,8 +1548,8 @@ a(w^{h} , v^{h})
 Given:
 \begin{equation*}
 a(w^{h} , v^{h})
- = b(w^{h} , f) 
-  + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i} 
+ = b(w^{h} , f)
+  + w^{h}_{i}\Big|_{\Gamma^{h}_{i}} h_{i}
   - a(w^{h} , g^{h})
 \end{equation*}
 
@@ -1564,34 +1564,34 @@ Solution:
 
 \begin{equation*}
 a(c^{A} N^{A}, d^{B} N^{B})
- = b( c^{A} N^{A} , f) 
-  + c^{A} N^{A}\Big|_{\Gamma^{h}_{i}} h_{i} 
+ = b( c^{A} N^{A} , f)
+  + c^{A} N^{A}\Big|_{\Gamma^{h}_{i}} h_{i}
   - a( c^{A} N^{A}, g^{C} N^{C})
 \end{equation*}
 
 \begin{equation*}
-c^{A} a(N^{A}, N^{B})d^{B} 
- = c^{A} b( N^{A} , f) 
-  + c^{A} N^{A}\Big|_{\Gamma^{h}_{i}} h_{i} 
-  - c^{A}a( N^{A}, N^{C})g^{C} 
+c^{A} a(N^{A}, N^{B})d^{B}
+ = c^{A} b( N^{A} , f)
+  + c^{A} N^{A}\Big|_{\Gamma^{h}_{i}} h_{i}
+  - c^{A}a( N^{A}, N^{C})g^{C}
 \end{equation*}
 
 \begin{equation*}
-a(N^{A}, N^{B})d^{B} 
- = b( N^{A} , f) 
-  + N^{A}\Big|_{\Gamma^{h}_{i}} h_{i} 
-  - a( N^{A}, N^{C})g^{C} 
+a(N^{A}, N^{B})d^{B}
+ = b( N^{A} , f)
+  + N^{A}\Big|_{\Gamma^{h}_{i}} h_{i}
+  - a( N^{A}, N^{C})g^{C}
 \end{equation*}
 
 \begin{align*}
 \text{Let}\quad K_{AB} &= a(N^{A}, N^{B}) \\
-F_A &= b( N^{A} , f) 
-  + N^{A}\Big|_{\Gamma^{h}_{i}} h_{i} 
-  - a( N^{A}, N^{C})g^{C} 
+F_A &= b( N^{A} , f)
+  + N^{A}\Big|_{\Gamma^{h}_{i}} h_{i}
+  - a( N^{A}, N^{C})g^{C}
 \end{align*}
 
 \begin{equation*}
-[ K_{AB} ] \{ d_B \} = \{ F_A \} 
-\end{equation*} 
+[ K_{AB} ] \{ d_B \} = \{ F_A \}
+\end{equation*}
 
 \end{document}
