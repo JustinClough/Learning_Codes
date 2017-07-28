@@ -22,10 +22,13 @@
 \usepackage{nameref}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsfonts}
 \usepackage[linesnumbered,ruled]{algorithm2e}
 \usepackage{tikz}
-\usetikzlibrary{calc,patterns,decorations.pathmorphing,decorations.markings}
-
+\usetikzlibrary{calc,patterns,decorations.pathmorphing,decorations.markings,positioning,automata}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{makecell}
 
 \begin{document}
 \maketitle
@@ -1356,7 +1359,7 @@ project but borrowed from other libraries, like \texttt{PUMI},
 \end{algorithm}
 \vspace{\baselineskip}
 
-\section{Testing} \label{sec:testing}
+\section{Tests \& Results} \label{sec:testing}
 The code written for this project was tested with triangular and 
 quadrilateral elements. Each type of element was also 
 tested in a linear and quadratic level of accuracy;
@@ -1364,26 +1367,36 @@ linear in that shape functions and numerical integration
 order were linear - quadratic in that the shape functions and
 numerical integration order were quadratic.
 The same 1 by 1 unit length model was used for all tests for 
-consistency. The same base Dirichlet boundary counditions were used
-for all tests as well; the leftmost and bottommost edge 
+consistency. 
+The same material properties were used all all tests as well.
+Young's modulus was set to 1000.0 and Poisson's ratio
+was set to 0.25.
+The same base Dirichlet boundary conditions were used
+for all tests as well; the leftmost and bottommost edges were 
 constrained to perpendicular motion as shown in Figure \ref{fig:DiriBC}.
 Each element type and accuracy level combination was tested with
-the following three scenarios:
+the following three test numbers:
 
 \begin{enumerate}
-  \item  stuff
-
+  \item An additional Dirichlet boundary condition on the 
+        rightmost edge of 0.01.
+  \item A Neumann boundary condition on the rightmost edge
+        of 100.0.
+  \item A body load of $(10.0, 0.0, 0.0)$ where the first component
+        is positive to the left in Figure \ref{fig:DiriBC}.
 \end{enumerate}
 
 \begin{figure}[H]
   \centering
 \begin{tikzpicture}[every node/.style={draw,outer sep=0pt,thick}]
   \tikzstyle{ground}=
-    [fill,pattern=north east lines,draw=none,minimum width=0.75cm,minimum height=0.3cm]
+    [fill,pattern=north east lines,
+      draw=none,minimum width=0.75cm,minimum height=0.3cm]
 
 \begin{scope}[xshift=7cm]
   % Creates the rectangle
-  \node (M) [minimum width=2.5cm, minimum height=2.5cm] {};
+  \node (M) [minimum width=2.5cm, minimum height=2.5cm] 
+    { \makecell[c]{$E=1000.0$ \\ $\nu=0.25$} };
 
   % Creates the bottom ground
   \node (ground) [ground,anchor=north,yshift=-0.25cm,minimum width=3.0cm] 
@@ -1405,18 +1418,248 @@ the following three scenarios:
 \end{scope}
 
 \end{tikzpicture}
-  \caption{Base Dirichlet boundary conditions.}
+  \caption{Base Dirichlet boundary conditions with material 
+            properties shown.}
   \label{fig:DiriBC}
 \end{figure} 
 
+Images from these three tests are shown in Sections \ref{subsec:linTris}
+and \ref{subsec:quadTris} for linear and quadratic triangular
+elements, respectively. 
+This is then repeated for quadrilateral elements; 
+results from linear quadrilateral tests are shown in 
+Section \ref{subsec:linQuads}
+results from quadratic quadrilateral tests are shown in 
+Section \ref{subsec:quadQuads}.
+Additionally, solution convergence 
+is shown for the linear triangular elements 
+in Section \ref{subsec:linTris} for the body loading case.
+Results are presented graphically as prepared in ParaView.
 
 \subsection{Linear Triangular Elements} \label{subsec:linTris}
-Linear Tri element text here.
+The displacement results for test 1 are shown in 
+Figures \ref{fig:linTri1_x} and \ref{fig:linTri1_y}.
+This displacement then caused the stress distribution 
+shown in Figure \ref{fig:linTri1_SXX}.
+The original mesh used is shown in Figure \ref{fig:TriMesh}.
+This mesh is also used for the quadratic triangular elements.
 
-Convergence of linear tet elements here.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11cm, height=11cm]{tri_4_mesh}
+  \caption{Original mesh used for test 1 and 2 for the linear
+            and quadratic triangular elements.}
+  \label{fig:TriMesh}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{tri_4_t1_disp_X}
+  \caption{Deformation X component for test 1 of linear 
+            triangular elements.}
+  \label{fig:linTri1_x}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{tri_4_t1_disp_Y}
+  \caption{Deformation Y component for test 1 of linear 
+            triangular elements.}
+  \label{fig:linTri1_y}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{tri_4_t1_Sxx}
+  \caption{The $xx$ component of the Cauchy stress for test 1.
+            All other components were zero.}
+  \label{fig:linTri1_SXX}
+\end{figure}
+
+The displacement results for test 2 are shown in 
+Figures \ref{fig:linTri2_x} and \ref{fig:linTri2_y}.
+This displacement then caused the stress distribution 
+shown in Figure \ref{fig:linTri2_SXX}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{tri_4_t2_disp_X}
+  \caption{Deformation X component for test 2 of linear 
+            triangular elements.}
+  \label{fig:linTri2_x}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{tri_4_t2_disp_Y}
+  \caption{Deformation Y component for test 2 of linear 
+            triangular elements.}
+  \label{fig:linTri2_y}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{tri_4_t2_Sxx}
+  \caption{The $xx$ component of the Cauchy stress for test 2.
+            All other components were zero.}
+  \label{fig:linTri2_SXX}
+\end{figure}
+
+The displacement results for test 3 are shown in 
+Figures \ref{fig:linTri3_x} and \ref{fig:linTri3_y}.
+This displacement then caused the stress distribution 
+shown in Figure \ref{fig:linTri3_SXX}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{tri_4_t3_disp_X}
+  \caption{Deformation X component for test 3 of linear 
+            triangular elements.}
+  \label{fig:linTri3_x}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{tri_4_t3_disp_Y}
+  \caption{Deformation Y component for test 3 of linear 
+            triangular elements.}
+  \label{fig:linTri3_y}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{tri_4_t3_Sxx}
+  \caption{The $xx$ component of the Cauchy stress for test 3.}
+  \label{fig:linTri3_SXX}
+\end{figure}
+
+Convergence was also measured using test 3. This is shown in 
+Figure \ref{fig:triConv}. The analytical solution for the 
+body load case is shown in Equation \ref{eq:AnaSol}:
+
+\begin{equation} \label{eq:AnaSol}
+U_{a} = \frac{g(a-x_1)x_1}{E}
+  \begin{bmatrix}
+    1    \\
+    -\nu \\
+    0
+  \end{bmatrix}
+\end{equation}
+
+\noindent
+where $U_a$ is the analytical displacement solution, $a$ is the width
+of the plate (taken as $1$ in this test), and $x_1$ is the position
+along the width of the plate. The origin is taken to be the bottom
+left corner.
+
+\begin{figure}[H]
+  \centering
+\begin{tikzpicture}
+  \begin{axis}[ 
+    title=Linear Triangluar Element Convergence,
+    xmode=log, 
+    xlabel=$DOF$,
+    ymode=log,
+    ylabel=$\quad RMS$]
+  \addplot table { RMS.txt };
+  \end{axis}
+\end{tikzpicture}
+  \caption{RMS of displacement error when compared to analytical 
+            solution with respect to increasing degrees of freedom.}
+  \label{fig:triConv}
+\end{figure}
+
+As shown in Figure \ref{fig:triConv}, the linear triangular 
+elements are able to converge on the exact, quadratic, solution
+even though each element is only linear in accuracy.
 
 \subsection{Quadratic Triangular Elements} \label{subsec:quadTris}
-Quadratic Tri element text here.
+The displacement results for test 1 are shown in 
+Figures \ref{fig:quadTri1_x} and \ref{fig:quadTri1_y}.
+This displacement then caused the stress distribution 
+shown in Figure \ref{fig:quadTri1_SXX}.
+The original mesh used is shown in Figure \ref{fig:TriMesh}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{Qtri_4_t1_disp_X}
+  \caption{Deformation X component for test 1 of quadratic
+            triangular elements.}
+  \label{fig:quadTri1_x}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{Qtri_4_t1_disp_Y}
+  \caption{Deformation Y component for test 1 of quadratic
+            triangular elements.}
+  \label{fig:quadTri1_y}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{Qtri_4_t1_Sxx}
+  \caption{The $xx$ component of the Cauchy stress for test 1.
+            All other components were zero.}
+  \label{fig:quadTri1_SXX}
+\end{figure}
+
+The displacement results for test 2 are shown in 
+Figures \ref{fig:quadTri2_x} and \ref{fig:quadTri2_y}.
+This displacement then caused the stress distribution 
+shown in Figure \ref{fig:quadTri2_SXX}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{Qtri_4_t2_disp_X}
+  \caption{Deformation X component for test 2 of quadratic
+            triangular elements.}
+  \label{fig:quadTri2_x}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{Qtri_4_t2_disp_Y}
+  \caption{Deformation Y component for test 2 of quadratic
+            triangular elements.}
+  \label{fig:quadTri2_y}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{Qtri_4_t2_Sxx}
+  \caption{The $xx$ component of the Cauchy stress for test 2.
+            All other components were zero.}
+  \label{fig:quadTri2_SXX}
+\end{figure}
+
+The displacement results for test 3 are shown in 
+Figures \ref{fig:quadTri3_x} and \ref{fig:quadTri3_y}.
+This displacement then caused the stress distribution 
+shown in Figure \ref{fig:quadTri3_SXX}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{Qtri_4_t3_disp_X}
+  \caption{Deformation X component for test 3 of quadratic
+            triangular elements.}
+  \label{fig:quadTri3_x}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{Qtri_4_t3_disp_Y}
+  \caption{Deformation Y component for test 3 of quadratic
+            triangular elements.}
+  \label{fig:quadTri3_y}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm, height=10cm]{Qtri_4_t3_Sxx}
+  \caption{The $xx$ component of the Cauchy stress for test 3.}
+  \label{fig:quadTri3_SXX}
+\end{figure}
 
 \subsection{Linear Quadrilateral Elements} \label{subsec:linQuads}
 Linear quad text here.
@@ -1434,7 +1677,6 @@ closing comments here.
 \appendix
 \section{Source Code and Headers} \label{sec:code}
 
-\newpage
 \subsection{a4.cc} \label{subsec:a4.cc}
 \lstinputlisting{/lore/clougj/FiniteElementProgramming/a4/src/a4.cc}
 
