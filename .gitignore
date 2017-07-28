@@ -13,3 +13,53 @@ a.out
 
 #Ignore g++'s pre-compiled headers
 *.gch
+
+#Hidden files
+.**
+
+#But not itself
+!.gitignore
+
+#Barn Directories
+/barn**
+
+#Scratch Directories
+/scratch**
+
+#Build Directories
+**/build
+
+#Slurm output
+slurm-**
+
+#Testing Output
+output.txt
+
+#Reordered meshes
+a2/Reordered_**
+
+#Results
+**/*Results*
+
+#a3 meshes
+a3/a3/
+a3/migrated/
+
+#Latex support files
+**.aux
+**.log
+
+#Eigen
+**igen**
+
+#a4 models and meshes
+a4/models_meshes/
+
+# vim sessions
+**.vim
+
+#test directories
+test/
+
+#latex style package
+*.sty

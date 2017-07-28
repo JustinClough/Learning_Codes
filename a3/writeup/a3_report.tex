@@ -1,0 +1,101 @@
+\documentclass[a4paper, 12pt]{article}
+\author{Justin Clough, RIN:661682899}
+\title{FEP: Assignment 3}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{float}
+\usepackage{enumerate}
+\usepackage{listings}
+\lstset{
+    frame=single,
+    breaklines=true,
+}
+
+\begin{document}
+\maketitle
+
+\section*{Algorithm Description}
+
+\subsection*{Operation 1} \label{sec:sub:op1}
+
+The number of mesh regions for each part was determined by 
+first iterating over all mesh vertices. For each mesh vertex, 
+its third dimensional adjacencies, surrounding mesh regions, were 
+collected into a temporary vector. The contents of this temporary 
+vector were then added to another data structure if it did not 
+already exist in the other structure. The size of this data 
+structure was then the number of regions on each part. The mesh
+vertices were then iterated over again. For each mesh vertex, 
+it was first checked if it was owned by the operating process. 
+If it was owned, then the local and global identification numbers 
+were recorded. The number of adjacent regions was recorded as well 
+for each vertex. The results for this operation are shown in the
+results section. Printed out content from process zero is followed
+by process one.
+
+\subsection*{Operation 2} \label{sec:sub:op2}
+
+A similar process as shown in Operation 1 was used. The number of
+mesh faces for each part was determined by first iterating over all mesh
+vertices. For each mesh vertex, 
+its first dimensional adjacencies, surrounding mesh edges, were 
+collected into a temporary vector. The contents of this temporary 
+vector were then added to another data structure if it did not 
+already exist in the other structure. The size of this data 
+structure was then the number of edges on each part. The mesh
+vertices were then iterated over again. For each mesh vertex, 
+it was first checked if it was owned by the operating process. 
+If it was owned, then the local and global identification numbers 
+were recorded. The number of adjacent faces was recorded as well 
+for each vertex. The results for this operation are shown in the
+results section.
+Printed out content from process zero is followed
+by process one.
+
+
+\subsection*{Operation 3} \label{sec:sub:op3}
+
+The number of mesh faces on the partition model face before migration
+was determined by iterating over all mesh faces. An integer counter
+was started at zero and was incremented if a mesh face was on the 
+part boundary. After all mesh faces were iterated on, the value of 
+the counter was recorded. Next, a migration plan was constructed. 
+Process zero then iterated over all mesh regions. For each mesh 
+region, it was first checked if it was owned by process zero. If it
+was, then its second dimension adjacencies were collected in a 
+temporary vector. The faces in this temporary vector were then 
+iterated over and each checked if they were on the part boundary.
+If any of each region's faces were on the part boundary, then the 
+region was added to another data structure. The region was only added
+to this other data structure if it had not already been added. The 
+regions in this data structure were then iterated over. Each region was 
+then added to the migration plan and its local identification number 
+was recorded. Mesh migration was then performed and the resulting mesh
+was verified. The mesh faces were then iterated over again. A counter 
+was stared at zero and was incremented each time a face was found on 
+the boundary. The results for this operation are shown in the
+results section.
+Printed out content from process zero is followed
+by process one. The code to execute the above three process begins
+on page \pageref{sec:code}.
+
+\section*{Operation 1 Results} \label{sec:results1}
+\lstinputlisting{
+  /lore/clougj/FiniteElementProgramming/a3/Op1Results_Proc0.txt}
+\lstinputlisting{
+  /lore/clougj/FiniteElementProgramming/a3/Op1Results_Proc1.txt}
+\section*{Operation 2 Results} \label{sec:results2}
+\lstinputlisting{
+  /lore/clougj/FiniteElementProgramming/a3/Op2Results_Proc0.txt}
+\lstinputlisting{
+  /lore/clougj/FiniteElementProgramming/a3/Op2Results_Proc1.txt}
+\section*{Operation 3 Results} \label{sec:results3}
+\lstinputlisting{
+  /lore/clougj/FiniteElementProgramming/a3/Op3Results_Proc0.txt}
+\lstinputlisting{
+  /lore/clougj/FiniteElementProgramming/a3/Op3Results_Proc1.txt}
+
+\newpage
+\section*{Code} \label{sec:code}
+\lstinputlisting{/lore/clougj/FiniteElementProgramming/a3/a3.cc}
+
+\end{document}
