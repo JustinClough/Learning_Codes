@@ -36,14 +36,14 @@ slurm-**
 output.txt
 
 #Reordered meshes
-a2/Reordered_**
+FEP/a2/Reordered_**
 
 #Results
 **/*Results*
 
 #a3 meshes
-a3/a3/
-a3/migrated/
+FEP/a3/a3/
+FEP/a3/migrated/
 
 #Latex support files
 **.aux
@@ -53,7 +53,7 @@ a3/migrated/
 **igen**
 
 #a4 models and meshes
-a4/models_meshes/
+FEP/a4/models_meshes/
 
 # vim sessions
 **.vim
