@@ -14,7 +14,11 @@ class elem
     // Gets the right Node Position.
     double getRightPos();
 
+    // Constructor
     elem( double leftPos_, double rightPos_);
+
+    // Destructor
+    ~elem();
 
   private:
     // The length of the element.

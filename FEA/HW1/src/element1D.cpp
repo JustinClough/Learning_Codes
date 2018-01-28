@@ -20,6 +20,11 @@ elem::elem( double leftPos_, double rightPos_)
   }
 }
 
+elem::~elem()
+{
+
+}
+
 double elem::getLength()
 {
   return length;

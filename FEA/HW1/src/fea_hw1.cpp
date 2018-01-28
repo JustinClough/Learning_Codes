@@ -1,15 +1,30 @@
 #include "eig_wrap.hpp"
 #include "mesh1D.hpp"
+#include "stiffness.hpp"
 
 #include <iostream>
 
 int main( int argc, char** argv)
 {
+  // Define Mesh paramters, testing size
+  double oddSize         = 0.9;
+  double evenSize        = 1.1;
+  //int    NplusOneArray[] = {10, 20, 40, 80, 160, 320};
+  int    NplusOneArray[] = {10, 10, 10, 10, 10, 10};
+  int    numTests        = 6;
 
-  double oddSize  = 0.9;
-  double evenSize = 1.1;
-  int    NplusOne = 10; 
-  mesh1D mesh( oddSize, evenSize, NplusOne);
+  for( int i = 0; i < numTests; i++)
+  {
+    // First construct the mesh 
+    int NplusOne = NplusOneArray[i]; 
+    mesh1D* mesh = new mesh1D( oddSize, evenSize, NplusOne);
+
+    // Create the stiffness matrix
+    int caseNumber = 1;
+    MatrixXd K = create_stiffness( mesh, caseNumber);
+
+    delete mesh;
+  }
 
   return 0;
 }

@@ -15,8 +15,9 @@ mesh1D::~mesh1D()
 {
   for( int i = 0; i < elements.size(); i++)
   {
-    delete elements[i];
+   delete (elements[i]);
   }
+  elements.clear();
 }
 
 elem mesh1D::getElem(int i)
@@ -34,9 +35,11 @@ elem mesh1D::getElem(int i)
 
 void mesh1D::constructElems()
 {
+  numNodes = 1;
   for( int i = 0; i < numElems+1; i++)
   {
     constructElement( i);
+    numNodes++;
   }
   return;
 }
