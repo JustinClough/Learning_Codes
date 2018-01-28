@@ -1,15 +1,14 @@
 #ifndef EIG_WRAP
-#define EIF_WRAP
+#define EIG_WRAP
 
-#include <iostream>
+// eig_wrap.hpp
+// This wraps all needed Eigen package
+// headers into a "convenient" header.
+// It also defines using directives.
 
+#include </lore/clougj/Learning_Codes/FEA/Eigen_Package/Eigen/Eigen>
 
-void print_hello()
-{
-
-  std::cout << "hello world" << std::endl;
-
-  return;
-}
+using Eigen::MatrixXd;
+using Eigen::VectorXd;
 
 #endif
