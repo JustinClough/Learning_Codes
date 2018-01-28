@@ -1,6 +1,36 @@
 #include "element1D.hpp"
 
-elem::elem( double length_)
+#include <cstdlib>
+#include <iostream>
+
+elem::elem( double leftPos_, double rightPos_)
 {
-  length = length_;
+  rightPos = rightPos_;
+  leftPos = leftPos_;
+
+  length = rightPos - leftPos;
+
+  if ( length <= 0.0)
+  {
+    std::cout << "Degenerate element construction attempted. "
+              << "Attempted length = " 
+              << length << std::endl;
+    
+    std::abort();
+  }
+}
+
+double elem::getLength()
+{
+  return length;
+}
+
+double elem::getLeftPos()
+{
+  return leftPos;
+}
+
+double elem::getRightPos()
+{
+  return rightPos;
 }

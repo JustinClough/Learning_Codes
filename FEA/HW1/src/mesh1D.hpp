@@ -11,13 +11,16 @@ class mesh1D
 {
   public:
     // Constructor
-    mesh1D( double oddSize, double evenSize, int elems);
+    mesh1D( double oddSize, double evenSize, int NplusOne);
+
+    // Destructor
+    ~mesh1D();
 
     // Get the number of elements in the mesh
-    int getNumElems;
+    int getNumElems();
   
     // Get the number of nodes in the mesh
-    int getNumNodes;
+    int getNumNodes();
 
     // Get the ith element of the mesh
     elem getElem( int i);
@@ -31,7 +34,7 @@ class mesh1D
     int numNodes;
 
     // The array of elements
-    std::vector<elem> elements; 
+    std::vector<elem*> elements; 
 
     // Element sizes
     double oddSize;
@@ -39,6 +42,9 @@ class mesh1D
 
     // Constructor of the elements
     void constructElems();
+
+    // Constructor of a single element
+    void constructElement( int i);
     
 };
 #endif
