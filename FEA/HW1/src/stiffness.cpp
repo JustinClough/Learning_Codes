@@ -7,13 +7,13 @@ springFactory::springFactory( mesh1D* mesh, int caseNumber_)
 {
   m = mesh;
   caseNumber = caseNumber_;
+  int numDofs = m->getNumNodes();
+  K = MatrixXd::Zero( numDofs, numDofs);
 }
 
 void springFactory::create_stiffness()
 {
   int numDofs = m->getNumNodes();
-  MatrixXd K (numDofs, numDofs);
-  K = MatrixXd::Zero( numDofs, numDofs);
 
   for( int i = 0; i < numDofs; i++)
   {
@@ -51,23 +51,28 @@ MatrixXd springFactory::getStiffness()
 
 void springFactory::p3q2Stiffness( int row, int col)
 { 
-  double hi = m->getElem( row).getLength();
+  std::cout << "(row, col) = " << row << ", " << col << std::endl;
+  double p  = 3.0;
+  double q  = 2.0;
 
-  if( row == 1)
+  if( row == 0)
   { 
+    std::cout << "row 0 assignment" << std::endl;
     // TODO:special assignment for first row
   }
-  else if( row == m->getNumNodes() )
+  else if( row == (m->getNumElems()) )
   {
+    std::cout << "row (last) assignment" << std::endl;
     // TODO:special assignment for last row
   }
   else
   {
-    double hip1 = m->getElem( row + 1).getLength();
+    double hi = m->getElem( row-1).getLength();
+    double hip1 = m->getElem( row).getLength();
     
     if( row == col)
     {
-      //K( row, col) = -P / 
+      K( row, col) = -p * (1/hi + 1/hip1) + q/3 * (hi + hip1);
     }
   }
   return;

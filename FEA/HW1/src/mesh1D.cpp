@@ -5,7 +5,7 @@
 
 mesh1D::mesh1D( double oddSize_, double evenSize_, int NplusOne)
 {
-  numElems = NplusOne - 1;
+  numElems = NplusOne;
   oddSize = oddSize_;
   evenSize = evenSize_;
   constructElems();
@@ -22,12 +22,12 @@ mesh1D::~mesh1D()
 
 elem mesh1D::getElem(int i)
 {
-  if ( i > numElems)
+  if ( i >= numElems)
   {
     std::cout
       << "Attempted to access out of bounds element. "
       << "Element number " << i << " requested. "
-      << "Maximum number " << numElems << std::endl;
+      << "Elements are numbered 0 to " << numElems-1 << std::endl;
     std::abort();
   }
   return *elements[i];
@@ -36,7 +36,7 @@ elem mesh1D::getElem(int i)
 void mesh1D::constructElems()
 {
   numNodes = 1;
-  for( int i = 0; i < numElems+1; i++)
+  for( int i = 0; i < numElems; i++)
   {
     constructElement( i);
     numNodes++;
@@ -53,7 +53,7 @@ void mesh1D::constructElement( int i)
     leftPos = (elements[i-1])->getRightPos();
   }
 
-  double DX = 1.0 / (numElems + 1.0);
+  double DX = 1.0 / numElems;
   double rightPos = leftPos;
 
   // Create element based on even or odd number

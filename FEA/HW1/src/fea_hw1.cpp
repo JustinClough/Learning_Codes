@@ -20,9 +20,19 @@ int main( int argc, char** argv)
     int NplusOne = NplusOneArray[i]; 
     mesh1D* mesh = new mesh1D( oddSize, evenSize, NplusOne);
 
-    springFactory* sF = new springFactory( mesh, caseNumber);
+    std::cout << "elems = " << mesh->getNumElems() << std::endl;
+    std::cout << "Nodes = " << mesh->getNumNodes() << std::endl;
 
-    delete sF;
+    springFactory* sf = new springFactory( mesh, caseNumber);
+
+    sf->create_stiffness();
+
+    MatrixXd K = sf->getStiffness();
+
+    std::cout << "K = " << std::endl;
+    std::cout << K << std::endl;
+
+    delete sf;
     delete mesh;
   }
 
