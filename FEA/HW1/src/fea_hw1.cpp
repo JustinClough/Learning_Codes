@@ -12,6 +12,7 @@ int main( int argc, char** argv)
   //int    NplusOneArray[] = {10, 20, 40, 80, 160, 320};
   int    NplusOneArray[] = {10, 10, 10, 10, 10, 10};
   int    numTests        = 6;
+  int caseNumber = 1;
 
   for( int i = 0; i < numTests; i++)
   {
@@ -19,10 +20,9 @@ int main( int argc, char** argv)
     int NplusOne = NplusOneArray[i]; 
     mesh1D* mesh = new mesh1D( oddSize, evenSize, NplusOne);
 
-    // Create the stiffness matrix
-    int caseNumber = 1;
-    MatrixXd K = create_stiffness( mesh, caseNumber);
+    springFactory* sF = new springFactory( mesh, caseNumber);
 
+    delete sF;
     delete mesh;
   }
 
