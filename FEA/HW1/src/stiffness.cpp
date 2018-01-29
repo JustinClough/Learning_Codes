@@ -50,8 +50,26 @@ MatrixXd springFactory::getStiffness()
 }
 
 void springFactory::p3q2Stiffness( int row, int col)
-{
-  // TODO
+{ 
+  double hi = m->getElem( row).getLength();
+
+  if( row == 1)
+  { 
+    // TODO:special assignment for first row
+  }
+  else if( row == m->getNumNodes() )
+  {
+    // TODO:special assignment for last row
+  }
+  else
+  {
+    double hip1 = m->getElem( row + 1).getLength();
+    
+    if( row == col)
+    {
+      //K( row, col) = -P / 
+    }
+  }
   return;
 }
 
