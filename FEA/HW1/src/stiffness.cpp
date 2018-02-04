@@ -24,7 +24,8 @@ void springFactory::create_stiffness()
     }
   }
 
-  std::cout << "K = " << K << std::endl;
+  std::cout << "K = " << std::endl;
+  std::cout << K << std::endl;
   return ;
 }
 

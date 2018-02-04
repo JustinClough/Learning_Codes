@@ -26,9 +26,6 @@ int main( int argc, char** argv)
 
     MatrixXd K = sf->getStiffness();
 
-    std::cout << "K = " << std::endl;
-    std::cout << K << std::endl;
-
     delete sf;
     delete mesh;
   }
