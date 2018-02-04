@@ -1,6 +1,7 @@
 #include "stiffness.hpp"
 
 #include <iostream>
+#include <cmath>
 
 
 springFactory::springFactory( mesh1D* mesh, int caseNumber_)
@@ -51,11 +52,10 @@ MatrixXd springFactory::getStiffness()
 
 void springFactory::p3q2Stiffness( int row, int col)
 { 
-  std::cout << "(row, col) = " << row << ", " << col << std::endl;
   double p  = 3.0;
   double q  = 2.0;
 
-  if( row == 0)
+  if( row == 0.0)
   { 
     std::cout << "row 0 assignment" << std::endl;
     // TODO:special assignment for first row
@@ -67,12 +67,18 @@ void springFactory::p3q2Stiffness( int row, int col)
   }
   else
   {
-    double hi = m->getElem( row-1).getLength();
+    double hi   = m->getElem( row-1).getLength();
     double hip1 = m->getElem( row).getLength();
     
     if( row == col)
     {
-      K( row, col) = -p * (1/hi + 1/hip1) + q/3 * (hi + hip1);
+      // On the diagonal
+      K( row, col) = -p * (1.0/hi + 1.0/hip1) + q/3.0 * (hi + hip1);
+    }
+    else if ( std::abs(row - col) == 1.0)
+    {
+      // Inside of diagonal
+      K( row, col) = - p / hi + q / ( 6.0 * hi);
     }
   }
   return;

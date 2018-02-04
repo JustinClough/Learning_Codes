@@ -20,9 +20,6 @@ int main( int argc, char** argv)
     int NplusOne = NplusOneArray[i]; 
     mesh1D* mesh = new mesh1D( oddSize, evenSize, NplusOne);
 
-    std::cout << "elems = " << mesh->getNumElems() << std::endl;
-    std::cout << "Nodes = " << mesh->getNumNodes() << std::endl;
-
     springFactory* sf = new springFactory( mesh, caseNumber);
 
     sf->create_stiffness();
