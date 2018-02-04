@@ -73,12 +73,20 @@ void springFactory::p3q2Stiffness( int row, int col)
     if( row == col)
     {
       // On the diagonal
-      K( row, col) = -p * (1.0/hi + 1.0/hip1) + q/3.0 * (hi + hip1);
+      K( row, col) = p * (1.0/hi + 1.0/hip1) + q/3.0 * (hi + hip1);
     }
-    else if ( std::abs(row - col) == 1.0)
+    else if ( std::abs( row - col) == 1.0)
     {
-      // Inside of diagonal
-      K( row, col) = - p / hi + q / ( 6.0 * hi);
+      if ( (row - col) < 0.0)
+      {
+        // Inside of diagonal
+        K( row, col) = - p / hi + q * hi / 6.0;
+      }
+      else if ( (row - col) > 0.0)
+      {
+        // Inside of diagonal
+        K( row, col) = - p / hip1 + q * hip1 / 6.0;
+      }
     }
   }
   return;
