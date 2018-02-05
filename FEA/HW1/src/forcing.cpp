@@ -1,5 +1,7 @@
 #include "forcing.hpp"
 
+#include <cmath>
+#include <iostream>
 
 forcingFactory::forcingFactory( mesh1D* mesh, int caseNumber_)
 {
@@ -12,7 +14,7 @@ forcingFactory::forcingFactory( mesh1D* mesh, int caseNumber_)
   F = VectorXd::Zero( numDofs);
 }
 
-forcingFactory::create_forcing()
+void forcingFactory::create_forcing()
 {
   for ( int i = 0; i < numDofs; i++)
   {
@@ -25,9 +27,59 @@ forcingFactory::create_forcing()
   return;
 }
 
-VectorXd forcingFatory::getForcing()
+VectorXd forcingFactory::getForcing()
 {
   return F;
 }
 
+void forcingFactory::assign_force( int row)
+{
+  if ( caseNumber == 1)
+  { // A caseNumber of 1 is for the p = 3, q = 2 problem
+    p3q2force( row);
+  }
+  else if ( caseNumber == 2)
+  { // A casenumber of 2 is for the p = 1+x, q=0 problem
+    pXq0force( row);
+  }
+  else 
+  {
+    std::cout << "Unrecognized caseNumber = " << caseNumber << std::endl;
+  }
+  return;
+}
 
+void forcingFactory::p3q2force( int row)
+{
+  double hi   = m->getElem( row).getLength();
+  double hip1 = m->getElem( row + 1).getLength();
+
+  double xim1 = m->getElem( row).getLeftPos();
+  double xi   = m->getElem( row).getRightPos();
+  double xip1 = m->getElem( row + 1).getLeftPos();
+
+  double fim1 = analytic_p3q2( xim1);
+  double fi   = analytic_p3q2( xi);
+  double fip1 = analytic_p3q2( xip1);
+
+  F( row) = fim1 * hi / 6.0 
+            + fi * ( hi + hip1) / 3.0 
+            + fip1 * hip1 / 6.0;
+
+  return;
+}
+
+void forcingFactory::pXq0force( int row)
+{
+  // TODO
+  return;
+}
+
+double forcingFactory::analytic_p3q2( double x)
+{
+  double f = 0.0;
+  f += (17.0 * x * (x-1.0) - 6.0) * std::sin( 5.0 * x);
+  f += -3.0 * x * (x + 11) * std::exp( x);
+  f += -18.0 * (2.0 * x - 1) * cos( 5.0 * x);
+  return f;
+}

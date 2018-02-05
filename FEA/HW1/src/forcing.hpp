@@ -27,6 +27,9 @@ class forcingFactory
   // Assign forcing component for p=x+1, q=0 case (caseNumber 2)
   void pXq0force( int row);
 
+  // Evaluate given force function for p3q2 case
+  double analytic_p3q2( double x);
+
   // The forcing vector
   VectorXd F;
 

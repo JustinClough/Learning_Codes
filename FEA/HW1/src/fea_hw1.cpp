@@ -28,6 +28,9 @@ int main( int argc, char** argv)
 
     forcingFactory* ff = new forcingFactory( mesh, caseNumber);
 
+    ff->create_forcing();
+    VectorXd F = ff->getForcing();
+
     delete ff;
     delete sf;
     delete mesh;
