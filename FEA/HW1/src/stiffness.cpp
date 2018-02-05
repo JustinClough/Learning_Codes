@@ -31,7 +31,10 @@ void springFactory::create_stiffness()
 
 void springFactory::assign_stiffness( int row, int col)
 {
-  if ( caseNumber == 1)
+  if ( ( caseNumber == 1) ||
+       ( caseNumber == 3) ||
+       ( caseNumber == 4) ||
+       ( caseNumber == 5))
   { // A caseNumber of 1 is for the p = 3, q = 2 problem
     p3q2Stiffness( row, col);
   }
