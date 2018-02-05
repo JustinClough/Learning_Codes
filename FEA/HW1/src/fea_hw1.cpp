@@ -1,6 +1,7 @@
 #include "eig_wrap.hpp"
 #include "mesh1D.hpp"
 #include "stiffness.hpp"
+#include "forcing.hpp"
 
 #include <iostream>
 
@@ -23,9 +24,11 @@ int main( int argc, char** argv)
     springFactory* sf = new springFactory( mesh, caseNumber);
 
     sf->create_stiffness();
-
     MatrixXd K = sf->getStiffness();
 
+    forcingFactory* ff = new forcingFactory( mesh, caseNumber);
+
+    delete ff;
     delete sf;
     delete mesh;
   }
