@@ -1,5 +1,7 @@
 set( HW1_SOURCES
 eig_wrap.hpp
+errorCalcs.hpp
+errorCalcs.cpp
 element1D.hpp
 element1D.cpp
 forcing.cpp

@@ -2,6 +2,7 @@
 #include "mesh1D.hpp"
 #include "stiffness.hpp"
 #include "forcing.hpp"
+#include "errorCalcs.hpp"
 
 #include <iostream>
 
@@ -31,7 +32,7 @@ int main( int argc, char** argv)
 
     VectorXd d = K.colPivHouseholderQr().solve( F);
 
-    
+    errorCalcs( d, mesh, caseNumber); 
 
     delete ff;
     delete sf;
