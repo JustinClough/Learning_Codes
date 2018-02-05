@@ -8,14 +8,15 @@ springFactory::springFactory( mesh1D* mesh, int caseNumber_)
 {
   m = mesh;
   caseNumber = caseNumber_;
-  int numDofs = m->getNumNodes();
+  int numNodes = m->getNumNodes();
+  // Assuming that only the interior nodes are
+  //  degrees of freedom
+  numDofs = numNodes - 2;
   K = MatrixXd::Zero( numDofs, numDofs);
 }
 
 void springFactory::create_stiffness()
 {
-  int numDofs = m->getNumNodes();
-
   for( int i = 0; i < numDofs; i++)
   {
     for( int j = 0; j < numDofs; j++)
@@ -56,38 +57,25 @@ void springFactory::p3q2Stiffness( int row, int col)
   double p  = 3.0;
   double q  = 2.0;
 
-  if( row == 0.0)
-  { 
-    std::cout << "row 0 assignment" << std::endl;
-    // TODO:special assignment for first row
-  }
-  else if( row == (m->getNumElems()) )
+  double hi   = m->getElem( row).getLength();
+  double hip1 = m->getElem( row + 1).getLength();
+
+  if( row == col)
   {
-    std::cout << "row (last) assignment" << std::endl;
-    // TODO:special assignment for last row
+    // On the diagonal
+    K( row, col) = p * (1.0/hi + 1.0/hip1) + q/3.0 * (hi + hip1);
   }
-  else
+  else if ( std::abs( row - col) == 1.0)
   {
-    double hi   = m->getElem( row-1).getLength();
-    double hip1 = m->getElem( row).getLength();
-    
-    if( row == col)
+    if ( (row - col) < 0.0)
     {
-      // On the diagonal
-      K( row, col) = p * (1.0/hi + 1.0/hip1) + q/3.0 * (hi + hip1);
+      // Inside of diagonal
+      K( row, col) = - p / hi + q * hi / 6.0;
     }
-    else if ( std::abs( row - col) == 1.0)
+    else if ( (row - col) > 0.0)
     {
-      if ( (row - col) < 0.0)
-      {
-        // Inside of diagonal
-        K( row, col) = - p / hi + q * hi / 6.0;
-      }
-      else if ( (row - col) > 0.0)
-      {
-        // Inside of diagonal
-        K( row, col) = - p / hip1 + q * hip1 / 6.0;
-      }
+      // Inside of diagonal
+      K( row, col) = - p / hip1 + q * hip1 / 6.0;
     }
   }
   return;

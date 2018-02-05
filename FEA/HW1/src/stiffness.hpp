@@ -35,5 +35,8 @@ class springFactory
 
   // Pointer to the mesh
   mesh1D* m;
+
+  // Number of dofs
+  int numDofs;
 };
 #endif
