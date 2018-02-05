@@ -41,8 +41,15 @@ void EC::create_analyticals()
       }
       else if ( cn == 3)
       {
-        // TODO
-    
+        U( j) = 4.0;
+      }
+      else if ( cn == 4)
+      {
+        U( j) = xj - 2.0;
+      }
+      else if ( cn == 5)
+      {
+        U( j) = xj * xj - 3.0;
       }
     }
     us.push_back( U);
@@ -269,10 +276,6 @@ void EC::write()
   else if ( cn == 5)
   {
     filename = filename + "5.txt";
-  } 
-  else if ( cn == 6)
-  {
-    filename = filename + "6.txt";
   } 
   else
   {
