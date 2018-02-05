@@ -69,15 +69,96 @@ void EC::getDiff()
   return;
 }
 
+double EC::e_interp( double ea, 
+                 double eb, 
+                 double xa, 
+                 double xb, 
+                 double h, 
+                 double x)
+{
+  return ea * (xb - x) / h + eb * (x - xa) / h;
+}
+
 void EC::L_2()
 {
-  // TODO
+  double tmp = 0.0;
+  for( int i = 0; i < ehs.size(); i++)
+  {
+    VectorXd e = ehs[i];
+    mesh1D* m = ms[i];
+
+    for( int j = 0; j < e.size(); j++)
+    {
+      double hj = m->getElem( j).getLength();
+      double xa = m->getElem( j).getLeftPos();
+      double xb = m->getElem( j).getRightPos();
+      double ea = 0.0;
+      if( j != 0)
+      {
+        double ea = e(j-1);
+      }
+      double eb = e(j);
+      // M perscribed in problem handout
+      int M = 3;
+      for ( int m = 1; m <= M; m++)
+      {
+        double x = xa + hj * m / M;
+        double e_intp = e_interp( ea, eb, xa, xb, hj, x);
+        tmp = e_intp * e_intp;
+      }
+      tmp *=  hj / M;
+    }
+    L2.push_back( std::sqrt( tmp));
+  }
+
+  std::cout << "L2 Error = " << std::endl;
+  for ( int i =0; i < L2.size(); i++)
+  {
+    std::cout << L2[i] << std::endl;
+  }
   return;
 }
 
 void EC::L_inf()
 {
-  // TODO
+  double tmp = 0.0;
+  for( int i = 0; i < ehs.size(); i++)
+  {
+    VectorXd e = ehs[i];
+    mesh1D* m = ms[i];
+
+    for( int j = 0; j < e.size(); j++)
+    {
+      double hj = m->getElem( j).getLength();
+      double xa = m->getElem( j).getLeftPos();
+      double xb = m->getElem( j).getRightPos();
+      double ea = 0.0;
+      if( j != 0)
+      {
+        double ea = e(j-1);
+      }
+      double eb = e(j);
+      // M perscribed in problem handout
+      int M = 3;
+      for ( int m = 1; m <= M; m++)
+      {
+        double x = xa + hj * m / M;
+        double e_intp = std::abs( e_interp( ea, eb, xa, xb, hj, x) );
+        if ( tmp < e_intp)
+        {
+          tmp = e_intp;
+        }
+      }
+    }
+    Linf.push_back( tmp);
+    tmp = 0.0;
+  }
+
+  std::cout << "Linf Error = " << std::endl;
+  for ( int i =0; i < Linf.size(); i++)
+  {
+    std::cout << Linf[i] << std::endl;
+  }
   return;
 }
 
@@ -101,6 +182,13 @@ void EC::write()
   {
     file << "Error with " << na[i] << " elements:" << std::endl;
     file << ehs[i] << std::endl;
+    file << "Abs(Error) with " << na[i] << " elements:" << std::endl;
+    file << ehs[i].cwiseAbs() << std::endl;
+    file << "Node Locations: " << std::endl;
+    for( int j = 0; j < (ms[i]->getNumElems() - 1); j++)
+    {
+      file << ms[i]->getElem(j).getRightPos() << std::endl;
+    }
   }
 
   file.close();

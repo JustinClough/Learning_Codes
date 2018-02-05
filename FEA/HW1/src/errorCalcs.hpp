@@ -52,11 +52,37 @@ class EC
     // Calculates the L2 norm and order
     void L_2();
 
+    // The vector of L_2 norms
+    std::vector<double> L2;
+
+    // The vector of L_2 orders
+    std::vector<double> L_2_order;
+
     // Calculates the L_inf norm and order
     void L_inf();
 
+    // The vector of L_inf norms
+    std::vector<double> Linf;
+
+    // The vector of L_inf orders
+    std::vector<double> L_inf_order;
+
     // Calculates the Energy norm and order
     void Energy();
+
+    // The vector of NRG norms
+    std::vector<double> NRG;
+
+    // The vector of NRG orders
+    std::vector<double> NRG_order;
+
+    // An intra element interpolation of the error
+    double e_interp( double ea, 
+                     double eb, 
+                     double xa, 
+                     double xb, 
+                     double h, 
+                     double x);
 };
 
 #endif
