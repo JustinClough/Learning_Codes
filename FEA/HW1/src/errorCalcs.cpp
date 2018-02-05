@@ -116,6 +116,21 @@ void EC::L_2()
   {
     std::cout << L2[i] << std::endl;
   }
+
+  for ( int i = 0; i < L2.size(); i++)
+  {
+    if ( i == 0)
+    {
+      L_2_order.push_back( 0.0);
+    }
+    else
+    {
+      double top    = std::log( L2[ i-1] / L2[i]);
+      double bottom = std::log( 2.0);
+      double tmp    = top / bottom;
+      L_2_order.push_back( tmp);
+    }
+  }
   return;
 }
 
@@ -159,6 +174,21 @@ void EC::L_inf()
   {
     std::cout << Linf[i] << std::endl;
   }
+
+  for ( int i = 0; i < Linf.size(); i++)
+  {
+    if ( i == 0)
+    {
+      L_inf_order.push_back( 0.0);
+    }
+    else
+    {
+      double top    = std::log( Linf[ i-1] / Linf[i]);
+      double bottom = std::log( 2.0);
+      double tmp    = top / bottom;
+      L_inf_order.push_back( tmp);
+    }
+  }
   return;
 }
 
@@ -200,6 +230,21 @@ void EC::Energy()
   {
     std::cout << NRG[i] << std::endl;
   }
+
+  for ( int i = 0; i < NRG.size(); i++)
+  {
+    if ( i == 0)
+    {
+      NRG_order.push_back( 0.0);
+    }
+    else
+    {
+      double top    = std::log( NRG[ i-1] / NRG[i]);
+      double bottom = std::log( 2.0);
+      double tmp    = top / bottom;
+      NRG_order.push_back( tmp);
+    }
+  }
   return;
 }
 
@@ -223,6 +268,39 @@ void EC::write()
     for( int j = 0; j < (ms[i]->getNumElems() - 1); j++)
     {
       file << ms[i]->getElem(j).getRightPos() << std::endl;
+    }
+
+    file << "L2 Error: " << std::endl;
+    for( int j = 0; j < L2.size(); j++)
+    {
+      file << L2[j] << std::endl;
+    }
+    file << "L2 Order: " << std::endl;
+    for( int j = 0; j < L_2_order.size(); j++)
+    {
+      file << L_2_order[j] << std::endl;
+    }
+
+    file << "Linf Error: " << std::endl;
+    for( int j = 0; j < Linf.size(); j++)
+    {
+      file << Linf[j] << std::endl;
+    }
+    file << "Linf Order: " << std::endl;
+    for( int j = 0; j < L_inf_order.size(); j++)
+    {
+      file << L_inf_order[j] << std::endl;
+    }
+
+    file << "Energy Error: " << std::endl;
+    for( int j = 0; j < NRG.size(); j++)
+    {
+      file << NRG[j] << std::endl;
+    }
+    file << "NRG Order: " << std::endl;
+    for( int j = 0; j < NRG_order.size(); j++)
+    {
+      file << NRG_order[j] << std::endl;
     }
   }
 
