@@ -164,7 +164,42 @@ void EC::L_inf()
 
 void EC::Energy()
 {
-  //TODO
+  double tmp = 0.0;
+  for( int i = 0; i < ehs.size(); i++)
+  {
+    VectorXd e = ehs[i];
+    mesh1D* m = ms[i];
+
+    for( int j = 0; j < e.size(); j++)
+    {
+      double hj = m->getElem( j).getLength();
+      double xa = m->getElem( j).getLeftPos();
+      double xb = m->getElem( j).getRightPos();
+      double ea = 0.0;
+      if( j != 0)
+      {
+        double ea = e(j-1);
+      }
+      double eb = e(j);
+      // M perscribed in problem handout
+      int M = 3;
+      for ( int m = 1; m <= M; m++)
+      {
+        // Since we have a linear basis, the 
+        //  derivatives are constant inside each element
+        double dedx = (eb - ea) / hj;
+        tmp = dedx * dedx;
+      }
+      tmp *=  hj / M;
+    }
+    NRG.push_back( std::sqrt( tmp));
+  }
+
+  std::cout << "NRG Error = " << std::endl;
+  for ( int i =0; i < NRG.size(); i++)
+  {
+    std::cout << NRG[i] << std::endl;
+  }
   return;
 }
 
