@@ -2,6 +2,8 @@ set( HW1_SOURCES
 eig_wrap.hpp
 element1D.hpp
 element1D.cpp
+forcing.cpp
+forcing.hpp
 mesh1D.hpp
 mesh1D.cpp
 stiffness.hpp
