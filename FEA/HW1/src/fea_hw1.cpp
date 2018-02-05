@@ -29,6 +29,10 @@ int main( int argc, char** argv)
     ff->create_forcing();
     VectorXd F = ff->getForcing();
 
+    VectorXd d = K.colPivHouseholderQr().solve( F);
+
+    
+
     delete ff;
     delete sf;
     delete mesh;
