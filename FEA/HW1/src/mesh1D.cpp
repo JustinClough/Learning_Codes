@@ -22,7 +22,7 @@ mesh1D::~mesh1D()
 
 elem mesh1D::getElem(int i)
 {
-  if ( i >= numElems)
+  if ( ( i >= numElems) || ( i < 0))
   {
     std::cout
       << "Attempted to access out of bounds element. "
