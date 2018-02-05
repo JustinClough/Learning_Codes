@@ -34,14 +34,13 @@ void EC::create_analyticals()
     for( int j = 0; j < numDofs; j++)
     {
       double xj = ms[i]->getElem(j).getRightPos();
-      if ( cn == 1)
+      if (( cn == 1) || ( cn == 2) )
       { 
-        // This is the p3q2 case
+        // This is the p3q2 case and the p(x), q0 case
         U( j) = xj * (xj - 1.0) * ( std::sin( 5.0 * xj) + 3.0 * std::exp( xj));
       }
-      else if ( cn == 2)
+      else if ( cn == 3)
       {
-        // This is the p(x), q0 case
         // TODO
     
       }
@@ -254,6 +253,31 @@ void EC::write()
   if( cn == 1)
   {
     filename = filename + "1.txt";
+  }
+  else if ( cn == 2)
+  {
+    filename = filename + "2.txt";
+  } 
+  else if ( cn == 3)
+  {
+    filename = filename + "3.txt";
+  } 
+  else if ( cn == 4)
+  {
+    filename = filename + "4.txt";
+  } 
+  else if ( cn == 5)
+  {
+    filename = filename + "5.txt";
+  } 
+  else if ( cn == 6)
+  {
+    filename = filename + "6.txt";
+  } 
+  else
+  {
+    std::cout << "Bad case Number " << cn << std::endl;
+    std::abort();
   }
   std::ofstream file;
   file.open( filename.c_str());

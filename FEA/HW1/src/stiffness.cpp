@@ -42,6 +42,7 @@ void springFactory::assign_stiffness( int row, int col)
   else 
   {
     std::cout << "Unrecognized caseNumber = " << caseNumber << std::endl;
+    std::abort();
   }
   return;
 }
@@ -82,6 +83,42 @@ void springFactory::p3q2Stiffness( int row, int col)
 
 void springFactory::pXq0Stiffness( int row, int col)
 {
-  // TODO
+  double hi   = m->getElem( row).getLength();
+  double hip1 = m->getElem( row + 1).getLength();
+
+  double xim1 = m->getElem( row).getLeftPos();
+  double xi   = m->getElem( row).getRightPos();
+  double xip1 = m->getElem( row).getRightPos();
+
+  if( row == col)
+  {
+    // On the diagonal
+    double tmp1 = ( xi * xi - xim1 * xim1) / 2.0;
+    tmp1 += hi;
+    tmp1 /= (hi * hi);
+    double tmp2 = ( xip1 * xip1 - xi * xi) / 2.0;
+    tmp2 += hip1;
+    tmp2 /= (hip1 * hip1);
+    K( row, col) = tmp1 + tmp2;
+  }
+  else if ( std::abs( row - col) == 1.0)
+  {
+    if ( (row - col) < 0.0)
+    {
+      // Inside of diagonal
+      double tmp = ( xi * xi - xim1 * xim1) / 2.0;
+      tmp += hi;
+      tmp /= -1.0 * (hi * hi);
+      K( row, col) = tmp;
+    }
+    else if ( (row - col) > 0.0)
+    {
+      // Inside of diagonal
+      double tmp = ( xip1 * xip1 - xi * xi) / 2.0;
+      tmp += hip1;
+      tmp /= -1.0 * (hip1 * hip1);
+      K( row, col) = tmp;
+    }
+  }
   return;
 }

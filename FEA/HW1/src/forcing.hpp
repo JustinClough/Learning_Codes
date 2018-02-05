@@ -30,6 +30,9 @@ class forcingFactory
   // Evaluate given force function for p3q2 case
   double analytic_p3q2( double x);
 
+  // Evaluate given force function for pXq0 case
+  double analytic_pXq0( double x);
+
   // The forcing vector
   VectorXd F;
 

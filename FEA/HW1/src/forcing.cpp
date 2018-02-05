@@ -45,6 +45,7 @@ void forcingFactory::assign_force( int row)
   else 
   {
     std::cout << "Unrecognized caseNumber = " << caseNumber << std::endl;
+    std::abort();
   }
   return;
 }
@@ -71,8 +72,30 @@ void forcingFactory::p3q2force( int row)
 
 void forcingFactory::pXq0force( int row)
 {
-  // TODO
+  double hi   = m->getElem( row).getLength();
+  double hip1 = m->getElem( row + 1).getLength();
+
+  double xim1 = m->getElem( row).getLeftPos();
+  double xi   = m->getElem( row).getRightPos();
+  double xip1 = m->getElem( row + 1).getLeftPos();
+
+  double fim1 = analytic_pXq0( xim1);
+  double fi   = analytic_pXq0( xi);
+  double fip1 = analytic_pXq0( xip1);
+
+  F( row) = fim1 * hi / 6.0 
+            + fi * ( hi + hip1) / 3.0 
+            + fip1 * hip1 / 6.0;
   return;
+}
+
+double forcingFactory::analytic_pXq0( double x)
+{
+  double f = 0.0;
+  f += std::sin( 5.0 * x) * ( -9.0 * x - 1.0);
+  f += std::cos( 5.0 * x) * ( -17.0 * x*x - x + 6.0);
+  f += std::exp( x) * (- 3.0 * x*x*x - 15.0 * x*x - 15.0 * x +6.0);
+  return f;
 }
 
 double forcingFactory::analytic_p3q2( double x)
