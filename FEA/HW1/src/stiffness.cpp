@@ -3,7 +3,6 @@
 #include <iostream>
 #include <cmath>
 
-
 springFactory::springFactory( mesh1D* mesh, int caseNumber_)
 {
   m = mesh;
