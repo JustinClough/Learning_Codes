@@ -1,5 +1,7 @@
 set( HW1_SOURCES
 eig_wrap.hpp
+driver.hpp
+driver.cpp
 errorCalcs.hpp
 errorCalcs.cpp
 element1D.hpp
