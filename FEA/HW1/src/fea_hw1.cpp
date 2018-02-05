@@ -22,12 +22,10 @@ int main( int argc, char** argv)
     mesh1D* mesh = new mesh1D( oddSize, evenSize, NplusOne);
 
     springFactory* sf = new springFactory( mesh, caseNumber);
-
     sf->create_stiffness();
     MatrixXd K = sf->getStiffness();
 
     forcingFactory* ff = new forcingFactory( mesh, caseNumber);
-
     ff->create_forcing();
     VectorXd F = ff->getForcing();
 
