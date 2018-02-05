@@ -283,6 +283,7 @@ void EC::write()
     std::abort();
   }
   std::ofstream file;
+  file << std::scientific;
   file.open( filename.c_str());
   
   for( int i = 0; i < ehs.size(); i++)
