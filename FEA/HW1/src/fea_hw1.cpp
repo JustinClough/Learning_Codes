@@ -16,6 +16,8 @@ int main( int argc, char** argv)
   int    numTests        = 6;
   int caseNumber = 1;
 
+  std::vector<VectorXd> solutions;
+
   for( int i = 0; i < numTests; i++)
   {
     // First construct the mesh 
@@ -30,14 +32,15 @@ int main( int argc, char** argv)
     ff->create_forcing();
     VectorXd F = ff->getForcing();
 
-    VectorXd d = K.colPivHouseholderQr().solve( F);
-
-    errorCalcs( d, mesh, caseNumber); 
+    solutions.push_back( K.colPivHouseholderQr().solve( F));
 
     delete ff;
     delete sf;
     delete mesh;
   }
+  errorCalcs( solutions, NplusOneArray, caseNumber); 
+  solutions.clear();
+  
 
   return 0;
 }
