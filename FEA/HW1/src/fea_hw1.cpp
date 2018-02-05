@@ -9,9 +9,11 @@ int main( int argc, char** argv)
   int    NplusOneArray[] = {10, 20, 40, 80, 160, 320};
   //int    NplusOneArray[] = {10, 10, 10, 10, 10, 10};
   int    numTests        = 6;
-  int    caseNumber = 1;
 
-  drive_problem( oddSize, evenSize, NplusOneArray, numTests, caseNumber);
+  for ( int i = 1; i < 6; i++)
+  {
+    drive_problem( oddSize, evenSize, NplusOneArray, numTests, i);
+  }
 
   return 0;
 }
