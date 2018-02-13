@@ -21,12 +21,6 @@ class forcingFactory
   // for the particular case number
   void assign_force( int row);
 
-  // Assign forcing component for p=3, q=2 case (caseNumber 1)
-  void p3q2force( int row);
-
-  // Assign forcing component for p=x+1, q=0 case (caseNumber 2)
-  void pXq0force( int row);
-
   // Evaluate given force function for p3q2 case
   double analytic_p3q2( double x);
 
@@ -45,20 +39,13 @@ class forcingFactory
   // Number of dofs
   int numDofs;
 
-  // Force assignment for case 3
-  void case3force( int row);
-
   // Analytical force for case 3
   double analytic_3( double x);
+
   // Analytical force for case 4
   double analytic_4( double x);
+
   // Analytical force for case 5
   double analytic_5( double x);
-
-  // Force assignment for case 4
-  void case4force( int row);
-
-  // Force assignment for case 5
-  void case5force( int row);
 };
 #endif
