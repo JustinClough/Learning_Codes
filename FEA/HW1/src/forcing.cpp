@@ -155,7 +155,7 @@ double forcingFactory::analytic_p3q2( double x)
 {
   double f = 0.0;
   f += (17.0 * x * (x-1.0) - 6.0) * std::sin( 5.0 * x);
-  f += -3.0 * x * (x + 11) * std::exp( x);
-  f += -18.0 * (2.0 * x - 1) * cos( 5.0 * x);
+  f += -3.0 * x * (x + 11.0) * std::exp( x);
+  f += -18.0 * (2.0 * x - 1.0) * cos( 5.0 * x);
   return f;
 }
