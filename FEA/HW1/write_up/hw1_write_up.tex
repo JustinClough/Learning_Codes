@@ -28,11 +28,12 @@
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
 \usepackage{makecell}
+\usepackage{ulem}
+\usepackage{verbatim}
 
 \begin{document}
-%\maketitle
 
-\section*{Part II: Implementation} \label{sec:intro}
+\section*{Part II: Implementation (reattempted)} \label{sec:intro}
 The purpose of this exercise was to use the Finite Element Method (FEM) 
 to approximate, and study, the solution to the problem presented in 
 Eq. \ref{eq:StrongForm}.
@@ -55,17 +56,17 @@ p   \in & C^1 [0,1] \quad &p > 0
 
 \noindent
 The problem domain of one unit in one dimension was divided into a nonuniform but structured mesh.
-The rule for determining element size is shown in Eq. \ref{eq:ElemSize}.
+The rule for determining element size is shown in the equation below.
 
 \[
   h_{j} = \begin{cases} 
-    0.9 \Delta x \quad \text{ for odd j}  \label{eq:ElemSize} \\
+    0.9 \Delta x \quad \text{ for odd j}   \\
     1.1 \Delta x \quad \text{ for even j}
   \end{cases}
 \]
 
 \noindent
-The $\Delta x$ referred to in Eq. \ref{eq:ElemSize} is the average size of any given element. 
+The $\Delta x$ referred to is the average size of any given element. 
 Specifically, it is calculated by use of Eq. \ref{eq:DeltaX}.
 
 \begin{equation} \label{eq:DeltaX}
@@ -78,7 +79,10 @@ Tests were conducted for $N=10, 20, 40, 80, 160, 320$.
 These six mesh size tests were conducted for six different cases which are described in 
 Table \ref{tab:Cases}.
 
-\begin{center}
+\begin{table}
+\caption{ Case numbers and descriptions.}
+\vspace{0.1in}
+\centering
 \begin{tabular}{ |c|c|c|c|c|c|}
   \hline
   Case Number & $\alpha$ & $\beta$ & $p$ & $q$ & $u$ \\
@@ -93,29 +97,50 @@ Table \ref{tab:Cases}.
   \hline
   5           &   -3     &  -2     &  3  &  2  &  $x^2-3$ \\
   \hline
-\end{tabular} \label{tab:Cases}
-\end{center}
+\end{tabular}
+\label{tab:Cases}
+\end{table}
 
-\noindent
 A computer code was written to evaluate the posed problems. 
-The results follow this section and the code itself is appended to this report.
+The results follow this section and the code itself 
+\sout{is appended to this report} can be viewed online at 
+\texttt{www.github.com/JustinClough/Learning\_Codes/tree/master/FEA}; 
+it was not printed to conserve paper.
 Plots of the error for $N = 10, 20, 40$ with respect to location are
-presented in Figures \ref{fig:Error1} and Figure \ref{fig:Error2}.
+presented in Figures \ref{fig:Error1} and Figure \ref{fig:logError1} 
+for the first case.
+Plots of the error for $N = 10, 20, 40$ with respect to location are
+presented in Figures \ref{fig:Error2} and Figure \ref{fig:logError2} 
+for the second case.
 Tabulated data, in the form of error norms and convergence order 
 are presented in Tables \ref{tab:C1} through \ref{tab:C5}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=11cm, height=11cm]{error}
+  \includegraphics[width=12cm, height=11cm]{error_plot_1}
   \caption{ Error in solution over domain of problem.}
   \label{fig:Error1}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=11cm, height=11cm]{Log_error}
+  \includegraphics[width=12cm, height=11cm]{log_error_plot_1}
   \caption{ Log of error in solution over domain of problem.}
+  \label{fig:logError1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=12cm, height=11cm]{error_plot_2}
+  \caption{ Error in solution over domain of problem.}
   \label{fig:Error2}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=12cm, height=11cm]{log_error_plot_2}
+  \caption{ Log of error in solution over domain of problem.}
+  \label{fig:logError2}
 \end{figure}
 
 \begin{table}[!ht]
@@ -126,12 +151,12 @@ are presented in Tables \ref{tab:C1} through \ref{tab:C5}.
 \hline
  $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order  & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order& $||e_h(\cdot)||_h$& Order \\
  \hline
-     10  &  2.072428e-02 & 0.00 & 2.233885e-01 & 0.00 & 1.884026e-01 & 0.00\\
-     20  &  9.421318e-03 & 1.13 & 1.924613e-01 & 0.21 & 1.712967e-01 & 0.14\\
-     40  &  3.740229e-03 & 1.33 & 1.758183e-01 & 0.13 & 1.360083e-01 & 0.33\\
-     80  &  1.398561e-03 & 1.41 & 1.685136e-01 & 0.06 & 1.017135e-01 & 0.42\\
-     160 &  5.082905e-04 & 1.46 & 1.646495e-01 & 0.03 & 7.393317e-02 & 0.46\\
-     320 &  1.821839e-04 & 1.48 & 1.627100e-01 & 0.02 & 5.299896e-02 & 0.48\\
+     10  &  3.528607e-03 & 0.00 & 2.291486e-02 & 0.00 & 3.317002e-01 & 0.00\\
+     20  &  8.963598e-04 & 1.97 & 6.683362e-03 & 1.77 & 1.792580e-01 & 0.88\\
+     40  &  2.250262e-04 & 1.99 & 2.211256e-03 & 1.59 & 9.377064e-02 & 0.93\\
+     80  &  5.631579e-05 & 1.99 & 6.268937e-04 & 1.81 & 4.803148e-02 & 0.96\\
+     160 &  1.408267e-05 & 1.99 & 1.663275e-04 & 1.91 & 2.431665e-02 & 0.98\\
+     320 &  3.520901e-06 & 1.99 & 4.280166e-05 & 1.95 & 1.223537e-02 & 0.99\\
 \hline
 \end{tabular}
 \label{tab:C1}
@@ -145,12 +170,12 @@ are presented in Tables \ref{tab:C1} through \ref{tab:C5}.
 \hline
  $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order  & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order& $||e_h(\cdot)||_h$& Order \\
  \hline
-     10  & 2.343497e-02 & 0.00 & 3.718547e-01  & 0.00 &  2.130452e-01 & 0.00 \\
-     20  & 2.133812e-02 & 0.14 & 6.910094e-01  & -0.89 & 3.879659e-01 & -0.86\\
-     40  & 1.097459e-02 & 0.96 & 9.852965e-01  & -0.51 & 3.990759e-01 & -4.07\\
-     80  & 4.620878e-03 & 1.24 & 1.175112e+00  & -0.25 & 3.360638e-01 & 0.25\\
-     160 & 1.780002e-03 & 1.37 & 1.278376e+00  & -0.12 & 2.589093e-01 & 0.37\\
-     320 & 6.566801e-04 & 1.43 & 1.332562e+00  & -0.06 & 1.910342e-01 & 0.44\\
+     10  & 5.291277e-03 & 0.00 & 2.157976e-02 & 0.00 & 3.260128e-01 & 0.00\\
+     20  & 1.310432e-03 & 2.01 & 6.406604e-03 & 1.75 & 1.774688e-01 & 0.87\\
+     40  & 3.273072e-04 & 2.00 & 2.134625e-03 & 1.58 & 9.327537e-02 & 0.92\\
+     80  & 8.184745e-05 & 1.99 & 6.168818e-04 & 1.79 & 4.790149e-02 & 0.96\\
+     160 & 2.046769e-05 & 1.99 & 1.650486e-04 & 1.90 & 2.428336e-02 & 0.98\\
+     320 & 5.117846e-06 & 1.99 & 4.264007e-05 & 1.95 & 1.222695e-02 & 0.98\\
 \hline
 \end{tabular}
 \label{tab:C2}
@@ -164,12 +189,12 @@ are presented in Tables \ref{tab:C1} through \ref{tab:C5}.
 \hline
  $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order  & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order& $||e_h(\cdot)||_h$& Order \\
  \hline
-     10  & 7.423628e-01 & 0.00 & 3.896897e+00 & 0.00  & 6.748753e+00 & 0.00 \\
-     20  & 5.327322e-01 & 0.48 & 3.945805e+00 & -0.02 & 9.686040e+00 & -0.52\\
-     40  & 3.797393e-01 & 0.49 & 3.972235e+00 & -0.01 & 1.380870e+01 & -0.51\\
-     80  & 2.696418e-01 & 0.43 & 3.985950e+00 & -0.01 & 1.961031e+01 & -0.51\\
-     160 & 1.910725e-01 & 0.49 & 3.992933e+00 & -0.01 & 2.779236e+01 & -0.50\\
-     320 & 1.352541e-01 & 0.50 & 3.996456e+00 & -0.01 & 3.934665e+01 & -0.50\\
+     10  & 5.058005e-15 &  0.00 & 1.243450e-14 &  0.00 & 1.539017e-14 &  0.00\\
+     20  & 2.019833e-15 &  1.32 & 7.105427e-15 &  0.80 & 2.019843e-14 & -0.39\\
+     40  & 3.587761e-14 & -4.15 & 1.021405e-13 & -3.84 & 1.571914e-13 & -2.96\\
+     80  & 7.490578e-14 & -1.06 & 2.904343e-13 & -1.50 & 5.474745e-13 & -1.80\\
+     160 & 9.489067e-14 & -0.34 & 2.859935e-13 &  0.02 & 8.401636e-13 & -0.61\\
+     320 & 4.464905e-12 & -5.55 & 1.042100e-11 & -5.18 & 1.436984e-11 & -4.09\\
 \hline
 \end{tabular}
 \label{tab:C3}
@@ -183,12 +208,12 @@ are presented in Tables \ref{tab:C1} through \ref{tab:C5}.
 \hline
  $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order  & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order& $||e_h(\cdot)||_h$& Order \\
  \hline
-     10  & 2.006381e-01 & 0.00  & 1.847478e+00 & 0.00  &1.823982e+00  & 0.00 \\
-     20  & 1.385033e-01 & 0.53 &  1.922485e+00&  -0.05& 2.518242e+00 & -0.47\\
-     40  & 9.681655e-02 & 0.52 &  1.960923e+00&  -0.02& 3.520602e+00 & -0.48\\
-     80  & 6.807593e-02 & 0.51 &  1.980381e+00&  -0.01& 4.950977e+00 & -0.49\\
-     160 & 4.800344e-02 & 0.50 &  1.990170e+00&  -0.01& 6.982319e+00 & -0.49\\
-     320 & 3.389673e-02 & 0.50 &  1.995080e+00&  -0.01& 9.860868e+00 & -0.50\\
+     10  & 2.170933e-15 &  0.00 & 5.329071e-15 &  0.00 & 6.018740e-15  &  0.00\\
+     20  & 6.371945e-16 &  1.76 & 2.442491e-15 &  1.12 & 7.750267e-15  & -0.36\\
+     40  & 1.067982e-14 & -4.06 & 3.175238e-14 & -3.70 & 5.341707e-14  & -2.78\\
+     80  & 2.419360e-14 & -1.17 & 7.016610e-14 & -1.14 & 1.886608e-13  & -1.82\\
+     160 & 3.201968e-14 & -0.40 & 1.316725e-13 & -0.90 & 3.214517e-13  & -0.76\\
+     320 & 1.626372e-12 & -5.66 & 3.860690e-12 & -4.87 & 5.246423e-12  & -4.02\\
 \hline
 \end{tabular}
 \label{tab:C4}
@@ -202,19 +227,19 @@ are presented in Tables \ref{tab:C1} through \ref{tab:C5}.
 \hline
  $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order  & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order& $||e_h(\cdot)||_h$& Order \\
  \hline
-     10  & 3.831430e-01 & 0.00 & 2.837704e+00 & 0.00  & 3.483118e+00 & 0.00\\
-     20  & 2.704644e-01 & 0.50 & 2.917944e+00 & -0.04 & 4.917534e+00 & -0.49\\
-     40  & 1.912960e-01 & 0.49 & 2.958735e+00 & -0.02 & 6.956220e+00 & -0.50\\
-     80  & 1.353213e-01 & 0.49 & 2.979307e+00 & -0.09 & 9.841546e+00 & -0.50\\
-     160 & 9.571245e-02 & 0.49 & 2.989638e+00 & -0.04 & 1.392181e+01 & -0.50\\
-     320 & 6.768923e-02 & 0.49 & 2.994815e+00 & -0.02 & 1.969141e+01 & -0.50\\
+     10  & 3.411114e-15 &  0.00 & 2.688889e-03 & 0.00 & 5.648304e-02 & 0.00\\
+     20  & 1.557481e-15 &  1.13 & 6.722222e-04 & 2.00 & 2.877427e-02 & 0.97\\
+     40  & 2.048400e-14 & -3.71 & 1.680556e-04 & 2.00 & 1.451849e-02 & 0.98\\
+     80  & 4.361838e-14 & -1.09 & 4.201389e-05 & 2.00 & 7.291860e-03 & 0.99\\
+     160 & 6.317536e-14 & -0.53 & 1.050347e-05 & 2.00 & 3.654057e-03 & 0.99\\
+     320 & 2.883586e-12 & -5.51 & 2.625868e-06 & 2.00 & 1.829057e-03 & 0.99\\
 \hline
 \end{tabular}
 \label{tab:C5}
 \end{table}
 
 \noindent
-The following would was done to incorporate non-homogeneous Dirichlet boundary conditions.
+The following was done to incorporate non-homogeneous Dirichlet boundary conditions.
 First, the only change to the weak form of the problem would be separating the 
 trial and test spaces; the solution must have a non-zero value on the specified 
 boundary whereas the trial function must be zero on the boundaries.
@@ -227,14 +252,47 @@ The matrix \textbf{A} is not changed as the original PDE does not change.
 The forcing vector \textbf{F} includes the addition of the boundary terms
 on the first and last entry.
 
+The error measures behave as expected for Cases 1 and 2; 
+the order of the $L^2$ and $L^\infty$ norms tend to 2.0 
+and the order of the energy norm tends to 1.0.
+The solution to Cases 3 and 4 was captured up to machine precision.
+This is shown in the first row of Tables \ref{tab:C3} and \ref{tab:C4}.
+The reason for the increasing norm values with increasing mesh density 
+was due to round off error in calculating the norms.
+For example, assuming machine precision is $\epsilon = 10^{-16}$ 
+then $3*320*\epsilon = 9.6 \times 10^{-14}$; this represents sum taken
+to compute the $L^2$ norm on the mesh with $N+1=320$ with
+floating point arithmetic in the best case senario.
+A possible solution to this would be to normalize the norms 
+against the number of evaluation points. 
+The result of doing this is shown in Table \ref{tab:C3n} for Case 3.
+The $L^2$ norm for Case 5 behaves similar to that of Cases 3 and 4.
+The $L^\infty$ and energy norms behave similar to that of Cases 1 and 2.
 
-While the $L_2$ error norm decreases for all tests, the same is not true 
-for the $L_\infty$ or the energy norm. Appended to the code is additional
-work showing the hand calculations to derive the forcing functions and 
-their approximated equivalents. The \texttt{Eigen} software package
+\begin{table}[!ht]
+\caption{Errors and convergence orders for Case 3 with norms divided by number of evaluation points.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c| c| c| c| c|}
+\hline
+ $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order  & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order& $||e_h(\cdot)||_h$& Order \\
+ \hline
+     10  & 1.686002e-16 & 0.00 & 1.381611e-16 &  0.00 & 5.130058e-16 &  0.00\\
+     20  & 3.366388e-17 & 2.32 & 3.947460e-17 &  1.80 & 3.366405e-16 &  0.60\\
+     40  & 2.989801e-16 &-3.15 & 2.837237e-16 & -2.84 & 1.309928e-15 & -1.96\\
+     80  & 3.121074e-16 &-0.06 & 4.033810e-16 & -0.50 & 2.281144e-15 & -0.80\\
+     160 & 1.976889e-16 & 0.65 & 1.986066e-16 &  1.02 & 1.750341e-15 &  0.38\\
+     320 & 4.650943e-15 &-4.55 & 3.618402e-15 & -4.18 & 1.496858e-14 & -3.09\\
+\hline
+\end{tabular}
+\label{tab:C3n}
+\end{table}
+
+The \texttt{Eigen} software package
 was used as the linear solver for this project. 
 The matrix inversion method used was Householder-QR with pivoting.
 
+\begin{comment}
 \newpage
 \appendix
 \section{Source Code and Headers} \label{sec:code}
@@ -274,5 +332,6 @@ The matrix inversion method used was Householder-QR with pivoting.
 
 \subsection{eig\_wrap.hpp} \label{subsec:eig_wrap.hpp}
 \lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW1/src/eig_wrap.hpp}
+\end{comment}
 
 \end{document}
