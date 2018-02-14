@@ -42,6 +42,7 @@ void EC::calculate_errors()
 
     int      numDofs = mesh->getNumNodes() - 1;
     VectorXd e       = VectorXd::Zero( M * numDofs);
+    VectorXd dedx    = VectorXd::Zero( M * numDofs);
     VectorXd ePos    = VectorXd::Zero( M * numDofs);
 
     // Calculate the position error vector
@@ -49,14 +50,101 @@ void EC::calculate_errors()
 
     // Calc the error vector at each position (including interpolation)
     eval_errors( e, ePos, sol, mesh, M);
+    eval_ders( e, dedx, ePos, sol, mesh, M);
 
     std::cout << "es[" << i << "] = " << std::endl;
     std::cout << e << std::endl;
 
     es.push_back( e);
     xE.push_back( ePos);
+    edxs.push_back( dedx);
   }
   return;
+}
+
+void EC::eval_ders( VectorXd& e, 
+                    VectorXd& dedx, 
+                    VectorXd& ePos, 
+                    VectorXd& sol, 
+                    mesh1D*   mesh,
+                    int       M)
+{
+  for( int i = 0; i < sol.rows(); i++)
+  {
+    double uim1 = 0.0;
+    double ui = 0.0;
+    if( i == 0)
+    {
+      // Assuming the boundary is enforced
+      uim1 = get_analytic( 0.0);
+    }
+    else
+    {
+      uim1 = sol( i - 1);
+    }
+
+    if( i == (e.rows() - 1))
+    {
+      // Assuming the boundary is enforced
+      ui = get_analytic( 1.0);
+    }
+    else
+    {
+      ui = sol( i);
+    }
+
+    elem element = mesh->getElem( i);
+    double hi    = element.getLength();
+    double duI   = (uim1 - ui) / hi;
+
+    double derror = 0.0;
+    for( int j = 0; j < M; j++)
+    {
+      int    m     = j + 1;
+      int    index = (i * M) + j;
+
+      double xj  = ePos( index);
+      double du  = get_analytic_der( xj);
+
+      derror       = duI - du;
+      dedx( index) = derror;
+    }
+  }
+  return;
+}
+
+double EC::get_analytic_der( double x)
+{
+  double du = 0.0;
+  if( cn == 1 || cn == 2)
+  {
+    double S = std::sin( 5.0 * x);
+    double C = std::cos( 5.0 * x);
+    double E = std::exp( x);
+    du = ( x - 1.0) * ( S + 3.0 * E) 
+       + x * (S + 3.0 * E) 
+       + x * (x - 1.0) * ( 5.0 * C + 3.0 * E);
+  }
+  else if ( cn == 3)
+  {
+    du = 0.0;
+  }
+  else if ( cn == 4)
+  {
+    du = 1.0;
+  }
+  else if ( cn == 5)
+  {
+    du =  2.0 * x;
+  }
+  else
+  {
+    std::cout << "Bad case number of " << cn 
+              << ". Aborting..." << std::endl;
+    std::abort();
+  }
+
+  return du;
 }
 
 void EC::eval_errors( VectorXd& e, 
@@ -187,8 +275,16 @@ void EC::calculate_norms()
   for( int i = 0; i < es.size(); i++)
   {
     VectorXd e  = es[i];
-    //double   L2 = e.cwise
+    VectorXd de = edxs[i];
 
+    double L2 = e.norm();
+    L_2.push_back( L2);
+
+    double Linf = e.lpNorm<Eigen::Infinity>();
+    L_inf.push_back( Linf);
+
+    double nrg = de.norm();
+    NRG.push_back( nrg);
   }
   return;
 }

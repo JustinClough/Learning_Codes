@@ -41,6 +41,9 @@ class EC
     // The vector of error vectors
     std::vector<VectorXd> es;
 
+    // The vector of derivative error vectors
+    std::vector<VectorXd> edxs;
+
     // The vector of error positions
     std::vector<VectorXd> xE;
 
@@ -54,8 +57,20 @@ class EC
                       mesh1D*   mesh,
                       int       M);
 
+    // Populate the derivative error vector
+    void eval_ders( VectorXd& e, 
+                    VectorXd& dedx, 
+                    VectorXd& ePos, 
+                    VectorXd& sol, 
+                    mesh1D*   mesh,
+                    int       M);
+
     // Get the analytical solution at a give position
     double get_analytic( double x);
+
+    // Get the derivative of the analytical solution at
+    //  a given position
+    double get_analytic_der( double x);
 
     // Get the interpolation of the FEM solution
     double get_interp( double ua, 
@@ -71,8 +86,6 @@ class EC
 
     // The vector of NRG norms
     std::vector<double> NRG;
-
-    
 };
 
 #endif
