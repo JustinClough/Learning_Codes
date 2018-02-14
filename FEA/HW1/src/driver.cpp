@@ -23,16 +23,10 @@ void drive_problem( double oddSize,
     sf->create_stiffness();
     MatrixXd K = sf->getStiffness();
 
-    std::cout << "K = " << std::endl;
-    std::cout << K << std::endl;
-
     // Third construct forcing vector
     forcingFactory* ff = new forcingFactory( mesh, caseNumber);
     ff->create_forcing();
     VectorXd F = ff->getForcing();
-
-    std::cout << "F = " << std::endl;
-    std::cout << F << std::endl;
 
     // Calculate and store solution
     solutions.push_back( K.colPivHouseholderQr().solve( F));
@@ -40,13 +34,8 @@ void drive_problem( double oddSize,
     delete ff;
     delete sf;
   }
-  for (int i = 0; i < solutions.size(); i++)
-  {
-    std::cout << "sol[" << i << "] = " << std::endl;
-    std::cout << solutions[i] << std::endl;
-  }
-  
   errorCalcs( solutions, meshes, caseNumber); 
+
   solutions.clear();
   for (int i = 0; i < meshes.size(); i++)
   {

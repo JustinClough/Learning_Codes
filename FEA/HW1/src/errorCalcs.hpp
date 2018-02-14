@@ -86,6 +86,26 @@ class EC
 
     // The vector of NRG norms
     std::vector<double> NRG;
+
+    void order( std::vector<double>& norms, 
+                std::vector<double>& order);
+
+    // The vector of L_2_order
+    std::vector<double> L_2_order;
+
+    // The vector of L_inf_order
+    std::vector<double> L_inf_order;
+
+    // The vector of NRG_order
+    std::vector<double> NRG_order;
+
+    // Prints a vector to file
+    void vector_printer( std::ofstream&      f, 
+                         const std::string&  name, 
+                         std::vector<double> v);
+
+    // Gets the L2 error as specified in the handout
+    double get_L2_special( VectorXd e, int i);
 };
 
 #endif

@@ -145,17 +145,32 @@ double forcingFactory::analytic_5( double x)
 double forcingFactory::analytic_pXq0( double x)
 {
   double f = 0.0;
-  f += std::sin( 5.0 * x) * ( -9.0 * x - 1.0);
-  f += std::cos( 5.0 * x) * ( -17.0 * x*x - x + 6.0);
-  f += std::exp( x) * (- 3.0 * x*x*x - 15.0 * x*x - 15.0 * x +6.0);
+
+  double S = std::sin( 5.0 * x);
+  double C = std::cos( 5.0 * x);
+  double E = std::exp( x);
+
+  double a = (4.0 * x + 1.0) * (S + 3.0*E);
+  double b = (5.0 * C + 3.0 * E) * (5.0 * x * x + x - 2.0);
+  double c = ( x * x * x - x) * ( -25.0 * S + 3.0 * E);
+
+  f = (-1.0) * ( a + b + c);
+  
   return f;
 }
 
 double forcingFactory::analytic_p3q2( double x)
 {
   double f = 0.0;
-  f += (17.0 * x * (x-1.0) - 6.0) * std::sin( 5.0 * x);
-  f += -3.0 * x * (x + 11.0) * std::exp( x);
-  f += -18.0 * (2.0 * x - 1.0) * cos( 5.0 * x);
+  double S = std::sin( 5.0 * x);
+  double C = std::cos( 5.0 * x);
+  double E = std::exp( x);
+
+  double a = (S + 3.0 * E) * ( -6.0 + 2.0 * x * (x - 1.0));
+  double b = 6.0 * ( 2.0 * x - 1.0) * ( 5.0 * C + 3.0 * E);
+  double d = 3.0 * x * ( x - 1.0) * ( -25.0 * S + 3.0 * E);
+
+  f = a - b - d;
+
   return f;
 }
