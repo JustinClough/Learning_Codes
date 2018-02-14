@@ -63,3 +63,9 @@ test/
 
 #latex style package
 *.sty
+
+#text files
+*.txt
+
+#jpg files
+*.jpg
