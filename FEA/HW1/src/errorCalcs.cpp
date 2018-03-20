@@ -35,7 +35,7 @@ EC::EC( std::vector<VectorXd> solutions,
 void EC::calculate_errors()
 {
   int M = 3;
-  for( int i = 0; i < ms.size(); i++)
+  for( size_t i = 0; i < ms.size(); i++)
   {
     mesh1D*  mesh    = ms[i];
     VectorXd sol     = sols[i];
@@ -97,7 +97,6 @@ void EC::eval_ders( VectorXd& e,
     double derror = 0.0;
     for( int j = 0; j < M; j++)
     {
-      int    m     = j + 1;
       int    index = (i * M) + j;
 
       double xj  = ePos( index);
@@ -151,7 +150,6 @@ void EC::eval_errors( VectorXd& e,
                       int       M)
 {
   int numElems = mesh->getNumElems();
-  int numNodes = mesh->getNumNodes();
   for( int i = 0; i < numElems; i++)
   {
     double uim1 = 0.0;
@@ -180,7 +178,6 @@ void EC::eval_errors( VectorXd& e,
     double error = 0.0;
     for( int j = 0; j < M; j++)
     {
-      int    m     = j + 1;
       int    index = (i * M) + j;
 
       double xj = ePos( index);
@@ -294,7 +291,7 @@ double EC::get_L2_special( VectorXd e, int i)
 
 void EC::calculate_norms()
 {
-  for( int i = 0; i < es.size(); i++)
+  for( size_t i = 0; i < es.size(); i++)
   {
     VectorXd e  = es[i];
     VectorXd de = edxs[i];
@@ -322,7 +319,7 @@ void EC::calculate_orders()
 void EC::order( std::vector<double>& norms, 
                 std::vector<double>& order)
 {
-  for( int i = 0; i < norms.size(); i++)
+  for( size_t i = 0; i < norms.size(); i++)
   {
     double ord = 0.0;
     if ( i == 0)
@@ -395,7 +392,7 @@ void EC::vector_printer( std::ofstream&      f,
                          std::vector<double> v)
 {
   f << name << " = " << std::endl;
-  for ( int i = 0; i < v.size(); i++)
+  for ( size_t i = 0; i < v.size(); i++)
   {
     f << v[i] << std::endl;
   }

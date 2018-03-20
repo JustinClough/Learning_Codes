@@ -37,7 +37,7 @@ void drive_problem( double oddSize,
   errorCalcs( solutions, meshes, caseNumber); 
 
   solutions.clear();
-  for (int i = 0; i < meshes.size(); i++)
+  for (size_t i = 0; i < meshes.size(); i++)
   {
     delete meshes[ i];
   }

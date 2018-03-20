@@ -13,7 +13,7 @@ mesh1D::mesh1D( double oddSize_, double evenSize_, int NplusOne)
 
 mesh1D::~mesh1D()
 {
-  for( int i = 0; i < elements.size(); i++)
+  for( size_t i = 0; i < elements.size(); i++)
   {
    delete (elements[i]);
   }
