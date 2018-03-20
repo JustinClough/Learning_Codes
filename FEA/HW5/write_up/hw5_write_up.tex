@@ -1,0 +1,58 @@
+\documentclass[a4paper, 12pt]{article}
+\title{}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage[justification=centering]{caption}
+\usepackage{enumerate}
+\usepackage{multirow}
+\usepackage{listings}
+\lstset{
+    escapechar=`,
+    language=C++,
+    numbers=left,
+    tabsize=2,
+    prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+    frame=single,
+    breaklines=true,
+}
+\usepackage{graphicx}
+\graphicspath{ {./} }
+\usepackage{nameref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\usepackage{tikz}
+\usetikzlibrary{calc,patterns,decorations.pathmorphing,decorations.markings,positioning,automata}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{makecell}
+\usepackage{ulem}
+\usepackage{verbatim}
+
+\begin{document}
+
+
+\section*{Part II: Implementation (reattempted)} \label{sec:intro}
+
+
+
+The \texttt{Eigen} software package
+was used as the linear solver for this project. 
+The matrix inversion method used was Householder-QR with pivoting.
+
+\begin{comment}
+\newpage
+\appendix
+\section{Source Code and Headers} \label{sec:code}
+
+\subsection{fea\_hw5.cpp} \label{subsec:fea_hw5.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW5/src/fea_hw5.cpp}
+
+\subsection{driver.cpp} \label{subsec:driver.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW5/src/driver.cpp}
+\subsection{driver.hpp} \label{subsec:driver.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW5/src/driver.hpp}
+
+\end{document}
