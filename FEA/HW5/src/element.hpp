@@ -4,18 +4,19 @@
 #include <vector>
 
 #include "vertex.hpp"
+class vertex;
 
 class element
 {
   public: 
     // Constructor, 3 vertices in CCW ordering
-    element( std::vector<vertex> vtxs_);
+    element( std::vector< vertex> vtxs_, int ID);
     
     // Get this element's global ID
     int get_elem_ID();
 
     // Get the i'th vertex (local ID)
-    int get_vertex( int i);
+    vertex* get_vertex( int i);
 
   private:
     // The global element ID

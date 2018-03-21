@@ -4,5 +4,6 @@
 #include "eig_wrap.hpp"
 #include "mesh.hpp"
 
+void drive_problem();
 
 #endif

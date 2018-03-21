@@ -2,5 +2,6 @@
 #define MESH_HPP
 
 #include "element.hpp"
+#include "vertex.hpp"
 
 #endif
