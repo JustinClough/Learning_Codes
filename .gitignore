@@ -67,5 +67,8 @@ test/
 #text files
 *.txt
 
+# but not CMakeLists.txt files
+!CMakeLists.txt
+
 #jpg files
 *.jpg
