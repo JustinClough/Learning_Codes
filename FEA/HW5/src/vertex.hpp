@@ -22,6 +22,13 @@ class vertex
     // Get this vertex's global ID
     int get_global_ID();
 
+    // Set this vertex as a DoF or DoG 
+    //  Is a DoF by default
+    void set_dof( bool isDof);
+
+    // Get if this vertex is a DoF
+    bool get_is_dof();
+
     // Set this vertex's upward adjacent elements
     void add_owner( element* elem);
 
@@ -37,6 +44,9 @@ class vertex
 
     // The global ID of this vertex
     int gID;
+
+    // Is a DoF (true) or DoG (false)
+    bool is_dof;
 
 };
 

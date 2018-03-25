@@ -5,8 +5,9 @@
 
 vertex::vertex( coord pt_)
 {
-  pt = new coord( pt_);
-  gID = -1;
+  pt     = new coord( pt_);
+  gID    = -1;
+  is_dof = true;
 }
 
 vertex::~vertex()
@@ -55,4 +56,15 @@ void vertex::get_owners( std::vector< element*> &owners)
     owners.push_back( elems[i] );
   }
   return;
+}
+
+void vertex::set_dof( bool isDof)
+{
+  is_dof = isDof;
+  return;
+}
+
+bool vertex::get_is_dof()
+{
+  return is_dof;
 }

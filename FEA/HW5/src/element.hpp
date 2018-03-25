@@ -25,6 +25,11 @@ class element
     // Vector of vertixes (CCW)
     std::vector< vertex> vtxs;
 
+    // Calculates the area of this element
+    void  calc_area();
+
+    // The area of this element
+    double area;
 
 };
 
