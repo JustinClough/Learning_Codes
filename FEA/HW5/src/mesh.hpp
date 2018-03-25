@@ -14,6 +14,7 @@ class mesh
     //  - number of elements
     //  - location of nodes (node_matrix)
     //  - node collections of elements (elem_matrix)
+    //  - nodes on each geometric edge
     void print_mesh_stats();
 
     // Deconstructor

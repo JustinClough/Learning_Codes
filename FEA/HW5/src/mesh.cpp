@@ -1,5 +1,7 @@
 #include "mesh.hpp"
 
+#include "eig_wrap.hpp"
+
 #include <iostream>
 
 mesh::mesh( int Np1_, bool isL_)
