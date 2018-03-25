@@ -63,6 +63,10 @@ class mesh
     // Checks where a node is and places it into the 
     //  correct array
     void check_boundary( int index);
+
+    // Creates a single element number i from 
+    //  a triple of nodes n1, n2, n3
+    void create_elem_from_triple( int i, int n1, int n2, int n3);
 };
 
 #endif

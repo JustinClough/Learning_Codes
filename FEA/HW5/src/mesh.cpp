@@ -3,10 +3,21 @@
 #include "eig_wrap.hpp"
 
 #include <iostream>
+#include <cstdlib>
 
 mesh::mesh( int Np1_, bool isL_)
 {
   isL = isL_;
+
+  // TODO
+  if ( isL)
+  {
+    std::cout
+      << "L shaped domains not supported."
+      << std::endl;
+    std::abort();
+  }
+
   N   = Np1_ - 1;
 
   num_nodes = (N+2) * (N+2);
@@ -14,7 +25,8 @@ mesh::mesh( int Np1_, bool isL_)
 
   create_nodes();
 
-  num_elems = (N+1) * (N+1);
+  num_elems = 2 * (N+1) * (N+1);
+
   elem_matrix = MatrixXd::Zero( num_elems, 3);
 
   create_elems();
@@ -87,8 +99,37 @@ void mesh::check_boundary( int index)
 
 void mesh::create_elems()
 {
-  // TODO
+  int elem = 0;
+  int n1   = 0;
+  int n2   = 0;
+  int n3   = 0;
+  
+  for( int n = 0; n < ( (N+2) * (N+1)); n++)
+  {
+    if ( n % (N+1) != 0 || n == 0)
+    {
+      n1 = n;
+      n2 = n + 1;
+      n3 = n + N + 2;
+      create_elem_from_triple( elem, n1, n2, n3);
+      elem++;
+
+      n1 = n;
+      n2 = n + N + 2;
+      n3 = n + N + 1;
+      create_elem_from_triple( elem, n1, n2, n3);
+      elem++;
+    }
+  }
+
   return;
+}
+
+void mesh::create_elem_from_triple( int i, int n1, int n2, int n3)
+{
+  elem_matrix( i, 0) = n1;
+  elem_matrix( i, 1) = n2;
+  elem_matrix( i, 2) = n3;
 }
 
 void mesh::print_mesh_stats()
