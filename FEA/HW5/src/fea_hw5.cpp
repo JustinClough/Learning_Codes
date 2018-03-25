@@ -3,6 +3,7 @@
 
 int main( int argc, char** argv)
 {
+  seed_random();
 
   int CaseNumber = 0;
   //int Np1[2] = { 20, 40};
