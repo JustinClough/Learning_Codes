@@ -5,7 +5,11 @@
 void drive_problem()
 {
 
-  std::cout << "driving problem" << std::endl;
+  mesh* m = new mesh( 4, false);
+
+  m->print_mesh_stats();
+
+  delete m;
 
 }
 
