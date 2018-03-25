@@ -6,7 +6,7 @@
 class mesh
 {
   public:
-    // Constructor
+    // Constructor. Creates nodes and elements
     mesh( int Np1_, bool isL_);
 
     // Print mesh information:
@@ -39,6 +39,17 @@ class mesh
 
     // The num_elems by 3 matrix of node locations
     MatrixXd elem_matrix;
+
+    // The num_elems vector of element areas
+    std::vector<double> elem_areas;
+
+    // Calcuates the element areas, 
+    //  populates elem_areas
+    void calc_areas();
+
+    // Calcuates the area of a single element.
+    //  Returns the area of element i.
+    double calc_elem_area( int i);
 
     // Creates the nodes of the mesh, 
     //  popuates the node_matrix

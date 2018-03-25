@@ -9,7 +9,7 @@ mesh::mesh( int Np1_, bool isL_)
 {
   isL = isL_;
 
-  // TODO
+  // TODO: bonus part 1
   if ( isL)
   {
     std::cout
@@ -30,6 +30,7 @@ mesh::mesh( int Np1_, bool isL_)
   elem_matrix = MatrixXd::Zero( num_elems, 3);
 
   create_elems();
+  calc_areas();
 }
 
 mesh::~mesh()
@@ -38,6 +39,45 @@ mesh::~mesh()
   right_nodes.clear();
   left_nodes.clear();
   top_nodes.clear();
+  
+  elem_areas.clear();
+}
+
+void mesh::calc_areas()
+{
+  for( int i = 0; i < num_elems; i++)
+  {
+    elem_areas.push_back( calc_elem_area( i));
+  }
+
+  return;
+}
+
+double mesh::calc_elem_area( int i)
+{
+  int n1 = elem_matrix( i, 0);
+  int n2 = elem_matrix( i, 1);
+  int n3 = elem_matrix( i, 2);
+
+  double x1 = node_matrix( n1, 0);
+  double x2 = node_matrix( n2, 0);
+  double x3 = node_matrix( n3, 0);
+
+  double y1 = node_matrix( n1, 1);
+  double y2 = node_matrix( n2, 1);
+  double y3 = node_matrix( n3, 1);
+
+  double v1x = x2 - x1;
+  double v1y = y2 - y1;
+
+  double v2x = x3 - x1;
+  double v2y = y3 - y1;
+
+  double cross = (v1x * v2y) - (v1y * v2x);
+
+  double area = ( 1.0 / 2.0) * cross;
+
+  return area;
 }
 
 void mesh::create_nodes()
@@ -89,7 +129,7 @@ void mesh::check_boundary( int index)
   {
     left_nodes.push_back( index);
   }
-  else if ( index % (N+1) == 0 )
+  else if ( index % (N+2) == (N+1) )
   {
     right_nodes.push_back( index);
   }
@@ -106,17 +146,17 @@ void mesh::create_elems()
   
   for( int n = 0; n < ( (N+2) * (N+1)); n++)
   {
-    if ( n % (N+1) != 0 || n == 0)
+    if ( n % (N+2) != (N+1) || n == 0)
     {
       n1 = n;
       n2 = n + 1;
-      n3 = n + N + 2;
+      n3 = n + N + 3;
       create_elem_from_triple( elem, n1, n2, n3);
       elem++;
 
       n1 = n;
-      n2 = n + N + 2;
-      n3 = n + N + 1;
+      n2 = n + N + 3;
+      n3 = n + N + 2;
       create_elem_from_triple( elem, n1, n2, n3);
       elem++;
     }
@@ -185,6 +225,22 @@ void mesh::print_mesh_stats()
   {
     std::cout << right_nodes[i] << std::endl;
   }
+
+  std::cout
+    << "Area of elements are: "
+    << std::endl;
+  double checksum = 0.0;
+  for( size_t i = 0; i < elem_areas.size(); i++)
+  {
+    double area = elem_areas[i];
+    std::cout << area << std::endl;
+    checksum += area;
+  }
+
+  std::cout
+    << "Total area covered by the elements: " 
+    << checksum
+    << std::endl;
 
   return;
 }
