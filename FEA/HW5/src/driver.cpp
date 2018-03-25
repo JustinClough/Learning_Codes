@@ -2,10 +2,11 @@
 
 #include <iostream>
 
-void drive_problem()
+void drive_problem( int CaseNumber, int Np1)
 {
+  bool isL = false;
 
-  mesh* m = new mesh( 4, false);
+  mesh* m = new mesh( Np1, isL);
 
   m->print_mesh_stats();
 
