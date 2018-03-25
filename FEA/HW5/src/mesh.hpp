@@ -17,6 +17,10 @@ class mesh
     //  - nodes on each geometric edge
     void print_mesh_stats();
 
+    // Returns a pointer to a perturbed 
+    //  version of this mesh.
+    mesh* get_perturbed();
+
     // Deconstructor
     ~mesh();
 
@@ -78,6 +82,12 @@ class mesh
     // Creates a single element number i from 
     //  a triple of nodes n1, n2, n3
     void create_elem_from_triple( int i, int n1, int n2, int n3);
+
+    // Perturb the mesh by adjusting nodal locations
+    void perturb();
+  
+    // Perturbs node i of the mesh
+    void perturb_node( int i, bool bottom, bool top, bool left, bool right);
 };
 
 #endif

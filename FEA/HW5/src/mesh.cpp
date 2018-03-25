@@ -3,7 +3,18 @@
 #include "eig_wrap.hpp"
 
 #include <iostream>
+#include <algorithm>
+#include <time.h>
 #include <cstdlib>
+
+
+double get_random( double min, double max)
+{
+  double tmp = (double) rand() / RAND_MAX;
+  double ans = min + tmp * ( max - min);
+
+  return ans;
+}
 
 mesh::mesh( int Np1_, bool isL_)
 {
@@ -41,6 +52,93 @@ mesh::~mesh()
   top_nodes.clear();
   
   elem_areas.clear();
+}
+
+mesh* mesh::get_perturbed()
+{
+  mesh* pm = new mesh( (N+1), isL);
+
+  pm->perturb();
+
+  return pm;
+}
+
+void mesh::perturb()
+{
+  for( int i = 0; i < num_nodes; i++)
+  {
+    bool bottom = false;
+    bool top    = false;
+    bool left   = false;
+    bool right  = false;
+
+    // Check if on bottom or top boundary
+    if ( std::find( bottom_nodes.begin(), bottom_nodes.end(), i) 
+          != bottom_nodes.end() )
+    {
+      bottom = true;
+    }
+    else if ( std::find( top_nodes.begin(), top_nodes.end(), i) 
+               != top_nodes.end() )
+    {
+      top = true;
+    }
+
+    // Check if on left or right boundary
+    if ( std::find( left_nodes.begin(), left_nodes.end(), i) 
+          != left_nodes.end() )
+    {
+      left = true;
+    }
+    else if ( std::find( right_nodes.begin(), right_nodes.end(), i) 
+               != right_nodes.end() )
+    {
+      right = true;
+    }
+
+    perturb_node( i, bottom, top, left, right);
+  }
+
+  // Now correct area information
+  elem_areas.clear();
+  calc_areas();
+
+  return;
+}
+
+void mesh::perturb_node( int i, 
+                         bool bottom, 
+                         bool top, 
+                         bool left, 
+                         bool right)
+{
+  double max = (1.0 / 2.0) / 10.0;
+  double min = -max;
+  double r = get_random( min, max);
+
+  double h = 1.0 / ( (int)N + 1.0);
+
+  double p = r * h;
+  double x = node_matrix( i, 0);
+  double y = node_matrix( i, 1);
+
+  double xnew = x;
+  double ynew = y;
+
+  if( !bottom && !top)
+  {
+    ynew += p;
+  }
+
+  if( !left && !right)
+  {
+    xnew += p;
+  }
+
+  node_matrix( i, 0) = xnew;
+  node_matrix( i, 1) = ynew;
+
+  return;
 }
 
 void mesh::calc_areas()
