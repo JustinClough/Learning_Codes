@@ -6,12 +6,12 @@ solution::solution( mesh* m_, int CaseNumber_)
   m  = m_;
   CaseNumber = CaseNumber_;
 
-  numIntNodes = m->get_number_interior_nodes();
-  numElems    = m->get_number_elements();
+  numNodes = m->get_number_nodes();
+  numElems = m->get_number_elements();
 
-  K = SparseMatrix<double>(numIntNodes, numIntNodes);
-  F = VectorXd::Zero( numIntNodes);
-  U = VectorXd::Zero( numIntNodes);
+  K = SparseMatrix<double>(numNodes, numNodes);
+  F = VectorXd::Zero( numNodes);
+  U = VectorXd::Zero( numNodes);
 }
 
 solution::~solution()
@@ -45,8 +45,6 @@ void solution::assemble_stiffness()
   for( int i = 0; i < numElems; i++)
   {
     MatrixXd k_elem = get_elemental_stiffness( i);
-    //TODO
-
     assign_elemental_stiffness( k_elem, i);
   }
   return;

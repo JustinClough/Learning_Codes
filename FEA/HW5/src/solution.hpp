@@ -19,8 +19,8 @@ class solution
     // Pointer to the mesh
     mesh* m;
 
-    // Number of interior nodes
-    int numIntNodes;
+    // Number of mesh nodes
+    int numNodes;
 
     int numElems;
 
