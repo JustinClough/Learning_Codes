@@ -27,6 +27,9 @@ class mesh
     // Gets the number of interior nodes
     int get_number_interior_nodes();
 
+    // Gets the number of total nodes
+    int get_number_nodes();
+
     // Gets the number of elements
     int get_number_elements();
 
@@ -35,7 +38,6 @@ class mesh
     bool isL;
 
     // The value of N (from N+1).
-    //  The number of interior nodes.
     int N;
 
     // Number of elements

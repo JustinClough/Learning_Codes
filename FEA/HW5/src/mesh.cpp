@@ -63,6 +63,11 @@ mesh* mesh::get_perturbed()
   return pm;
 }
 
+int mesh::get_number_nodes()
+{
+  return num_nodes;
+}
+
 int mesh::get_number_elements()
 {
   return num_elems;
