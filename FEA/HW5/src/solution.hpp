@@ -22,6 +22,8 @@ class solution
     // Number of interior nodes
     int numIntNodes;
 
+    int numElems;
+
     // CaseNumber
     int CaseNumber;
 
@@ -39,6 +41,13 @@ class solution
 
     // Assembles only the forcing matrix
     void assemble_forcing();
+
+    // Returns the stiffness matrix for element i
+    MatrixXd get_elemental_stiffness( int i);
+
+    // Assigns the i'th elemental stiffness k_elem
+    //  to the global stiffness matrix
+    void assign_elemental_stiffness( MatrixXd k_elem, int i);
 
 };
 
