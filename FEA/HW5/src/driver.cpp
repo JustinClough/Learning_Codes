@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#include "solution.hpp"
+#include "mesh.hpp"
+
 void seed_random()
 {
   srand( time( NULL));
@@ -17,7 +20,10 @@ void drive_problem( int CaseNumber, int Np1)
   m->print_mesh_stats();
   pm->print_mesh_stats();
 
+  solution* s = new solution( m, CaseNumber);
 
+
+  delete s;
   delete pm;
   delete m;
 

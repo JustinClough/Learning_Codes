@@ -270,6 +270,11 @@ void mesh::create_elem_from_triple( int i, int n1, int n2, int n3)
   elem_matrix( i, 2) = n3;
 }
 
+int mesh::get_number_interior_nodes()
+{
+  return interior_nodes.size();
+}
+
 void mesh::print_mesh_stats()
 {
   std::cout

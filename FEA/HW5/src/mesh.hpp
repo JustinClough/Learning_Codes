@@ -24,6 +24,9 @@ class mesh
     // Deconstructor
     ~mesh();
 
+    // Gets the number of interior nodes
+    int get_number_interior_nodes();
+
   private:
     // True if the mesh is an L shape
     bool isL;
@@ -74,6 +77,9 @@ class mesh
 
     // Pointer to nodes on top of mesh
     std::vector<int> top_nodes;
+
+    // Pointer to nodes on the interior of mesh
+    std::vector<int> interior_nodes;
 
     // Checks where a node is and places it into the 
     //  correct array

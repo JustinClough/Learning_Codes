@@ -9,6 +9,8 @@ element.cpp
 element.hpp
 vertex.cpp
 vertex.hpp
+solution.cpp
+solution.hpp
 eig_wrap.hpp
 fea_hw5.cpp)
 

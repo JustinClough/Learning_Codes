@@ -10,5 +10,6 @@
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
+using Eigen::SparseMatrix;
 
 #endif
