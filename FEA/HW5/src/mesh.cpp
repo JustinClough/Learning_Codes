@@ -212,24 +212,36 @@ void mesh::create_nodes()
 
 void mesh::check_boundary( int index)
 {
+  bool interior = true;
+
+
   // Check top or bottom
   if ( index <= (N+1) )
   {
     bottom_nodes.push_back( index);
+    interior = false;
   }
   else if ( index >= ((N+2)*(N+1) ) )
   {
     top_nodes.push_back( index);
+    interior = false;
   }
 
   // Check left or right
   if ( index % (N+2) == 0)
   {
     left_nodes.push_back( index);
+    interior = false;
   }
   else if ( index % (N+2) == (N+1) )
   {
     right_nodes.push_back( index);
+    interior = false;
+  }
+
+  if( interior)
+  {
+    interior_nodes.push_back( index);
   }
 
   return;
