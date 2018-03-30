@@ -27,6 +27,9 @@ class mesh
     // Gets the number of interior nodes
     int get_number_interior_nodes();
 
+    // Gets the number of elements
+    int get_number_elements();
+
   private:
     // True if the mesh is an L shape
     bool isL;
