@@ -9,6 +9,9 @@ class solution
     // Constructor
     solution( mesh* m_, int CaseNumber_);
 
+    // Assembles the stiffness and forcing functions
+    void assemble_problem();
+
     // Destructor
     ~solution();
 
@@ -30,6 +33,12 @@ class solution
 
     // Solution Vector
     VectorXd U;
+
+    // Assembles only the stiffness matrix
+    void assemble_stiffness();
+
+    // Assembles only the forcing matrix
+    void assemble_forcing();
 
 };
 

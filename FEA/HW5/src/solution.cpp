@@ -17,3 +17,24 @@ solution::~solution()
 {
 
 }
+
+void solution::assemble_problem()
+{
+  assemble_stiffness();
+  assemble_forcing();
+
+  return;
+}
+
+void solution::assemble_stiffness()
+{
+  //TODO
+  return;
+}
+
+void solution::assemble_forcing()
+{
+  //TODO
+  return;
+}
+
