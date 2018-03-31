@@ -346,6 +346,11 @@ void mesh::create_elems()
   return;
 }
 
+int mesh::get_global_id( int elem, int node)
+{
+  return elem_matrix( elem, node);
+}
+
 void mesh::create_elem_from_triple( int i, int n1, int n2, int n3)
 {
   elem_matrix( i, 0) = n1;

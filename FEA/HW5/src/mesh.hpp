@@ -43,6 +43,10 @@ class mesh
     //  xy = 1 for y
     double get_pos( int elem, int i, int xy);
 
+    // Gets the global ID for the node'th node
+    //  on element number elem.
+    int get_global_id( int elem, int node);
+
   private:
     // True if the mesh is an L shape
     bool isL;
