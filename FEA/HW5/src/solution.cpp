@@ -134,6 +134,7 @@ void solution::assemble_stiffness()
     MatrixXd k_elem = get_elemental_stiffness( i);
     assign_elemental_stiffness( k_elem, i);
   }
+
   return;
 }
 
@@ -154,10 +155,76 @@ void solution::assemble_forcing()
   return;
 }
 
+double average( double a, double b)
+{
+  double ans = (a + b) / 2.0;
+  return ans;
+}
+
+double average( double a, double b, double c)
+{
+  double ans = ( a + b + c) / 3.0;
+  return ans;
+}
+
 VectorXd solution::get_elemental_forcing( int elem_num)
 {
   VectorXd f_elem = VectorXd::Zero( elemental_dofs);
-  // TODO
+
+  double area = m->get_elem_area( elem_num);
+
+  double x1 = m->get_pos( elem_num, 0, 0);
+  double y1 = m->get_pos( elem_num, 0, 1);
+
+  double x2 = m->get_pos( elem_num, 1, 0);
+  double y2 = m->get_pos( elem_num, 1, 1);
+
+  double x3 = m->get_pos( elem_num, 2, 0);
+  double y3 = m->get_pos( elem_num, 2, 1);
+
+  double x12 = average( x1, x2);
+  double x13 = average( x1, x3);
+  double x23 = average( x2, x3);
+
+  double y12 = average( y1, y2);
+  double y13 = average( y1, y3);
+  double y23 = average( y2, y3);
+
+  double x123 = average( x1, x2, x3);
+  double y123 = average( y1, y2, y3);
+
+  double f1 = force_at_point( x1, y1);
+  double f2 = force_at_point( x2, y2);
+  double f3 = force_at_point( x3, y3);
+
+  double f12 = force_at_point( x12, y12);
+  double f13 = force_at_point( x13, y13);
+  double f23 = force_at_point( x23, y23);
+
+  double f123 = force_at_point( x123, y123);
+
+  double tmp1 = 0.0;
+  double tmp2 = 0.0;
+  double tmp3 = 0.0;
+
+  tmp1 += 3.0 * f1;
+  tmp2 += 3.0 * f2;
+  tmp3 += 3.0 * f3;
+
+  tmp1 += 4.0 * ( f12 + f13);
+  tmp2 += 4.0 * ( f12 + f23);
+  tmp3 += 4.0 * ( f13 + f23);
+
+  tmp1 += 9.0 * f123;
+  tmp2 += 9.0 * f123;
+  tmp3 += 9.0 * f123;
+
+  f_elem(0) = tmp1;
+  f_elem(1) = tmp2;
+  f_elem(2) = tmp3;
+
+  f_elem *= area / 60.0;
+
   return f_elem;
 }
 
@@ -165,4 +232,42 @@ void solution::assign_elemental_forcing( VectorXd f_elem, int elem)
 {
   // TODO
   return;
+}
+
+double solution::force_at_point( double x, double y)
+{
+  // TODO
+  double ans = 0.0;
+  if( CaseNumber == 1)
+  {
+    ans = 2.0;
+  }
+  else if( CaseNumber == 2)
+  {
+    ans = 2.0 * x;
+  }
+  else if( CaseNumber == 3)
+  {
+    ans = 2.0 * y;
+  }
+  else if( CaseNumber == 4)
+  {
+    double a =  2.0 * y * y * y;
+    double b = -18.0 * y;
+    double c =  152.0 * std::sin( 5.0 * ( x + y));
+    double d = -2.0 * std::exp( x);
+
+    ans = a + b + c + d;
+  }
+  else
+  {
+    std::cout
+    << "Unrecognized CaseNumber. CaseNumber = "
+    << CaseNumber 
+    << std::endl;
+
+    std::abort();
+  }
+
+  return ans;
 }

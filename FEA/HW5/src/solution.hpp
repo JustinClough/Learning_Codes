@@ -75,6 +75,10 @@ class solution
 
     // Assigns the elemental forcing vector to the global one.
     void assign_elemental_forcing( VectorXd f_elem, int elem);
+
+    // Gets the force at a point based on the 
+    //  case nuber defined at construction time.
+    double force_at_point( double x, double y);
 };
 
 #endif
