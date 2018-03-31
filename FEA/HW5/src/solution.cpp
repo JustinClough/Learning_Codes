@@ -15,7 +15,7 @@ solution::solution( mesh* m_, int CaseNumber_)
   numNodes = m->get_number_nodes();
   numElems = m->get_number_elements();
 
-  K = SparseMatrix<double>(numNodes, numNodes);
+  K = SparseMatrix<double, Eigen::RowMajor>(numNodes, numNodes);
   F = VectorXd::Zero( numNodes);
   U = VectorXd::Zero( numNodes);
 }
@@ -140,6 +140,7 @@ void solution::assemble_stiffness()
 
 void solution::apply_boundary_conditions()
 {
+
   for( int i = 0; i < numNodes; i++)
   {
     if( m->which_boundary( i) != 0)
@@ -148,7 +149,8 @@ void solution::apply_boundary_conditions()
       fix_global_system( bv, i);
     }
   }
-  // TODO
+  // two bugs make a feature
+  K = K.transpose();
   return;
 }
 
@@ -193,7 +195,23 @@ double solution::get_boundary_value( int i)
 
 void solution::fix_global_system( double bv, int i)
 {
-  // TODO
+  // Reassign K(i,:) to all zeros except diag
+  double diag = 0.0;
+  for( SparseMatrix< double>::InnerIterator 
+        it( K, i); it; ++it)
+  {
+    if( it.row() == it.col() )
+    {
+      diag = it.value();
+    }
+    else
+    {
+      it.valueRef() = 0.0;
+    }
+  }
+
+  F( i) = bv * diag;
+
   return;
 }
 
@@ -204,6 +222,7 @@ void solution::assemble_forcing()
     VectorXd f_elem = get_elemental_forcing( i);
     assign_elemental_forcing( f_elem, i);
   }
+
   return;
 }
 
