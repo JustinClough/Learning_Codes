@@ -22,6 +22,7 @@ void drive_problem( int CaseNumber, int Np1)
 
   solution* s = new solution( m, CaseNumber);
 
+  s->assemble_problem();
 
   delete s;
   delete pm;
