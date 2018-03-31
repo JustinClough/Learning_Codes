@@ -16,6 +16,9 @@ class solution
     //  for the specified case number.
     void apply_boundary_conditions();
 
+    // Solves the system KU=F for U
+    void solve_system();
+
     // Destructor
     ~solution();
 

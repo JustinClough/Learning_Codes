@@ -345,3 +345,17 @@ double solution::force_at_point( double x, double y)
 
   return ans;
 }
+
+void solution::solve_system()
+{
+  K.makeCompressed();
+  Eigen::SparseLU< SparseMatrix< double> > solver;
+
+  solver.analyzePattern( K);
+
+  solver.factorize( K);
+
+  U = solver.solve( F);
+
+  return;
+}
