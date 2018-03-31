@@ -33,6 +33,11 @@ class mesh
     // Gets the number of elements
     int get_number_elements();
 
+    // Gets the i'th element's area
+    double get_elem_area( int i);
+
+    double get_elem_side_length( int elem, int side);
+
   private:
     // True if the mesh is an L shape
     bool isL;
@@ -52,12 +57,23 @@ class mesh
     // The num_elems by 3 matrix of node locations
     MatrixXd elem_matrix;
 
+    // The num_elems by 3 matrix of side lengths
+    MatrixXd side_lengths;
+
     // The num_elems vector of element areas
     std::vector<double> elem_areas;
 
     // Calcuates the element areas, 
     //  populates elem_areas
     void calc_areas();
+
+    // Calcualtes the side lengths of each element
+    //  Populates the side_lengths matrix.
+    void calc_side_lengths();
+
+    // Calculates the side lengths for a 
+    //  single element
+    void calc_elem_sides( int i);
 
     // Calcuates the area of a single element.
     //  Returns the area of element i.

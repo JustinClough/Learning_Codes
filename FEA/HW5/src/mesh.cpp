@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <time.h>
 #include <cstdlib>
+#include <cmath>
 
 
 double get_random( double min, double max)
@@ -42,6 +43,7 @@ mesh::mesh( int Np1_, bool isL_)
 
   create_elems();
   calc_areas();
+  calc_side_lengths();
 }
 
 mesh::~mesh()
@@ -63,9 +65,61 @@ mesh* mesh::get_perturbed()
   return pm;
 }
 
+double mesh::get_elem_side_length( int elem, int side)
+{
+  return side_lengths( elem, side);
+}
+
+void mesh::calc_elem_sides( int i)
+{
+  int n1 = elem_matrix( i, 0);
+  int n2 = elem_matrix( i, 1);
+  int n3 = elem_matrix( i, 2);
+
+  double x1 = node_matrix( n1, 0);
+  double y1 = node_matrix( n1, 1);
+
+  double x2 = node_matrix( n2, 0);
+  double y2 = node_matrix( n2, 1);
+
+  double x3 = node_matrix( n3, 0);
+  double y3 = node_matrix( n3, 1);
+
+  double x12 = x1 - x2;
+  double x23 = x2 - x3;
+  double x13 = x1 - x3;
+
+  double y12 = y1 - y2;
+  double y23 = y2 - y3;
+  double y13 = y1 - y3;
+  
+  double h1 = std::sqrt( x23 * x23 + y23 * y23);
+  double h2 = std::sqrt( x13 * x13 + y13 * y13);
+  double h3 = std::sqrt( x12 * x12 + y12 * x12);
+
+  side_lengths(i, 0) = h1;
+  side_lengths(i, 1) = h2;
+  side_lengths(i, 2) = h3;
+}
+
+void mesh::calc_side_lengths()
+{
+  side_lengths = MatrixXd::Zero( num_elems, 3);
+  for( int i = 0; i < num_elems; i++)
+  {
+    calc_elem_sides( i);
+  }
+  return;
+}
+
 int mesh::get_number_nodes()
 {
   return num_nodes;
+}
+
+double mesh::get_elem_area( int i)
+{
+  return elem_areas[i];
 }
 
 int mesh::get_number_elements()
@@ -185,7 +239,7 @@ double mesh::calc_elem_area( int i)
 
   double area = ( 1.0 / 2.0) * cross;
 
-  return area;
+  return std::abs(area);
 }
 
 void mesh::create_nodes()
