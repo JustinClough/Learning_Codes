@@ -24,10 +24,12 @@ void drive_problem( int CaseNumber, int Np1)
 
   s->assemble_problem();
   s->apply_boundary_conditions();
+  s->solve_system();
 
   delete s;
   delete pm;
   delete m;
 
+  return;
 }
 
