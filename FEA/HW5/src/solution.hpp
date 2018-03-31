@@ -79,6 +79,14 @@ class solution
     // Gets the force at a point based on the 
     //  case nuber defined at construction time.
     double force_at_point( double x, double y);
+
+    // Adjusts the global system for boundary value bv
+    //  at node i.
+    void fix_global_system( double bv, int i);
+
+    // Gets the DBC boundary value for node number i
+    //  based on Case number defined at construction.
+    double get_boundary_value( int i);
 };
 
 #endif

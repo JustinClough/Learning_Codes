@@ -140,6 +140,26 @@ void solution::assemble_stiffness()
 
 void solution::apply_boundary_conditions()
 {
+  for( int i = 0; i < numNodes; i++)
+  {
+    if( m->which_boundary( i) != 0)
+    {
+      double bv  = get_boundary_value( i);
+      fix_global_system( bv, i);
+    }
+  }
+  // TODO
+  return;
+}
+
+double solution::get_boundary_value( int i)
+{
+  // TODO
+  return 0.0;
+}
+
+void solution::fix_global_system( double bv, int i)
+{
   // TODO
   return;
 }
