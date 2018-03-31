@@ -47,6 +47,14 @@ class mesh
     //  on element number elem.
     int get_global_id( int elem, int node);
 
+    // Returns the boundary number the node is on. 
+    //  0 = Interior
+    //  1 = Bottom
+    //  2 = Right
+    //  3 = Top
+    //  4 = Left
+    int which_boundary( int node);
+
   private:
     // True if the mesh is an L shape
     bool isL;

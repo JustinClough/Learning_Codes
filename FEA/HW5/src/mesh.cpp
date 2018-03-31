@@ -177,6 +177,34 @@ void mesh::perturb()
   return;
 }
 
+int mesh::which_boundary( int node)
+{
+  if ( std::find( bottom_nodes.begin(), bottom_nodes.end(), node)
+      != bottom_nodes.end() )
+  {
+    return 1;
+  }
+  else if ( std::find( top_nodes.begin(), top_nodes.end(), node) 
+      != top_nodes.end() )
+  {
+    return 3;
+  }
+
+  // Check if on left or right boundary
+  if ( std::find( left_nodes.begin(), left_nodes.end(), node) 
+      != left_nodes.end() )
+  {
+    return 4;
+  }
+  else if ( std::find( right_nodes.begin(), right_nodes.end(), node) 
+      != right_nodes.end() )
+  {
+    return 2;
+  }
+
+  return 0;
+}
+
 void mesh::perturb_node( int i, 
                          bool bottom, 
                          bool top, 
