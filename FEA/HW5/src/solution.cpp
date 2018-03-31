@@ -146,6 +146,23 @@ void solution::apply_boundary_conditions()
 void solution::assemble_forcing()
 {
   //TODO
+  for( int i = 0; i < numElems; i++)
+  {
+    VectorXd f_elem = get_elemental_forcing( i);
+    assign_elemental_forcing( f_elem, i);
+  }
   return;
 }
 
+VectorXd solution::get_elemental_forcing( int elem_num)
+{
+  VectorXd f_elem = VectorXd::Zero( elemental_dofs);
+  // TODO
+  return f_elem;
+}
+
+void solution::assign_elemental_forcing( VectorXd f_elem, int elem)
+{
+  // TODO
+  return;
+}

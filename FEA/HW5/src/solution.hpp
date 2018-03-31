@@ -69,6 +69,12 @@ class solution
     // Gets the elemental pure spring matrix
     MatrixXd get_elemental_S( int i);
 
+    // Gets the elemental forcing function.
+    //  Body forces only.
+    VectorXd get_elemental_forcing( int elem_num);
+
+    // Assigns the elemental forcing vector to the global one.
+    void assign_elemental_forcing( VectorXd f_elem, int elem);
 };
 
 #endif
