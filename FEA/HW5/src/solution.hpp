@@ -63,7 +63,7 @@ class solution
     MatrixXd get_elemental_M( int i);
 
     // Gets the elemental pure spring matrix
-    MatrixXd get_elemental_K( int i);
+    MatrixXd get_elemental_S( int i);
 
 };
 

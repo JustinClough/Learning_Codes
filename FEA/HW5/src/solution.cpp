@@ -58,14 +58,46 @@ MatrixXd solution::get_elemental_M( int i)
   return mass;
 }
 
-MatrixXd solution::get_elemental_K( int i)
+MatrixXd solution::get_elemental_S( int i)
 {
-  MatrixXd k = MatrixXd::Zero( elemental_dofs, elemental_dofs);
+  MatrixXd spring = MatrixXd::Zero( elemental_dofs, elemental_dofs);
   double area = m->get_elem_area( i);
 
-  // TODO
+  double x1 = m->get_pos( i, 0, 0);
+  double y1 = m->get_pos( i, 0, 1);
 
-  return k;
+  double x2 = m->get_pos( i, 1, 0);
+  double y2 = m->get_pos( i, 1, 1);
+
+  double x3 = m->get_pos( i, 2, 0);
+  double y3 = m->get_pos( i, 2, 1);
+
+  double x31 = x3 - x1;
+  double x12 = x1 - x2;
+  double x23 = x2 - x3;
+
+  double y31 = y3 - y1;
+  double y12 = y1 - y2;
+  double y23 = y2 - y3;
+
+  // Diagonal Values of spring matrix
+  spring( 0, 0) = y23 * y23 + x23 * x23;
+  spring( 1, 1) = y31 * y31 + x31 * x31;
+  spring( 2, 2) = y12 * y12 + x12 * x12;
+
+  // Upper
+  spring( 0, 1) = y23 * y31 + x23 * x31;
+  spring( 0, 2) = y23 * y12 + x23 * x12;
+  spring( 1, 2) = y31 * y12 + x31 * x12;
+
+  // Lower
+  spring( 1, 0) = y23 * y31 + x23 * x31;
+  spring( 2, 0) = y23 * y12 + x23 * x12;
+  spring( 2, 1) = y31 * y12 + x31 * x12;
+
+  spring /= (4.0 * area);
+
+  return spring;
 }
 
 
@@ -73,11 +105,9 @@ MatrixXd solution::get_elemental_stiffness( int i)
 {
   // TODO
   MatrixXd mass = get_elemental_M( i);
+  MatrixXd spring = get_elemental_S( i);
 
-  std::cout << "m of element " << i <<  "= " << std::endl <<
-     mass << std::endl;
-
-  return mass;
+  return p * spring + q * mass;
 }
 
 void solution::assign_elemental_stiffness( MatrixXd k_elem, int i)
