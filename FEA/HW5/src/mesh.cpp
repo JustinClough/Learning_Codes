@@ -70,6 +70,13 @@ double mesh::get_elem_side_length( int elem, int side)
   return side_lengths( elem, side);
 }
 
+double mesh::get_pos( int elem, int i, int xy)
+{
+  int n = elem_matrix( elem, i);
+
+  return node_matrix( n, xy); 
+}
+
 void mesh::calc_elem_sides( int i)
 {
   int n1 = elem_matrix( i, 0);
@@ -419,6 +426,12 @@ void mesh::print_mesh_stats()
   std::cout
     << "Total area covered by the elements: " 
     << checksum
+    << std::endl;
+
+  std::cout 
+    << "Side Lengths Matrix: "
+    << std::endl
+    << side_lengths
     << std::endl;
 
   return;

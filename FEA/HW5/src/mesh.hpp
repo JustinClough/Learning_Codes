@@ -38,6 +38,11 @@ class mesh
 
     double get_elem_side_length( int elem, int side);
 
+    // Gets the x or y position of the elem's i'th node.
+    //  xy = 0 for x
+    //  xy = 1 for y
+    double get_pos( int elem, int i, int xy);
+
   private:
     // True if the mesh is an L shape
     bool isL;
