@@ -23,6 +23,7 @@ void drive_problem( int CaseNumber, int Np1)
   solution* s = new solution( m, CaseNumber);
 
   s->assemble_problem();
+  s->apply_boundary_conditions();
 
   delete s;
   delete pm;
