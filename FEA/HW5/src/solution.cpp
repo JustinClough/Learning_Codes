@@ -137,6 +137,12 @@ void solution::assemble_stiffness()
   return;
 }
 
+void solution::apply_boundary_conditions()
+{
+  // TODO
+  return;
+}
+
 void solution::assemble_forcing()
 {
   //TODO

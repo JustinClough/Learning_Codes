@@ -12,6 +12,10 @@ class solution
     // Assembles the stiffness and forcing functions
     void assemble_problem();
 
+    // Apply the Dirichlet boundary conditions
+    //  for the specified case number.
+    void apply_boundary_conditions();
+
     // Destructor
     ~solution();
 
