@@ -43,6 +43,12 @@ class mesh
     //  xy = 1 for y
     double get_pos( int elem, int i, int xy);
 
+    // Gets the x or y position of the 
+    //  node'th node.
+    //  xy = 0 for x
+    //  xy = 1 for y
+    double get_pos( int node, int xy);
+
     // Gets the global ID for the node'th node
     //  on element number elem.
     int get_global_id( int elem, int node);

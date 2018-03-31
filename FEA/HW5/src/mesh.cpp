@@ -205,6 +205,11 @@ int mesh::which_boundary( int node)
   return 0;
 }
 
+double mesh::get_pos( int node, int xy)
+{
+  return node_matrix( node, xy);
+}
+
 void mesh::perturb_node( int i, 
                          bool bottom, 
                          bool top, 
