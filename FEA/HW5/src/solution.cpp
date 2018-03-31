@@ -146,7 +146,6 @@ void solution::apply_boundary_conditions()
 
 void solution::assemble_forcing()
 {
-  //TODO
   for( int i = 0; i < numElems; i++)
   {
     VectorXd f_elem = get_elemental_forcing( i);
@@ -230,13 +229,16 @@ VectorXd solution::get_elemental_forcing( int elem_num)
 
 void solution::assign_elemental_forcing( VectorXd f_elem, int elem)
 {
-  // TODO
+  for( int i = 0; i < elemental_dofs; i++)
+  {
+    int row  = m->get_global_id( elem, i);
+    F( row) += f_elem( i);
+  }
   return;
 }
 
 double solution::force_at_point( double x, double y)
 {
-  // TODO
   double ans = 0.0;
   if( CaseNumber == 1)
   {
