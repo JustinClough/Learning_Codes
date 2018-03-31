@@ -103,7 +103,6 @@ MatrixXd solution::get_elemental_S( int i)
 
 MatrixXd solution::get_elemental_stiffness( int i)
 {
-  // TODO
   MatrixXd mass = get_elemental_M( i);
   MatrixXd spring = get_elemental_S( i);
 
@@ -112,7 +111,19 @@ MatrixXd solution::get_elemental_stiffness( int i)
 
 void solution::assign_elemental_stiffness( MatrixXd k_elem, int i)
 {
-  // TODO
+  for( int j = 0; j < elemental_dofs; j++)
+  {
+    for( int n = 0; n < elemental_dofs; n++)
+    {
+      int Erow = j;
+      int Ecol = n;
+
+      int row = m->get_global_id( i, j);
+      int col = m->get_global_id( i, n);
+
+      K.coeffRef( row, col) += k_elem( Erow, Ecol);
+    }
+  }
   return;
 }
 
