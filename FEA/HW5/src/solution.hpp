@@ -19,10 +19,20 @@ class solution
     // Pointer to the mesh
     mesh* m;
 
+    // PDE Parameter "p"
+    double p;
+
+    // PDE Parameter "q"
+    double q;
+
     // Number of mesh nodes
     int numNodes;
 
+    // Number of elements in the mesh
     int numElems;
+
+    // Number of degrees of freedom per element
+    int elemental_dofs;
 
     // CaseNumber
     int CaseNumber;
@@ -48,6 +58,12 @@ class solution
     // Assigns the i'th elemental stiffness k_elem
     //  to the global stiffness matrix
     void assign_elemental_stiffness( MatrixXd k_elem, int i);
+
+    // Gets the elemental pure mass matrix
+    MatrixXd get_elemental_M( int i);
+
+    // Gets the elemental pure spring matrix
+    MatrixXd get_elemental_K( int i);
 
 };
 
