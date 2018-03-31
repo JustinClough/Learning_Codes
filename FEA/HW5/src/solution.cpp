@@ -154,8 +154,41 @@ void solution::apply_boundary_conditions()
 
 double solution::get_boundary_value( int i)
 {
-  // TODO
-  return 0.0;
+  double x = m->get_pos( i, 0);
+  double y = m->get_pos( i, 1);
+
+  double ans = 0.0;
+
+  if( CaseNumber == 1)
+  {
+    ans = 1.0;
+  }
+  else if( CaseNumber == 2)
+  {
+    ans = x;
+  }
+  else if( CaseNumber == 3)
+  {
+    ans = y;
+  }
+  else if( CaseNumber == 4)
+  {
+    double a = y * y * y;
+    double b = std::sin( 5.0 * (x + y));
+    double c = 2.0 * std::exp( x);
+    ans = a + b + c;
+  }
+  else
+  {
+    std::cout
+    << "Unrecognized CaseNumber. CaseNumber = "
+    << CaseNumber 
+    << std::endl;
+
+    std::abort();
+  }
+
+  return ans;
 }
 
 void solution::fix_global_system( double bv, int i)
