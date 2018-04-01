@@ -34,15 +34,23 @@
 \begin{document}
 
 
-\section*{Part II: Implementation (reattempted)} \label{sec:intro}
+\section*{Part II: Implementation} \label{sec:intro}
+The purpose of this exercise was to use the Finite Element Method (FEM)
+to solve the Boundary Value Problem (BVP) shown in Equations \ref{eq:wfStart}
+to \ref{eq:wfEnd}.
 
+
+\begin{align}
+a( u, v) &= F(v) \forall v \in H_0^1(\Omega) \label{eq:wfStart} \\
+a( u, v) = \int_{\Omega} p \nabla u \cdot \nabla v + q u v dx dy                    
+\end{align}
 
 
 The \texttt{Eigen} software package
 was used as the linear solver for this project. 
-The matrix inversion method used was Householder-QR with pivoting.
+The \texttt{Sparse LU} solver was used to 
+solve the linear system.
 
-\begin{comment}
 \newpage
 \appendix
 \section{Source Code and Headers} \label{sec:code}
@@ -54,5 +62,21 @@ The matrix inversion method used was Householder-QR with pivoting.
 \lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW5/src/driver.cpp}
 \subsection{driver.hpp} \label{subsec:driver.hpp}
 \lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW5/src/driver.hpp}
+
+\subsection{mesh.cpp} \label{subsec:mesh.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW5/src/mesh.cpp}
+\subsection{mesh.hpp} \label{subsec:mesh.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW5/src/mesh.hpp}
+
+\subsection{solution.cpp} \label{subsec:solution.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW5/src/solution.cpp}
+\subsection{solution.hpp} \label{subsec:solution.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW5/src/solution.hpp}
+
+\subsection{CMakeLists.txt} \label{subsec:CMakeLists.txt}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW5/src/CMakeLists.txt}
+
+\subsection{eig\_wrap.hpp} \label{subsec:eig_wrap.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW5/src/eig_wrap.hpp}
 
 \end{document}
