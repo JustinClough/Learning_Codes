@@ -4,7 +4,7 @@ export FEA_HW5_SRC=/lore/clougj/Learning_Codes/FEA/HW5/src
 
 cmake \
   -D EIG_DIR=${EIG_SRC} \
-  -D CMAKE_CXX_FLAGS="-g -O2 -Wall -Werror" \
+  -D CMAKE_CXX_FLAGS="-g -O3 -Wall -Werror" \
   -D HW1_SRC=${FEA_HW1_SRC} \
   -D HW5_SRC=${FEA_HW5_SRC} \
   ../
