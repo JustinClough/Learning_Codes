@@ -31,7 +31,6 @@ int main( int argc, char** argv)
 
   seed_random();
 
-
   drive_problem( cn, np1);  
 
   return 0;
