@@ -105,8 +105,19 @@ class solution
     double get_exact_solution( double x, double y);
 
     // Gets the L2 error for element elem.
-    double get_elemental_error_L2(int elem);
+    double get_elemental_error_L2( int elem);
 
+    // Gets the H1 error for element elem.
+    double get_elemental_error_H1( int elem);
+
+    // Gets the exact gradient of the solution.
+    double get_exact_solution_grad( double x, double y, int xy);
+
+    // The value of the H1 norm
+    double H1_error;
+
+    // The value of the L2 norm
+    double L2_error;
 };
 
 #endif

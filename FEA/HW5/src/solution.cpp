@@ -388,18 +388,19 @@ void solution::compute_errors()
 
 void solution::compute_L2_error()
 {
-  // TODO
-
   double error = 0.0;
   for( int elem = 0; elem < numElems; elem++)
   {
     error += get_elemental_error_L2( elem);
   }
 
+  L2_error = error;
+  L2_error = std::sqrt( L2_error);
+
   error = std::sqrt( error);
-  std::cout
+  std::cout << std::scientific
     << "L2 Error = "
-    << error
+    << L2_error
     << std::endl;
 
   return;
@@ -472,11 +473,115 @@ double solution::get_elemental_error_L2( int elem)
 
 void solution::compute_H1_error()
 {
-  // TODO
-
   double error = 0.0;
-  (void) error;
+  for( int elem = 0; elem < numElems; elem++)
+  {
+    error += get_elemental_error_H1( elem);
+  }
+
+  H1_error = error + L2_error * L2_error;
+  H1_error = std::sqrt( H1_error);
+
+  std::cout << std::scientific
+    << "H1 Error = "
+    << H1_error
+    << std::endl;
   return;
+}
+
+double solution::get_elemental_error_H1( int elem)
+{
+  double area = m->get_elem_area( elem);
+
+  double x1 = m->get_pos( elem, 0, 0);
+  double y1 = m->get_pos( elem, 0, 1);
+
+  double x2 = m->get_pos( elem, 1, 0);
+  double y2 = m->get_pos( elem, 1, 1);
+
+  double x3 = m->get_pos( elem, 2, 0);
+  double y3 = m->get_pos( elem, 2, 1);
+
+  double x12 = average( x1, x2);
+  double x13 = average( x1, x3);
+  double x23 = average( x2, x3);
+
+  double y12 = average( y1, y2);
+  double y13 = average( y1, y3);
+  double y23 = average( y2, y3);
+
+  double x123 = average( x1, x2, x3);
+  double y123 = average( y1, y2, y3);
+
+  double ux1 = get_exact_solution_grad( x1, y1, 0);
+  double ux2 = get_exact_solution_grad( x2, y2, 0);
+  double ux3 = get_exact_solution_grad( x3, y3, 0);
+  double uy1 = get_exact_solution_grad( x1, y1, 1);
+  double uy2 = get_exact_solution_grad( x2, y2, 1);
+  double uy3 = get_exact_solution_grad( x3, y3, 1);
+
+  double ux12 = get_exact_solution_grad( x12, y12, 0);
+  double ux23 = get_exact_solution_grad( x23, y23, 0);
+  double ux13 = get_exact_solution_grad( x13, y13, 0);
+  double uy12 = get_exact_solution_grad( x12, y12, 1);
+  double uy13 = get_exact_solution_grad( x13, y13, 1);
+  double uy23 = get_exact_solution_grad( x23, y23, 1);
+
+  double ux123 = get_exact_solution_grad( x123, y123, 0);
+  double uy123 = get_exact_solution_grad( x123, y123, 1);
+
+  double gx1 = (y2 - y3) / (2.0 * area);
+  double gy1 = (x3 - x2) / (2.0 * area);
+
+  double gx2 = (y3 - y1) / (2.0 * area);
+  double gy2 = (x1 - x3) / (2.0 * area);
+
+  double gx3 = (y1 - y2) / (2.0 * area);
+  double gy3 = (x2 - x1) / (2.0 * area);
+
+  // TODO
+  double uh1 = U( m->get_global_id( elem, 0));
+  double uh2 = U( m->get_global_id( elem, 1));
+  double uh3 = U( m->get_global_id( elem, 2));
+
+  double uhx1 = uh1 * gx1;
+  double uhx2 = uh2 * gx2;
+  double uhx3 = uh3 * gx3;
+  double uhy1 = uh1 * gy1;
+  double uhy2 = uh2 * gy2;
+  double uhy3 = uh3 * gy3;
+
+  double guhx = uhx1 + uhx2 + uhx3;
+  double guhy = uhy1 + uhy2 + uhy3;
+
+  double ex1  = (guhx - ux1) * (guhx - ux1); 
+  double ey1  = (guhy - uy1) * (guhy - uy1); 
+  double ex2  = (guhx - ux2) * (guhx - ux2); 
+  double ey2  = (guhy - uy2) * (guhy - uy2); 
+  double ex3  = (guhx - ux3) * (guhx - ux3); 
+  double ey3  = (guhy - uy3) * (guhy - uy3); 
+
+  double tmp1 = ex1 + ey1 + ex2 + ey2 + ex3 + ey3;
+
+  double ex12  = (guhx - ux12) * (guhx - ux12); 
+  double ey12  = (guhy - uy12) * (guhy - uy12); 
+  double ex23  = (guhx - ux23) * (guhx - ux23); 
+  double ey23  = (guhy - uy23) * (guhy - uy23); 
+  double ex13  = (guhx - ux13) * (guhx - ux13); 
+  double ey13  = (guhy - uy13) * (guhy - uy13); 
+
+  double tmp2 = ex12 + ey12 + ex13 + ey13 + ex23 + ey23;
+
+  double ex123  = (guhx - ux123) * (guhx - ux123); 
+  double ey123  = (guhy - uy123) * (guhy - uy123); 
+
+  double tmp3 = ex123 + ey123;
+
+  double error = 3.0 * tmp1 + 8.0 * tmp2 + 27 * tmp3;
+
+  error *= area / 60.0;
+
+  return error;
 }
 
 double solution::get_exact_solution( double x, double y)
@@ -503,4 +608,65 @@ double solution::get_exact_solution( double x, double y)
     u = a + b + c;
   }
   return u;
+}
+
+double solution::get_exact_solution_grad( double x, double y, int xy)
+{
+  double du = 0.0;
+
+  if( xy == 0)
+  {
+    if( CaseNumber == 1)
+    {
+      du = 0.0;
+    }
+    else if( CaseNumber == 2)
+    {
+      du = 1.0;
+    }
+    else if( CaseNumber == 3)
+    {
+      du = 0.0;
+    }
+    else if( CaseNumber == 4)
+    {
+      double a = 0.0;
+      double b = 5.0 * std::cos( 5.0 * (x + y));
+      double c = 2.0 * std::exp( x);
+      du = a + b + c;
+    }
+  }
+  else if ( xy == 1)
+  {
+    if( CaseNumber == 1)
+    {
+      du = 0.0;
+    }
+    else if( CaseNumber == 2)
+    {
+      du = 0.0;
+    }
+    else if( CaseNumber == 3)
+    {
+      du = 1.0;
+    }
+    else if( CaseNumber == 4)
+    {
+      double a = 3.0 * y * y;
+      double b = 5.0 * std::cos( 5.0 * (x + y));
+      double c = 0.0;
+      du = a + b + c;
+    }
+  }
+  else
+  {
+    std::cout 
+      << "Unrecognized xy option: "
+      << xy
+      << std::endl;
+
+    std::abort();
+  }
+
+  return du;
 }
