@@ -93,6 +93,20 @@ class solution
     // Gets the DBC boundary value for node number i
     //  based on Case number defined at construction.
     double get_boundary_value( int i);
+
+    // Computes the L2 error.
+    void compute_L2_error();
+
+    // Computes the H1 error.
+    void compute_H1_error();
+
+    // Gets the exact solution based on the Case
+    //  number provided at construction time.
+    double get_exact_solution( double x, double y);
+
+    // Gets the L2 error for element elem.
+    double get_elemental_error_L2(int elem);
+
 };
 
 #endif

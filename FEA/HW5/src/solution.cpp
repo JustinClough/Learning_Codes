@@ -380,7 +380,127 @@ void solution::solve_system()
 
 void solution::compute_errors()
 {
-  //TODO
+  compute_L2_error();
+  compute_H1_error();
 
   return;
+}
+
+void solution::compute_L2_error()
+{
+  // TODO
+
+  double error = 0.0;
+  for( int elem = 0; elem < numElems; elem++)
+  {
+    error += get_elemental_error_L2( elem);
+  }
+
+  error = std::sqrt( error);
+  std::cout
+    << "L2 Error = "
+    << error
+    << std::endl;
+
+  return;
+}
+
+double solution::get_elemental_error_L2( int elem)
+{
+  double area = m->get_elem_area( elem);
+
+  double x1 = m->get_pos( elem, 0, 0);
+  double y1 = m->get_pos( elem, 0, 1);
+
+  double x2 = m->get_pos( elem, 1, 0);
+  double y2 = m->get_pos( elem, 1, 1);
+
+  double x3 = m->get_pos( elem, 2, 0);
+  double y3 = m->get_pos( elem, 2, 1);
+
+  double x12 = average( x1, x2);
+  double x13 = average( x1, x3);
+  double x23 = average( x2, x3);
+
+  double y12 = average( y1, y2);
+  double y13 = average( y1, y3);
+  double y23 = average( y2, y3);
+
+  double x123 = average( x1, x2, x3);
+  double y123 = average( y1, y2, y3);
+
+  double u1 = get_exact_solution( x1, y1);
+  double u2 = get_exact_solution( x2, y2);
+  double u3 = get_exact_solution( x3, y3);
+
+  double u12 = get_exact_solution( x12, y12);
+  double u13 = get_exact_solution( x13, y13);
+  double u23 = get_exact_solution( x23, y23);
+
+  double u123 = get_exact_solution( x123, y123);
+
+  double uh1 = U( m->get_global_id( elem, 0));
+  double uh2 = U( m->get_global_id( elem, 1));
+  double uh3 = U( m->get_global_id( elem, 2));
+
+  double uh12 = average( uh1, uh2);
+  double uh13 = average( uh1, uh3);
+  double uh23 = average( uh2, uh3);
+
+  double uh123 = average( uh1, uh2, uh3);
+
+  double e1 = (u1 - uh1) * (u1 - uh1);
+  double e2 = (u2 - uh2) * (u2 - uh2);
+  double e3 = (u3 - uh3) * (u3 - uh3);
+
+  double e12 = (u12 - uh12) * (u12 - uh12);
+  double e23 = (u23 - uh23) * (u23 - uh23);
+  double e13 = (u13 - uh13) * (u13 - uh13);
+
+  double e123 = (u123 - uh123) * (u123 - uh123);
+
+  double tmp1 = e1  + e2  + e3;
+  double tmp2 = e12 + e13 + e23;
+  double tmp3 = e123;
+
+  double error = 3.0 * tmp1 + 8.0 * tmp2 + 27 * tmp3;
+
+  error *= area / 60.0;
+
+  return error;
+}
+
+void solution::compute_H1_error()
+{
+  // TODO
+
+  double error = 0.0;
+  (void) error;
+  return;
+}
+
+double solution::get_exact_solution( double x, double y)
+{
+  double u = 0.0;
+  
+  if( CaseNumber == 1)
+  {
+    u = 1.0;
+  }
+  else if( CaseNumber == 2)
+  {
+    u = x;
+  }
+  else if( CaseNumber == 3)
+  {
+    u = y;
+  }
+  else if( CaseNumber == 4)
+  {
+    double a = y * y * y;
+    double b = std::sin( 5.0 * (x + y));
+    double c = 2.0 * std::exp( x);
+    u = a + b + c;
+  }
+  return u;
 }
