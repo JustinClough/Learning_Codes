@@ -16,17 +16,33 @@ void drive_problem( int CaseNumber, int Np1)
   bool isL = false;
 
   mesh* m  = new mesh( Np1, isL);
-  mesh* pm = m->get_perturbed();
-  m->print_mesh_stats();
-  pm->print_mesh_stats();
+  
+  std::cout 
+    << std::endl
+    << "Regular mesh"
+    << std::endl;
 
   solution* s = new solution( m, CaseNumber);
-
   s->assemble_problem();
   s->apply_boundary_conditions();
   s->solve_system();
-
+  s->compute_errors();
   delete s;
+
+  mesh* pm = m->get_perturbed();
+
+  std::cout 
+    << std::endl
+    << "Peturbed mesh"
+    << std::endl;
+
+  solution* sp = new solution( pm, CaseNumber);
+  sp->assemble_problem();
+  sp->apply_boundary_conditions();
+  sp->solve_system();
+  sp->compute_errors();
+  delete sp;
+
   delete pm;
   delete m;
 

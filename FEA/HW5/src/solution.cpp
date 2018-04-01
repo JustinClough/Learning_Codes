@@ -1,6 +1,7 @@
 #include "solution.hpp"
 
 #include <iostream>
+#include <ctime>
 
 solution::solution( mesh* m_, int CaseNumber_)
 {
@@ -27,8 +28,16 @@ solution::~solution()
 
 void solution::assemble_problem()
 {
+  clock_t start_time = std::clock();
+
   assemble_stiffness();
   assemble_forcing();
+
+  std::cout << std::scientific
+    << "Assembly time: "
+    << double ( clock() - start_time) / (double) CLOCKS_PER_SEC
+    << " seconds."
+    << std::endl;
 
   return;
 }
@@ -355,7 +364,23 @@ void solution::solve_system()
 
   solver.factorize( K);
 
+
+  clock_t start_time = std::clock();
   U = solver.solve( F);
+
+  std::cout << std::scientific
+    << "Solve time: "
+    << double ( clock() - start_time) / (double) CLOCKS_PER_SEC
+    << " seconds."
+    << std::endl;
+
+  return;
+
+}
+
+void solution::compute_errors()
+{
+  //TODO
 
   return;
 }

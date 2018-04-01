@@ -19,6 +19,9 @@ class solution
     // Solves the system KU=F for U
     void solve_system();
 
+    // Compute the errors
+    void compute_errors();
+
     // Destructor
     ~solution();
 
