@@ -539,7 +539,6 @@ double solution::get_elemental_error_H1( int elem)
   double gx3 = (y1 - y2) / (2.0 * area);
   double gy3 = (x2 - x1) / (2.0 * area);
 
-  // TODO
   double uh1 = U( m->get_global_id( elem, 0));
   double uh2 = U( m->get_global_id( elem, 1));
   double uh3 = U( m->get_global_id( elem, 2));
