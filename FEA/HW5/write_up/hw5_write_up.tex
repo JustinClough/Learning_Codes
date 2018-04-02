@@ -37,13 +37,62 @@
 \section*{Part II: Implementation} \label{sec:intro}
 The purpose of this exercise was to use the Finite Element Method (FEM)
 to solve the Boundary Value Problem (BVP) shown in Equations \ref{eq:wfStart}
-to \ref{eq:wfEnd}.
+to \ref{eq:wfEnd}:
 
 
 \begin{align}
-a( u, v) &= F(v) \forall v \in H_0^1(\Omega) \label{eq:wfStart} \\
-a( u, v) = \int_{\Omega} p \nabla u \cdot \nabla v + q u v dx dy                    
+a( u, v) &= F(v) \quad \forall v \in H_0^1(\Omega) \label{eq:wfStart} \\
+a( u, v) &= \int_{\Omega} p( x, y) \nabla u( x, y)  \cdot \nabla v( x, y) + q( x, y) u( x, y) v( x, y) dx dy \\
+F(v)     &= \int_{\Omega} f( x, y) v( x, y) dxdy \label{eq:wfEnd}
 \end{align}
+
+\noindent
+where $p(x,y)$, $u(x,y)$, and $q(x,y)$ were given functions on $\Omega$.
+The boundary of $\Omega$ is $\partial \Omega$ and the boundary
+information, $\alpha( x, y)$ was also given.
+The solution is $u \in V = \{ v\in H^1(\Omega):v\rvert_{\partial \Omega} = \alpha( x, y)\}$
+which satisfies Eq. \ref{eq:wfStart}. 
+The domain was tessellated with triangular elements;
+a typical element is denoted by $K$ and the estimated 
+domain and boundary as $\Omega_h$ and $\partial \Omega_h$, respectively.
+The FEM was then used to recover $u_h$ from Eq. \ref{eq:fem}.
+
+\begin{equation}
+a( u_h, v) = F( v) \quad \forall v \in V_{h,0}^1  \label{eq:fem}
+\end{equation}
+
+\noindent
+The test space was defined as
+$V_{h,0}^1 = \{v \in H_0^1(\Omega): v\rvert_{K} \in P^1(K), \forall K \in \Omega_h\}$.
+The domain considered was $\Omega = [0, 1] \times [0,1]$ with 
+parameters $p(x,y) = 3$ and $q(x,y) = 2$.  
+Four test cases, outlined in \ref{t:cases}, were considered.
+
+
+\begin{table}[!ht]
+\caption{ Case numbers and exact solutions.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{ |c|c|}
+  \hline
+  Case Number  & $u$ \\
+  \hline
+  1            &  $1$ \\
+  \hline
+  2            &  $x$ \\
+  \hline
+  3            &  $y$ \\
+  \hline
+  4            &  $y^3 + sin( 5(x+y)) + 2e^x$ \\
+  \hline
+\end{tabular}
+\label{t:cases}
+\end{table}
+
+\noindent
+For each case, the $L^2$ and $H^1$ norms of the error were measured. 
+Additionally, the mesh was refined to determine the order of 
+error convergence.
 
 
 The \texttt{Eigen} software package
