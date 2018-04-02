@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <ctime>
+#include <time.h>
 
 solution::solution( mesh* m_, int CaseNumber_)
 {
@@ -28,14 +29,23 @@ solution::~solution()
 
 void solution::assemble_problem()
 {
-  clock_t start_time = std::clock();
+
+  timespec ts;
+  clock_gettime( CLOCK_REALTIME, &ts);
 
   assemble_stiffness();
   assemble_forcing();
 
+  timespec tf;
+  clock_gettime( CLOCK_REALTIME, &tf);
+
+  double b = 1.0e9;
+  double assembly_time = b * (tf.tv_sec - ts.tv_sec) + tf.tv_nsec - ts.tv_nsec;
+  assembly_time /= b;
+
   std::cout << std::scientific
     << "Assembly time: "
-    << double ( clock() - start_time) / (double) CLOCKS_PER_SEC
+    << assembly_time
     << " seconds."
     << std::endl;
 
@@ -365,12 +375,21 @@ void solution::solve_system()
   solver.factorize( K);
 
 
-  clock_t start_time = std::clock();
+  timespec ts;
+  clock_gettime( CLOCK_REALTIME, &ts);
+
   U = solver.solve( F);
+
+  timespec tf;
+  clock_gettime( CLOCK_REALTIME, &tf);
+
+  double b = 1.0e9;
+  double solve_time = b * (tf.tv_sec - ts.tv_sec) + tf.tv_nsec - ts.tv_nsec;
+  solve_time /= b;
 
   std::cout << std::scientific
     << "Solve time: "
-    << double ( clock() - start_time) / (double) CLOCKS_PER_SEC
+    << solve_time
     << " seconds."
     << std::endl;
 
