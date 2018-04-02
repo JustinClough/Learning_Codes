@@ -116,7 +116,7 @@ Four test cases, outlined in \ref{t:cases}, were considered.
 \centering
 \begin{tabular}{ |c|c|}
   \hline
-  Case Number  & $u$ \\
+  Case Number  & $u( x,y)$ \\
   \hline
   1            &  $1$ \\
   \hline
@@ -137,6 +137,10 @@ error convergence. For cases 1, 2, and 3 meshes of size $N+1 = 20, 40$
 were considered. For case 4, meshes of size $N+1 = 10, 20, 40, 80, 160$.
 The results for case 1 are shown in Tables \ref{tab:C1o}
 and \ref{tab:C1p}.
+The results for case 2 are shown in Tables \ref{tab:C2o}
+and \ref{tab:C2p}.
+The results for case 3 are shown in Tables \ref{tab:C3o}
+and \ref{tab:C3p}.
 
 \begin{table}[!ht]
 \caption{Errors for regular mesh for Case 1.}
@@ -144,7 +148,7 @@ and \ref{tab:C1p}.
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
- $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
+ $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_{H^1}$ \\
  \hline
      20  & 4.063E-15 & 2.217E-14 \\
      40  & 2.684E-14 & 1.313E-13 \\
@@ -159,7 +163,7 @@ and \ref{tab:C1p}.
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
- $N+1$  & $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
+ $N+1$  & $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_{H^1}$ \\
  \hline
      20  & 7.780E-16 & 1.057E-14 \\
      40  & 3.401E-15 & 2.695E-14 \\
@@ -168,16 +172,13 @@ and \ref{tab:C1p}.
 \label{tab:C1p}
 \end{table}
 
-The results for case 2 are shown in Tables \ref{tab:C2o}
-and \ref{tab:C2p}.
-
 \begin{table}[!ht]
 \caption{Errors for regular mesh for Case 2.}
 \vspace{0.1in}
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
- $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
+ $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_{H^1}$ \\
  \hline
      20  & 2.196E-15 & 1.240E-14 \\
      40  & 1.197E-14 & 5.959E-14 \\
@@ -192,7 +193,7 @@ and \ref{tab:C2p}.
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
- $N+1$  & $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
+ $N+1$  & $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_{H^1}$ \\
  \hline
      20  & 9.345E-16 & 6.721E-14 \\
      40  & 9.639E-16 & 1.346E-14 \\
@@ -201,16 +202,13 @@ and \ref{tab:C2p}.
 \label{tab:C2p}
 \end{table}
 
-The results for case 3 are shown in Tables \ref{tab:C3o}
-and \ref{tab:C3p}.
-
 \begin{table}[!ht]
 \caption{Errors for regular mesh for Case 3.}
 \vspace{0.1in}
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
- $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
+ $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_{H^1}$ \\
  \hline
      20  & 2.404E-15 & 1.345E-14 \\
      40  & 1.272E-14 & 6.425E-14 \\
@@ -225,7 +223,7 @@ and \ref{tab:C3p}.
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
- $N+1$  & $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
+ $N+1$  & $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_{H^1}$ \\
  \hline
      20  & 3.927E-16 & 6.095E-15 \\
      40  & 1.415E-16 & 1.487E-14 \\
@@ -234,6 +232,12 @@ and \ref{tab:C3p}.
 \label{tab:C3p}
 \end{table}
 
+As shown in Tables \ref{tab:C1o} through \ref{tab:C3p}, 
+the method used is able to approximate the solution
+up to machine accuracy for cases 1, 2, and 3. 
+This is because the exact solution is a member 
+of the same space as the approximate solution.
+In essence, $u, u_h \in P^1(K)$.
 The results for case 4 are shown in Tables \ref{tab:C4o}
 and \ref{tab:C4p}. 
 
@@ -243,7 +247,7 @@ and \ref{tab:C4p}.
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
- $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order & $||e_h(\cdot)||_H^1$ & Order & Assembly & Solve \\
+ $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order & $||e_h(\cdot)||_{H^1}$ & Order & Assembly & Solve \\
  \hline
      10   & 7.136E-02 &  -      & 1.619E+00 &  -     & 2.512E-03 & 5.481E-05 \\
      20   & 1.831E-02 &  1.962  & 8.211E-01 &  0.979 & 1.658E-02 & 5.187E-05 \\
@@ -261,7 +265,7 @@ and \ref{tab:C4p}.
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
- $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order & $||e_h(\cdot)||_H^1$ & Order & Assembly & Solve \\
+ $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order & $||e_h(\cdot)||_{H^1}$ & Order & Assembly & Solve \\
  \hline
      10   & 7.153E-02 & -     & 1.619E+00 &  -     & 2.561E-03 & 6.031E-05 \\
      20   & 1.841E-02 & 1.958 & 8.225E-01 &  0.977 & 4.797E-03 & 5.071E-05 \\
@@ -273,11 +277,25 @@ and \ref{tab:C4p}.
 \label{tab:C4p}
 \end{table}
 
+As shown in Tables \ref{tab:C4o} and \ref{tab:C4p}, 
+method is converging towards the exact solution. 
+It converges at a rate of about $2.0$ in the $L^2$ norm
+and $1.0$ in the $H^1$ norm.
 
 The \texttt{Eigen} software package
 was used as the linear solver for this project. 
-The \texttt{Sparse LU} solver was used to 
+The native \texttt{Eigen::SparseMatrix} class was used to 
+store the stiffness vector.
+According to the documentation\footnote{www.eigen.tuxfamily.org}, 
+accessing any given element to write or read to 
+scales on the order of $nlog(n)$, where $n$ is 
+the number of non-zero entries at evaluation time.
+This is shown in the growth of assembly times.
+The \texttt{Eigen::Sparse\_LU} solver was used to 
 solve the linear system.
+It uses the main techniques from the sequential
+\texttt{SuperLU} package.
+
 
 \newpage
 \appendix
