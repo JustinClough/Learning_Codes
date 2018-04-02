@@ -220,7 +220,7 @@ void mesh::perturb_node( int i,
   double min = -max;
   double r = get_random( min, max);
 
-  double h = 1.0 / ( (int)N + 1.0);
+  double h = 1.0 / ( (double)N + 1.0);
 
   double p = r * h;
   double x = node_matrix( i, 0);

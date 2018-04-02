@@ -48,9 +48,9 @@ F(v)     &= \int_{\Omega} f( x, y) v( x, y) dxdy \label{eq:wfEnd}
 \end{align}
 
 \noindent
-where $p(x,y)$, $u(x,y)$, and $q(x,y)$ were given functions on $\Omega$.
+where $p(x,y)$, $f(x,y)$, and $q(x,y)$ were given functions on $\Omega$.
 The boundary of $\Omega$ is $\partial \Omega$ and the boundary
-information, $\alpha( x, y)$ was also given.
+information, $\alpha( x, y)$ on $\partial \Omega$ was also given.
 The solution is $u \in V = \{ v\in H^1(\Omega):v\rvert_{\partial \Omega} = \alpha( x, y)\}$
 which satisfies Eq. \ref{eq:wfStart}. 
 The domain was tessellated with triangular elements;
@@ -67,8 +67,8 @@ The test space was defined as
 $V_{h,0}^1 = \{v \in H_0^1(\Omega): v\rvert_{K} \in P^1(K), \forall K \in \Omega_h\}$.
 The domain considered was $\Omega = [0, 1] \times [0,1]$ with 
 parameters $p(x,y) = 3$ and $q(x,y) = 2$.
-It was approximated by $\Omega_h$ which had $N+2$ nodes
-on each domain boundary for a total of $(N+2)^2$ nodes.
+The tesselated domain $\Omega_h$ had $N+2$ nodes
+on each domain boundary for a total of $(N+2)^2$ nodes throughout the mesh.
 
 \subsection{Code Overview} \label{ss:codeOverview}
 The code followed the following major steps to 
@@ -76,12 +76,15 @@ construct and solve the FEM problem and solution:
 
 \begin{enumerate}
 \item Construct a mesh. This first involved calculating node location
-      and then assembling the nodes into elements. Additional data,
+      and then assembling the nodes into elements. 
+      Each element had counter-clockwise node ordering.
+      Additional data,
       such as element areas, was constructed at this steps.
 \item Assemble the linear algebra system. This was done by populating a
       sparse matrix (the stiffness matrix) and dense vector (the forcing
       vector). To populate these objects, the elemental contributions
       were summed into the global system. The elemental contributions
+      of the forcing functions, $f(x,y)$,
       were approximated using 3\textsuperscript{rd} order numerical
       quadrature. \label{i:assemble}
 \item Apply boundary conditions. This was done by removing
@@ -89,26 +92,27 @@ construct and solve the FEM problem and solution:
       corresponding to each node on the boundary. The given boundary
       information, $\alpha$, was then multiplied by the diagonal value
       which replaced that row's forcing vector term. For example, if 
-      node $n$ at $(X, Y)$ was on the boundary, then the $n$th row
+      node $n$ at $(X_n, Y_n)$ was on the boundary, then the $n$th row
       of the stiffness matrix was cleared except for the 
       diagonal value, $k_{n,n}$. The $n$th term in the forcing vector,
-      $F_n$, was then assigned $k_{n,n} \alpha( X, Y)$.
+      $F_n$, was then assigned $k_{n,n} \alpha( X_n, Y_n)$.
 \item Solve the system. Sparse LU factorization was then used 
       to solve the linear system.
 \item Compute errors. The $L^2$ and $H^1$ errors were estimated 
       by summing the elemental error contributions. The elemental
       error contributions were approximated using 3\textsuperscript{rd}
       order numerical quadrature. \label{i:errors}
-\item Perturb mesh and repeat. The mesh was perturbed and the above steps
+\item Perturb the mesh and repeat. The mesh was perturbed and the above steps
       from \ref{i:assemble} to \ref{i:errors} was repeated. 
       The mesh was perturbed by adjusting each node a random amount in 
       both the $x$ and $y$ directions so long as the boundary was 
       left unperturbed. The random amount had a maximum amount of 
-      $\frac{1}{20}$ \textsuperscript{th} of the original node spacing.
+      $\frac{1}{20}$ \textsuperscript{th} of the original node spacing
+      along each axis.
 \end{enumerate}
 
 \subsection{Testing and Results} \label{ss:testAndResults}
-Four test cases, outlined in \ref{t:cases}, were considered.
+Four test cases, outlined in Table \ref{t:cases}, were considered.
 
 \begin{table}[!ht]
 \caption{ Case numbers and exact solutions.}
@@ -134,7 +138,8 @@ Four test cases, outlined in \ref{t:cases}, were considered.
 For each case, the $L^2$ and $H^1$ norms of the error were measured. 
 Additionally, the mesh was refined to determine the order of 
 error convergence. For cases 1, 2, and 3 meshes of size $N+1 = 20, 40$
-were considered. For case 4, meshes of size $N+1 = 10, 20, 40, 80, 160$.
+were considered. For case 4, meshes of size $N+1 = 10, 20, 40, 80, 160$
+were used.
 The results for case 1 are shown in Tables \ref{tab:C1o}
 and \ref{tab:C1p}.
 The results for case 2 are shown in Tables \ref{tab:C2o}
@@ -148,7 +153,7 @@ and \ref{tab:C3p}.
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
- $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_{H^1}$ \\
+ $N+1$&  $||e_h(\cdot)||_{L^2(\Omega)}$ & $||e_h(\cdot)||_{H^1}$ \\
  \hline
      20  & 4.063E-15 & 2.217E-14 \\
      40  & 2.684E-14 & 1.313E-13 \\
@@ -163,7 +168,7 @@ and \ref{tab:C3p}.
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
- $N+1$  & $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_{H^1}$ \\
+ $N+1$  & $||e_h(\cdot)||_{L^2(\Omega)}$ & $||e_h(\cdot)||_{H^1}$ \\
  \hline
      20  & 7.780E-16 & 1.057E-14 \\
      40  & 3.401E-15 & 2.695E-14 \\
@@ -178,7 +183,7 @@ and \ref{tab:C3p}.
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
- $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_{H^1}$ \\
+ $N+1$&  $||e_h(\cdot)||_{L^2(\Omega)}$ & $||e_h(\cdot)||_{H^1}$ \\
  \hline
      20  & 2.196E-15 & 1.240E-14 \\
      40  & 1.197E-14 & 5.959E-14 \\
@@ -193,7 +198,7 @@ and \ref{tab:C3p}.
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
- $N+1$  & $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_{H^1}$ \\
+ $N+1$  & $||e_h(\cdot)||_{L^2(\Omega)}$ & $||e_h(\cdot)||_{H^1}$ \\
  \hline
      20  & 9.345E-16 & 6.721E-14 \\
      40  & 9.639E-16 & 1.346E-14 \\
@@ -208,7 +213,7 @@ and \ref{tab:C3p}.
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
- $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_{H^1}$ \\
+ $N+1$&  $||e_h(\cdot)||_{L^2(\Omega)}$ & $||e_h(\cdot)||_{H^1}$ \\
  \hline
      20  & 2.404E-15 & 1.345E-14 \\
      40  & 1.272E-14 & 6.425E-14 \\
@@ -223,7 +228,7 @@ and \ref{tab:C3p}.
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
- $N+1$  & $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_{H^1}$ \\
+ $N+1$  & $||e_h(\cdot)||_{L^2(\Omega)}$ & $||e_h(\cdot)||_{H^1}$ \\
  \hline
      20  & 3.927E-16 & 6.095E-15 \\
      40  & 1.415E-16 & 1.487E-14 \\
@@ -237,7 +242,7 @@ the method used is able to approximate the solution
 up to machine accuracy for cases 1, 2, and 3. 
 This is because the exact solution is a member 
 of the same space as the approximate solution.
-In essence, $u, u_h \in P^1(K)$.
+In essence, $u, u_h \in P^1(K)$ so $u_h = u$.
 The results for case 4 are shown in Tables \ref{tab:C4o}
 and \ref{tab:C4p}. 
 
@@ -247,7 +252,7 @@ and \ref{tab:C4p}.
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
- $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order & $||e_h(\cdot)||_{H^1}$ & Order & Assembly & Solve \\
+ $N+1$&  $||e_h(\cdot)||_{L^2(\Omega)}$ & Order & $||e_h(\cdot)||_{H^1}$ & Order & Assembly & Solve \\
  \hline
      10   & 7.136E-02 &  -      & 1.619E+00 &  -     & 2.512E-03 & 5.481E-05 \\
      20   & 1.831E-02 &  1.962  & 8.211E-01 &  0.979 & 1.658E-02 & 5.187E-05 \\
@@ -265,7 +270,7 @@ and \ref{tab:C4p}.
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
- $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order & $||e_h(\cdot)||_{H^1}$ & Order & Assembly & Solve \\
+ $N+1$&  $||e_h(\cdot)||_{L^2(\Omega)}$ & Order & $||e_h(\cdot)||_{H^1}$ & Order & Assembly & Solve \\
  \hline
      10   & 7.153E-02 & -     & 1.619E+00 &  -     & 2.561E-03 & 6.031E-05 \\
      20   & 1.841E-02 & 1.958 & 8.225E-01 &  0.977 & 4.797E-03 & 5.071E-05 \\
@@ -278,13 +283,13 @@ and \ref{tab:C4p}.
 \end{table}
 
 As shown in Tables \ref{tab:C4o} and \ref{tab:C4p}, 
-method is converging towards the exact solution. 
+the method is converging towards the exact solution. 
 It converges at a rate of about $2.0$ in the $L^2$ norm
 and $1.0$ in the $H^1$ norm.
 
-The \texttt{Eigen} software package
+The \texttt{Eigen C++} library
 was used as the linear solver for this project. 
-The native \texttt{Eigen::SparseMatrix} class was used to 
+The native \texttt{Eigen::SparseMatrix<$\cdot$>} class was used to 
 store the stiffness vector.
 According to the documentation\footnote{www.eigen.tuxfamily.org}, 
 accessing any given element to write or read to 
@@ -295,6 +300,13 @@ The \texttt{Eigen::Sparse\_LU} solver was used to
 solve the linear system.
 It uses the main techniques from the sequential
 \texttt{SuperLU} package.
+The reduction of solve times from $N+1=10$ to 
+$N+1=20$ is due to how sparse the stiffness matrix is
+as compared to how sparse \texttt{Eigen} assumes it will be.
+For both the original and perturbed meshes, overhead costs
+dominate the solve time when $N+1=10$. 
+For $N+1=20$ and larger, the actual cost to solve dominates
+the solution time.
 
 
 \newpage
