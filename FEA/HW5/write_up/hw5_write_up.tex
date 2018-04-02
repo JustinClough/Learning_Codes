@@ -34,7 +34,8 @@
 \begin{document}
 
 
-\section*{Part II: Implementation} \label{sec:intro}
+\section*{Part II: Implementation} 
+\subsection{Introduction}\label{sec:intro}
 The purpose of this exercise was to use the Finite Element Method (FEM)
 to solve the Boundary Value Problem (BVP) shown in Equations \ref{eq:wfStart}
 to \ref{eq:wfEnd}:
@@ -65,9 +66,49 @@ a( u_h, v) = F( v) \quad \forall v \in V_{h,0}^1  \label{eq:fem}
 The test space was defined as
 $V_{h,0}^1 = \{v \in H_0^1(\Omega): v\rvert_{K} \in P^1(K), \forall K \in \Omega_h\}$.
 The domain considered was $\Omega = [0, 1] \times [0,1]$ with 
-parameters $p(x,y) = 3$ and $q(x,y) = 2$.  
-Four test cases, outlined in \ref{t:cases}, were considered.
+parameters $p(x,y) = 3$ and $q(x,y) = 2$.
+It was approximated by $\Omega_h$ which had $N+2$ nodes
+on each domain boundary for a total of $(N+2)^2$ nodes.
 
+\subsection{Code Overview} \label{ss:codeOverview}
+The code followed the following major steps to 
+construct and solve the FEM problem and solution:
+
+\begin{enumerate}
+\item Construct a mesh. This first involved calculating node location
+      and then assembling the nodes into elements. Additional data,
+      such as element areas, was constructed at this steps.
+\item Assemble the linear algebra system. This was done by populating a
+      sparse matrix (the stiffness matrix) and dense vector (the forcing
+      vector). To populate these objects, the elemental contributions
+      were summed into the global system. The elemental contributions
+      were approximated using 3\textsuperscript{rd} order numerical
+      quadrature. \label{i:assemble}
+\item Apply boundary conditions. This was done by removing
+      all non-diagonal entries in the stiffness matrix for each row 
+      corresponding to each node on the boundary. The given boundary
+      information, $\alpha$, was then multiplied by the diagonal value
+      which replaced that row's forcing vector term. For example, if 
+      node $n$ at $(X, Y)$ was on the boundary, then the $n$th row
+      of the stiffness matrix was cleared except for the 
+      diagonal value, $k_{n,n}$. The $n$th term in the forcing vector,
+      $F_n$, was then assigned $k_{n,n} \alpha( X, Y)$.
+\item Solve the system. Sparse LU factorization was then used 
+      to solve the linear system.
+\item Compute errors. The $L^2$ and $H^1$ errors were estimated 
+      by summing the elemental error contributions. The elemental
+      error contributions were approximated using 3\textsuperscript{rd}
+      order numerical quadrature. \label{i:errors}
+\item Perturb mesh and repeat. The mesh was perturbed and the above steps
+      from \ref{i:assemble} to \ref{i:errors} was repeated. 
+      The mesh was perturbed by adjusting each node a random amount in 
+      both the $x$ and $y$ directions so long as the boundary was 
+      left unperturbed. The random amount had a maximum amount of 
+      $\frac{1}{20}$ \textsuperscript{th} of the original node spacing.
+\end{enumerate}
+
+\subsection{Testing and Results} \label{ss:testAndResults}
+Four test cases, outlined in \ref{t:cases}, were considered.
 
 \begin{table}[!ht]
 \caption{ Case numbers and exact solutions.}
@@ -92,7 +133,38 @@ Four test cases, outlined in \ref{t:cases}, were considered.
 \noindent
 For each case, the $L^2$ and $H^1$ norms of the error were measured. 
 Additionally, the mesh was refined to determine the order of 
-error convergence.
+error convergence. For cases 1, 2, and 3 meshes of size $N+1 = 20, 40$
+were considered. For case 4, meshes of size $N+1 = 10, 20, 40, 80, 160$.
+
+\begin{table}[!ht]
+\caption{Errors for regular mesh for Case 1.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+ $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
+ \hline
+     20  &  & \\
+     40  &  & \\
+\hline
+\end{tabular}
+\label{tab:C1o}
+\end{table}
+
+\begin{table}[!ht]
+\caption{Errors for perturbed mesh for Case 1.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+ $N+1$  & $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
+ \hline
+     20  & 0 & 0 \\
+     40  & 0 & 0 \\
+\hline
+\end{tabular}
+\label{tab:C1p}
+\end{table}
 
 
 The \texttt{Eigen} software package
