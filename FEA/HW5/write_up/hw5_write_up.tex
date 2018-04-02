@@ -135,6 +135,8 @@ For each case, the $L^2$ and $H^1$ norms of the error were measured.
 Additionally, the mesh was refined to determine the order of 
 error convergence. For cases 1, 2, and 3 meshes of size $N+1 = 20, 40$
 were considered. For case 4, meshes of size $N+1 = 10, 20, 40, 80, 160$.
+The results for case 1 are shown in Tables \ref{tab:C1o}
+and \ref{tab:C1p}.
 
 \begin{table}[!ht]
 \caption{Errors for regular mesh for Case 1.}
@@ -144,8 +146,8 @@ were considered. For case 4, meshes of size $N+1 = 10, 20, 40, 80, 160$.
 \hline
  $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
  \hline
-     20  &  & \\
-     40  &  & \\
+     20  & 4.063E-15 & 2.217E-14 \\
+     40  & 2.684E-14 & 1.313E-13 \\
 \hline
 \end{tabular}
 \label{tab:C1o}
@@ -159,11 +161,116 @@ were considered. For case 4, meshes of size $N+1 = 10, 20, 40, 80, 160$.
 \hline
  $N+1$  & $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
  \hline
-     20  & 0 & 0 \\
-     40  & 0 & 0 \\
+     20  & 7.780E-16 & 1.057E-14 \\
+     40  & 3.401E-15 & 2.695E-14 \\
 \hline
 \end{tabular}
 \label{tab:C1p}
+\end{table}
+
+The results for case 2 are shown in Tables \ref{tab:C2o}
+and \ref{tab:C2p}.
+
+\begin{table}[!ht]
+\caption{Errors for regular mesh for Case 2.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+ $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
+ \hline
+     20  & 2.196E-15 & 1.240E-14 \\
+     40  & 1.197E-14 & 5.959E-14 \\
+\hline
+\end{tabular}
+\label{tab:C2o}
+\end{table}
+
+\begin{table}[!ht]
+\caption{Errors for perturbed mesh for Case 2.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+ $N+1$  & $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
+ \hline
+     20  & 9.345E-16 & 6.721E-14 \\
+     40  & 9.639E-16 & 1.346E-14 \\
+\hline
+\end{tabular}
+\label{tab:C2p}
+\end{table}
+
+The results for case 3 are shown in Tables \ref{tab:C3o}
+and \ref{tab:C3p}.
+
+\begin{table}[!ht]
+\caption{Errors for regular mesh for Case 3.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+ $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
+ \hline
+     20  & 2.404E-15 & 1.345E-14 \\
+     40  & 1.272E-14 & 6.425E-14 \\
+\hline
+\end{tabular}
+\label{tab:C3o}
+\end{table}
+
+\begin{table}[!ht]
+\caption{Errors for perturbed mesh for Case 3.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+ $N+1$  & $||e_h(\cdot)||_{L^2([0,1])}$ & $||e_h(\cdot)||_H^1$ \\
+ \hline
+     20  & 3.927E-16 & 6.095E-15 \\
+     40  & 1.415E-16 & 1.487E-14 \\
+\hline
+\end{tabular}
+\label{tab:C3p}
+\end{table}
+
+The results for case 4 are shown in Tables \ref{tab:C4o}
+and \ref{tab:C4p}. 
+
+\begin{table}[!ht]
+\caption{Errors for regular mesh for Case 4. Assembly and Solve times in seconds.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+ $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order & $||e_h(\cdot)||_H^1$ & Order & Assembly & Solve \\
+ \hline
+     10   & 7.136E-02 &  -      & 1.619E+00 &  -     & 2.512E-03 & 5.481E-05 \\
+     20   & 1.831E-02 &  1.962  & 8.211E-01 &  0.979 & 1.658E-02 & 5.187E-05 \\
+     40   & 4.607E-03 &  1.991  & 4.120E-01 &  0.995 & 9.366E-02 & 2.842E-04 \\
+     80   & 1.154E-03 &  1.997  & 2.062E-01 &  1.000 & 1.957E+00 & 1.890E-03 \\
+     160  & 2.885E-04 &  2.000  & 1.031E-01 &  1.000 & 3.907E+01 & 1.211E-02 \\
+\hline
+\end{tabular}
+\label{tab:C4o}
+\end{table}
+
+\begin{table}[!ht]
+\caption{Errors for perturbed mesh for Case 4. Assembly and Solve times in seconds.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+ $N+1$&  $||e_h(\cdot)||_{L^2([0,1])}$ & Order & $||e_h(\cdot)||_H^1$ & Order & Assembly & Solve \\
+ \hline
+     10   & 7.153E-02 &  -  & 1.619E+00 &  -  & 2.561E-03 & 6.031E-05 \\
+     20   & 1.841E-02 &  -  & 8.225E-01 &  -  & 4.797E-03 & 5.071E-05 \\
+     40   & 4.638E-03 &  -  & 4.127E-01 &  -  & 6.699E-02 & 2.833E-04 \\
+     80   & 1.162E-03 &  -  & 2.067E-01 &  -  & 1.842E+00 & 1.881E-03 \\
+     160  & 2.908E-04 &  -  & 1.033E-01 &  -  & 2.904E+01 & 1.205E-02 \\
+\hline
+\end{tabular}
+\label{tab:C4p}
 \end{table}
 
 
