@@ -285,31 +285,68 @@ double mesh::calc_elem_area( int i)
 
 void mesh::create_nodes()
 {
-  // x and y spacing between nodes
-  double dx = 1.0 / ( (int)N + 1.0);
-  double dy = 1.0 / ( (int)N + 1.0);
-
-  double x     = 0.0;
-  double y     = 0.0;
-  int    index = 0;
-
-  for( int i = 0; i < (N+2); i++)
+  if ( isL)
   {
+    // TODO: bonus 1
+  }
+  else if( isCurved)
+  {
+    double beta = 1.0 / 4.0;
+    double dx = 1.0 / ( (double)N + 1.0);
 
-    for( int j = 0; j < (N+2); j++)
+    double x     = 0.0;
+    double y     = 0.0;
+    int    index = 0;
+
+    for( int i = 0; i < (N+2); i++)
     {
-      node_matrix( index, 0) = x;
-      node_matrix( index, 1) = y;
+      double Y_top = beta * x * ( 1.0 - x) + 1.0;
+      double dy    = Y_top / ( (double) N + 1.0);
 
-      x += dx;
+      for( int j = 0; j < (N+2); j++)
+      {
+        node_matrix( index, 0) = x;
+        node_matrix( index, 1) = y;
 
-      check_boundary( index);
+        x += dx;
 
-      index++;
+        check_boundary( index);
+
+        index++;
+      }
+      x =  0.0;
+      y += dy;
+
     }
-    x =  0.0;
-    y += dy;
+  }
+  else
+  {
+    // x and y spacing between nodes
+    double dx = 1.0 / ( (double)N + 1.0);
+    double dy = 1.0 / ( (double)N + 1.0);
 
+    double x     = 0.0;
+    double y     = 0.0;
+    int    index = 0;
+
+    for( int i = 0; i < (N+2); i++)
+    {
+
+      for( int j = 0; j < (N+2); j++)
+      {
+        node_matrix( index, 0) = x;
+        node_matrix( index, 1) = y;
+
+        x += dx;
+
+        check_boundary( index);
+
+        index++;
+      }
+      x =  0.0;
+      y += dy;
+
+    }
   }
 
   return;
