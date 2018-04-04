@@ -19,7 +19,7 @@ int main( int argc, char** argv)
   std::cout << "cn = " << cn << std::endl;
   std::cout << "np1 = " << np1 << std::endl;
 
-  if( cn <= 0 || cn > 4)
+  if( cn <= 0 || cn > 6)
   {
     std::cout 
       << "Unrecognized Case Number = "

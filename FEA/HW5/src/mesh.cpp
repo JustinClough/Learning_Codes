@@ -17,9 +17,10 @@ double get_random( double min, double max)
   return ans;
 }
 
-mesh::mesh( int Np1_, bool isL_)
+mesh::mesh( int Np1_, bool isL_, bool isCurved_)
 {
   isL = isL_;
+  isCurved = isCurved_;
 
   // TODO: bonus part 1
   if ( isL)
@@ -58,7 +59,7 @@ mesh::~mesh()
 
 mesh* mesh::get_perturbed()
 {
-  mesh* pm = new mesh( (N+1), isL);
+  mesh* pm = new mesh( (N+1), isL, isCurved);
 
   pm->perturb();
 

@@ -7,7 +7,7 @@ class mesh
 {
   public:
     // Constructor. Creates nodes and elements
-    mesh( int Np1_, bool isL_);
+    mesh( int Np1_, bool isL_, bool isCurved_);
 
     // Print mesh information:
     //  - number of nodes
@@ -64,6 +64,9 @@ class mesh
   private:
     // True if the mesh is an L shape
     bool isL;
+
+    // True if the mesh has a curved top
+    bool isCurved;
 
     // The value of N (from N+1).
     int N;

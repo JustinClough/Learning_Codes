@@ -14,8 +14,18 @@ void seed_random()
 void drive_problem( int CaseNumber, int Np1)
 {
   bool isL = false;
+  if( CaseNumber == 5)
+  {
+    isL = true;
+  }
+  
+  bool isCurved = false;
+  if( CaseNumber == 6)
+  {
+    isCurved = true;
+  }
 
-  mesh* m  = new mesh( Np1, isL);
+  mesh* m  = new mesh( Np1, isL, isCurved);
   
   std::cout 
     << std::endl
@@ -29,23 +39,26 @@ void drive_problem( int CaseNumber, int Np1)
   s->compute_errors();
   delete s;
 
-  mesh* pm = m->get_perturbed();
+  if( CaseNumber <= 4)
+  {
+    mesh* pm = m->get_perturbed();
 
-  std::cout 
-    << std::endl
-    << "Peturbed mesh"
-    << std::endl;
+    std::cout 
+      << std::endl
+      << "Peturbed mesh"
+      << std::endl;
 
-  solution* sp = new solution( pm, CaseNumber);
-  sp->assemble_problem();
-  sp->apply_boundary_conditions();
-  sp->solve_system();
-  sp->compute_errors();
-  delete sp;
+    solution* sp = new solution( pm, CaseNumber);
+    sp->assemble_problem();
+    sp->apply_boundary_conditions();
+    sp->solve_system();
+    sp->compute_errors();
+    delete sp;
 
-  delete pm;
+    delete pm;
+  }
+
   delete m;
 
   return;
 }
-

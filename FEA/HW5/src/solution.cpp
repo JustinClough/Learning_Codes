@@ -199,6 +199,21 @@ double solution::get_boundary_value( int i)
     double c = 2.0 * std::exp( x);
     ans = a + b + c;
   }
+  else if( CaseNumber == 5)
+  {
+    std::cout
+      << "L shaped domains not supported."
+      << std::endl;
+
+    std::abort();
+  }
+  else if( CaseNumber == 6)
+  {
+    double a = y * y * y;
+    double b = std::sin( 5.0 * (x + y));
+    double c = 2.0 * std::exp( x);
+    ans = a + b + c;
+  }
   else
   {
     std::cout
@@ -344,6 +359,23 @@ double solution::force_at_point( double x, double y)
     ans = 2.0 * y;
   }
   else if( CaseNumber == 4)
+  {
+    double a =  2.0 * y * y * y;
+    double b = -18.0 * y;
+    double c =  152.0 * std::sin( 5.0 * ( x + y));
+    double d = -2.0 * std::exp( x);
+
+    ans = a + b + c + d;
+  }
+  else if( CaseNumber == 5)
+  {
+    std::cout
+      << "L shaped domains not supported."
+      << std::endl;
+
+    std::abort();
+  }
+  else if( CaseNumber == 6)
   {
     double a =  2.0 * y * y * y;
     double b = -18.0 * y;
@@ -625,6 +657,30 @@ double solution::get_exact_solution( double x, double y)
     double c = 2.0 * std::exp( x);
     u = a + b + c;
   }
+  else if( CaseNumber == 5)
+  {
+    std::cout
+      << "L shaped domains not supported."
+      << std::endl;
+
+    std::abort();
+  }
+  else if( CaseNumber == 6)
+  {
+    double a = y * y * y;
+    double b = std::sin( 5.0 * (x + y));
+    double c = 2.0 * std::exp( x);
+    u = a + b + c;
+  }
+  else
+  {
+    std::cout
+    << "Unrecognized CaseNumber. CaseNumber = "
+    << CaseNumber 
+    << std::endl;
+
+    std::abort();
+  }
   return u;
 }
 
@@ -653,6 +709,30 @@ double solution::get_exact_solution_grad( double x, double y, int xy)
       double c = 2.0 * std::exp( x);
       du = a + b + c;
     }
+    else if( CaseNumber == 5)
+    {
+      std::cout
+        << "L shaped domains not supported."
+        << std::endl;
+
+      std::abort();
+    }
+    else if( CaseNumber == 6)
+    {
+      double a = 0.0;
+      double b = 5.0 * std::cos( 5.0 * (x + y));
+      double c = 2.0 * std::exp( x);
+      du = a + b + c;
+    }
+    else
+    {
+      std::cout
+      << "Unrecognized CaseNumber. CaseNumber = "
+      << CaseNumber 
+      << std::endl;
+
+      std::abort();
+    }
   }
   else if ( xy == 1)
   {
@@ -669,6 +749,21 @@ double solution::get_exact_solution_grad( double x, double y, int xy)
       du = 1.0;
     }
     else if( CaseNumber == 4)
+    {
+      double a = 3.0 * y * y;
+      double b = 5.0 * std::cos( 5.0 * (x + y));
+      double c = 0.0;
+      du = a + b + c;
+    }
+    else if( CaseNumber == 5)
+    {
+      std::cout
+        << "L shaped domains not supported."
+        << std::endl;
+
+      std::abort();
+    }
+    else if( CaseNumber == 6)
     {
       double a = 3.0 * y * y;
       double b = 5.0 * std::cos( 5.0 * (x + y));
