@@ -75,6 +75,43 @@ the original mesh in Figure \ref{fig:overlap}.
   \label{fig:overlap}
 \end{figure}
 
+The $y$ node postions were determined by linearly interpolating the 
+location of the top boundary with the location of the bottom boundary
+for predetermined $x$ value. 
+This is is shown in Algorithm \ref{al:create_nodes}.
+
+\begin{algorithm}
+  \underline{create\_nodes} $()$
+  \BlankLine
+  $x := 0.0$ \;
+  $y := 0.0$ \;
+  $index := 0$ \;
+  $dx := 1.0 / (N+1.0)$\;
+  \For{for i = 0 to (M-1)}
+  {
+    \For{for j = 0 to (M-1)}
+    {
+      $Y_{top} := \beta x (1-x) + 1$\;
+      $dy := Y_{top} / (N+1.0)$\;
+      $y := i * dy$\;
+
+      $node\_matrix( index, 0) := x$\;
+      $node\_matrix( index, 1) := y$\;
+
+      $x += dx$\;
+      $index++$\;
+    }
+    $x := 0.0$\;
+  }
+  return;
+  \caption{Creates the nodel locations for the mesh with 
+           a curved top domain defined by $Y_{top}(x)$. 
+           It assumes $M$ total nodes along each axis 
+           and $N$ interior nodes along each axis.}
+  \label{al:create_nodes}
+\end{algorithm}
+
+
 
 % TODO
 
