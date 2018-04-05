@@ -1,6 +1,6 @@
 \documentclass[a4paper, 12pt]{article}
 \title{}
-\usepackage{geometry}
+\usepackage[margin=1.0in]{geometry}
 \usepackage{float}
 \usepackage{subfigure}
 \usepackage[justification=centering]{caption}
@@ -130,7 +130,92 @@ A convergence study was done on these meshes.
 Meshes of sizes $N+1=10, 20, 40, 80, 160$ were evaluated.
 The exact solution was taken to be 
 $u = y^3 + sin( 5 (x + y)) + 2e^x$.
+The results for the unperturbed mesh are 
+shown in Table \ref{tab:conv}. 
+The results for the perturbed mesh are 
+shown in Table \ref{tab:pert}. 
 
-% TODO
+
+\begin{table}[!ht]
+\caption{Errors for regular mesh for $\Omega_c$. Assembly and Solve times in seconds.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+ $N+1$&  $||e_h(\cdot)||_{L^2(\Omega_c)}$ & Order & $||e_h(\cdot)||_{H^1}$ & Order & Assembly & Solve \\
+ \hline
+     10   & 7.774E-02 &  -      & 1.708E+00 &  -     & 2.621E-03 & 5.924E-05 \\
+     20   & 2.003E-02 &  1.957  & 8.677E-01 &  0.977 & 1.858E-02 & 5.200E-05 \\
+     40   & 5.048E-03 &  1.988  & 4.356E-01 &  0.994 & 9.830E-02 & 2.871E-04 \\
+     80   & 1.264E-03 &  1.998  & 2.180E-01 &  0.998 & 1.978E+00 & 1.919E-03 \\
+     160  & 3.163E-04 &  1.999  & 1.091E-01 &  0.999 & 3.937E+01 & 1.219E-02 \\
+\hline
+\end{tabular}
+\label{tab:conv}
+\end{table}
+
+\begin{table}[!ht]
+\caption{Errors for perturbed mesh for $\Omega_c$. Assembly and Solve times in seconds.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+ $N+1$&  $||e_h(\cdot)||_{L^2(\Omega_c)}$ & Order & $||e_h(\cdot)||_{H^1}$ & Order & Assembly & Solve \\
+ \hline
+     10   & 7.852E-02 & -     & 1.714E+00 &  -     & 2.607E-03 & 5.517E-05 \\
+     20   & 2.024E-02 & 1.956 & 8.718E-01 &  0.975 & 4.620E-03 & 5.095E-05 \\
+     40   & 5.075E-03 & 1.996 & 4.363E-01 &  0.998 & 6.542E-02 & 2.180E-04 \\
+     80   & 1.273E-03 & 1.995 & 2.184E-01 &  0.998 & 1.866E+00 & 1.898E-03 \\
+     160  & 3.184E-04 & 1.999 & 1.093E-01 &  0.999 & 2.929E+01 & 1.220E-02 \\
+\hline
+\end{tabular}
+\label{tab:pert}
+\end{table}
+
+
+As shown in Tables \ref{tab:conv} and \ref{tab:pert}, the method 
+still converges at approximately the expected order: 
+2 for the $L^2$ and 
+1 for the $H^1$ norms.
+A ten times larger $\beta$ value, $\beta=\frac{10}{4}$ was tried as an 
+experiment.
+The results for the unperturbed mesh are shown in Table \ref{t:b2}.
+
+% If a large $\beta$ value was used, then this meshing method 
+% would create more needle-like elements near the center. 
+% These elements with higher aspect ratios would then
+% cause issues with solution accuracy and convergence.
+
+\begin{table}[!ht]
+\caption{Errors for regular mesh for $\Omega_c$ with $\beta = \frac{10}{4}$. Assembly and Solve times in seconds.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+ $N+1$&  $||e_h(\cdot)||_{L^2(\Omega_c)}$ & Order & $||e_h(\cdot)||_{H^1}$ & Order & Assembly & Solve \\
+ \hline
+     10   & 2.231E-01 &  -      & 3.424E+00 &  -     & 2.544E-03 & 5.839E-05 \\
+     20   & 6.901E-02 &  1.693  & 1.869E+00 &  0.873 & 1.805E-02 & 5.259E-05 \\
+     40   & 1.880E-02 &  1.876  & 9.628E-01 &  0.957 & 9.471E-02 & 2.880E-04 \\
+     80   & 4.835E-03 &  1.959  & 4.855E-01 &  0.988 & 1.971E+00 & 1.920E-03 \\
+     160  & 1.219E-03 &  1.988  & 2.433E-01 &  0.997 & 2.961E+01 & 1.221E-02 \\
+\hline
+\end{tabular}
+\label{t:b2}
+\end{table}
+
+As shown in Table \ref{t:b2}, a larger $\beta$ value 
+requires more elements to both converge on the solution
+and achieve the theoretical convergence rate.
+If an even larger $\beta$ value was used, then this meshing method 
+would create more needle-like elements.
+These elements with higher aspect ratios would then 
+continue to cause issues with solution accuracy and convergence.
+
+The code used is not appended to this report in 
+an effort to save paper.
+Instead, it can be viewed online at
+\texttt{www.github.com/JustinClough/Learning\_Codes/tree/master/FEA}.
+
 
 \end{document}
