@@ -41,10 +41,12 @@ The top boundary of domain $\Omega = [0,1] \times [0,1]$
 was replaced with Equation \eqref{e:y_beta}.
 
 \begin{equation} \label{e:y_beta}
-y(x) = \beta x ( 1 - x) +1
+Y_{top}(x) = \beta x ( 1 - x) +1
 \end{equation}
 
 In Equation \eqref{e:y_beta}, $\beta = \frac{1}{4}$. 
+In essence, $\Omega_c = [0, 1] \times [0, Y_{top}]$ where the 
+$c$ subscript represents the curved domain.
 A mesh was made to approximate this geometry.
 An example of this mesh is shown in Figure \ref{fig:mesh}.
 Additionally, a perturbed mesh is shown 
@@ -75,12 +77,18 @@ the original mesh in Figure \ref{fig:overlap}.
   \label{fig:overlap}
 \end{figure}
 
-The $y$ node postions were determined by linearly interpolating the 
+The $y$ node positions were determined by linearly interpolating the 
 location of the top boundary with the location of the bottom boundary
 for predetermined $x$ value. 
 This is is shown in Algorithm \ref{al:create_nodes}.
+The algorithm that perturbs the mesh of $\Omega_c$ is the same
+as the that which perturbs the mesh of $\Omega$ except
+for nodes on the top. 
+For the nodes on the top boundary, first the $x$ value is 
+perturbed, then the new $y$ value is calculated using 
+Equation \eqref{e:y_beta}.
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \underline{create\_nodes} $()$
   \BlankLine
   $x := 0.0$ \;
@@ -98,20 +106,28 @@ This is is shown in Algorithm \ref{al:create_nodes}.
       $node\_matrix( index, 0) := x$\;
       $node\_matrix( index, 1) := y$\;
 
+      $check\_boudary( index)$\;
+
       $x += dx$\;
       $index++$\;
     }
     $x := 0.0$\;
   }
   return;
-  \caption{Creates the nodel locations for the mesh with 
+  \caption{Creates the nodal locations for the mesh with 
            a curved top domain defined by $Y_{top}(x)$. 
            It assumes $M$ total nodes along each axis 
-           and $N$ interior nodes along each axis.}
+           and $N$ interior nodes along each axis.
+           The function $check\_boundary(\cdot)$ checks
+           which boundary the node is on based on its index
+           and stores it in a separate data structure.}
   \label{al:create_nodes}
 \end{algorithm}
+\vspace{\baselineskip}
 
 
+
+A convergence study was done on these meshes.
 
 % TODO
 
