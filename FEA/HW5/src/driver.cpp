@@ -39,7 +39,7 @@ void drive_problem( int CaseNumber, int Np1)
   s->compute_errors();
   delete s;
 
-  if( CaseNumber <= 4)
+  if( CaseNumber != 5)
   {
     mesh* pm = m->get_perturbed();
 
