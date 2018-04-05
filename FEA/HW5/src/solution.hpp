@@ -35,6 +35,9 @@ class solution
     // PDE Parameter "q"
     double q;
 
+    // L-shaped domain parameter
+    double s;
+
     // Number of mesh nodes
     int numNodes;
 

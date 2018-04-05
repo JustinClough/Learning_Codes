@@ -11,6 +11,7 @@ solution::solution( mesh* m_, int CaseNumber_)
 
   p = 3.0;
   q = 2.0;
+  s = 1.5;
 
   elemental_dofs = 3;
 
@@ -201,11 +202,10 @@ double solution::get_boundary_value( int i)
   }
   else if( CaseNumber == 5)
   {
-    std::cout
-      << "L shaped domains not supported."
-      << std::endl;
+    double r = std::sqrt( x * x + y * y);
+    double t = std::atan2( y, x);
 
-    std::abort();
+    ans =  std::pow( r, s) * std::sin( s * t);
   }
   else if( CaseNumber == 6)
   {
@@ -369,11 +369,14 @@ double solution::force_at_point( double x, double y)
   }
   else if( CaseNumber == 5)
   {
-    std::cout
-      << "L shaped domains not supported."
-      << std::endl;
+    double r = std::sqrt( x * x + y * y);
+    double t = std::atan2( y, x);
 
-    std::abort();
+    double ur  = s * std::pow( r, s - 1.0) * std::sin( s * t);
+    double urr = s * (s -1.0) * std::pow( r, s - 2.0);
+    double utt = - s * s * std::pow( r, s) * std::sin( s * t);
+
+    ans = urr + ur / r + utt / (r * r);
   }
   else if( CaseNumber == 6)
   {
@@ -659,11 +662,10 @@ double solution::get_exact_solution( double x, double y)
   }
   else if( CaseNumber == 5)
   {
-    std::cout
-      << "L shaped domains not supported."
-      << std::endl;
+    double r = std::sqrt( x * x + y * y);
+    double t = std::atan2( y, x);
 
-    std::abort();
+    u = std::pow( r, s) * std::sin( s * t);
   }
   else if( CaseNumber == 6)
   {
@@ -711,11 +713,22 @@ double solution::get_exact_solution_grad( double x, double y, int xy)
     }
     else if( CaseNumber == 5)
     {
-      std::cout
-        << "L shaped domains not supported."
-        << std::endl;
+      double r = std::sqrt( x * x + y * y);
+      double t = std::atan2( y, x);
 
-      std::abort();
+      double ur = s * std::pow( r, s - 1.0) * std::sin( s * t);
+      double ut = s * std::pow( r, s) * std::cos( s * t);
+
+      double rx = 0.0;
+      double tx = 0.0;
+      if ( x != 0.0 && y != 0.0)
+      {
+        // This will blow up at the origin ( 0 / 0)
+        rx = x / r;
+        tx = x / ( r * r);
+      }
+
+      du = ur * rx + ut * tx;
     }
     else if( CaseNumber == 6)
     {
@@ -757,11 +770,22 @@ double solution::get_exact_solution_grad( double x, double y, int xy)
     }
     else if( CaseNumber == 5)
     {
-      std::cout
-        << "L shaped domains not supported."
-        << std::endl;
+      double r = std::sqrt( x * x + y * y);
+      double t = std::atan2( y, x);
 
-      std::abort();
+      double ur = s * std::pow( r, s - 1.0) * std::sin( s * t);
+      double ut = s * std::pow( r, s) * std::cos( s * t);
+
+      double ry = 0.0;
+      double ty = 0.0;
+      if ( x != 0.0 && y != 0.0)
+      {
+        // This will blow up at the origin ( 0 / 0)
+        ry = y / r;
+        ty = y / ( r * r);
+      }
+
+      du = ur * ry + ut * ty;
     }
     else if( CaseNumber == 6)
     {
