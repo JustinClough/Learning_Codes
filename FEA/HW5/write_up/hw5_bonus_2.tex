@@ -106,7 +106,7 @@ Equation \eqref{e:y_beta}.
       $node\_matrix( index, 0) := x$\;
       $node\_matrix( index, 1) := y$\;
 
-      $check\_boudary( index)$\;
+      $check\_boundary( index)$\;
 
       $x += dx$\;
       $index++$\;
@@ -126,8 +126,10 @@ Equation \eqref{e:y_beta}.
 \vspace{\baselineskip}
 
 
-
-A convergence study was done on these meshes.
+A convergence study was done on these meshes. 
+Meshes of sizes $N+1=10, 20, 40, 80, 160$ were evaluated.
+The exact solution was taken to be 
+$u = y^3 + sin( 5 (x + y)) + 2e^x$.
 
 % TODO
 
