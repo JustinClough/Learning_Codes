@@ -1,0 +1,81 @@
+\documentclass[a4paper, 12pt]{article}
+\title{}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage[justification=centering]{caption}
+\usepackage{enumerate}
+\usepackage{multirow}
+\usepackage{listings}
+\lstset{
+    escapechar=`,
+    language=C++,
+    numbers=left,
+    tabsize=2,
+    prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+    frame=single,
+    breaklines=true,
+}
+\usepackage{graphicx}
+\graphicspath{ {./} }
+\usepackage{nameref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\usepackage{tikz}
+\usetikzlibrary{calc,patterns,decorations.pathmorphing,decorations.markings,positioning,automata}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{makecell}
+\usepackage{ulem}
+\usepackage{verbatim}
+
+\begin{document}
+
+\section*{Part II++: Implementation of Bonus 2}
+\subsection{Introduction}\label{sec:intro}
+The latter bonus question, meshing a domain with a curved 
+boundary, was completed. 
+The top boundary of domain $\Omega = [0,1] \times [0,1]$
+was replaced with Equation \eqref{e:y_beta}.
+
+\begin{equation} \label{e:y_beta}
+y(x) = \beta x ( 1 - x) +1
+\end{equation}
+
+In Equation \eqref{e:y_beta}, $\beta = \frac{1}{4}$. 
+A mesh was made to approximate this geometry.
+An example of this mesh is shown in Figure \ref{fig:mesh}.
+Additionally, a perturbed mesh is shown 
+in Figure \ref{fig:pMesh} and is overlaid with
+the original mesh in Figure \ref{fig:overlap}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11cm, height=10cm]{curved_mesh}
+  \caption{ Mesh for domain with curved top boundary.}
+  \label{fig:mesh}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11cm, height=10cm]{perturbed_mesh}
+  \caption{ Mesh for domain with curved top boundary 
+            and perturbed node locations.}
+  \label{fig:pMesh}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11cm, height=10cm]{overlay_mesh}
+  \caption{ Mesh for domain with curved top boundary 
+            and perturbed node locations overlaid
+            with original.}
+  \label{fig:overlap}
+\end{figure}
+
+
+% TODO
+
+\end{document}
