@@ -141,6 +141,25 @@ class mesh
   
     // Perturbs node i of the mesh
     void perturb_node( int i, bool bottom, bool top, bool left, bool right);
+
+    // Gets the y value for a given x position 
+    //  with the default beta = 1/4 value
+    double y_beta_curve( double x);
+
+    // Gets the y value for a given x position 
+    double y_beta_curve( double x, double beta);
+
+    // Checks if the entered N value is compatible
+    //  with an L shaped domain
+    void L_warning();
+
+    // Creates the nodes for the L shaped domain
+    void create_nodes_L();
+
+    // Creates the elements for the L shaped domains
+    void create_elems_L();
+
+    int halfway;
 };
 
 #endif

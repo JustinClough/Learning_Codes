@@ -19,33 +19,147 @@ double get_random( double min, double max)
 
 mesh::mesh( int Np1_, bool isL_, bool isCurved_)
 {
-  isL = isL_;
+  isL      = isL_;
   isCurved = isCurved_;
+  N        = Np1_ - 1;
 
-  // TODO: bonus part 1
-  if ( isL)
+  L_warning();
+
+  if( isL)
   {
-    std::cout
-      << "L shaped domains not supported."
-      << std::endl;
-    std::abort();
+    halfway = (N+2)/2 + 1;
+
+    std::cout << "halfway = " << halfway << std::endl;
+
+    num_nodes = (N+2) * (N+2) - ( (N+1) / 2) * ( (N+1) / 2);
+    node_matrix = MatrixXd::Zero( num_nodes, 2);
+    create_nodes_L();
+
+    int n_s   = (N+1) / 2;
+    int n_l   = N+1;
+    num_elems = 2 *(n_l * n_s + n_s * n_s);
+    elem_matrix = MatrixXd::Zero( num_elems, 3);
+    create_elems_L();
+
+  } 
+  else
+  {
+    num_nodes = (N+2) * (N+2);
+    node_matrix = MatrixXd::Zero( num_nodes, 2);
+    create_nodes();
+
+    num_elems = 2 * (N+1) * (N+1);
+    elem_matrix = MatrixXd::Zero( num_elems, 3);
+    create_elems();
   }
 
-  N   = Np1_ - 1;
-
-  num_nodes = (N+2) * (N+2);
-  node_matrix = MatrixXd::Zero( num_nodes, 2);
-
-  create_nodes();
-
-  num_elems = 2 * (N+1) * (N+1);
-
-  elem_matrix = MatrixXd::Zero( num_elems, 3);
-
-  create_elems();
   calc_areas();
-  calc_side_lengths();
 }
+
+void mesh::create_nodes_L()
+{
+  // x and y spacing between nodes
+  double dx = 2.0 / ( (double)N + 1.0);
+  double dy = 2.0 / ( (double)N + 1.0);
+
+  double x     = -1.0;
+  double y     = -1.0;
+  int    index = 0;
+
+  for( int i = 0; i < (N+2); i++)
+  {
+    if( i < halfway)
+    {
+      for( int j = 0; j < (N+2); j++)
+      {
+        node_matrix( index, 0) = x;
+        node_matrix( index, 1) = y;
+
+        x += dx;
+
+        check_boundary( index);
+
+        index++;
+      }
+    }
+    else
+    {
+      for( int j = 0; j < halfway; j++)
+      {
+        node_matrix( index, 0) = x;
+        node_matrix( index, 1) = y;
+
+        x += dx;
+
+        check_boundary( index);
+
+        index++;
+      }
+    }
+    x =  0.0;
+    y += dy;
+
+  }
+  return;
+}
+
+void mesh::create_elems_L()
+{
+  int elem = 0;
+  int n1   = 0;
+  int n2   = 0;
+  int n3   = 0;
+  
+  for( int n = 0; n < ( num_nodes - (halfway +1)); n++)
+  {
+    std::cout << "num_nodes = " << num_nodes << std::endl;
+    std::cout << "n= " << n<< std::endl;
+
+    std::cout << "num_elems = " << num_elems << std::endl;
+    std::cout << "elem = " << elem << std::endl;
+
+    if ( n < (N+2) * (halfway -1) )
+    {
+      if ( n % (N+2) != (N+1) || n == 0)
+      {
+        n1 = n;
+        n2 = n + 1;
+        n3 = n + N + 3;
+        create_elem_from_triple( elem, n1, n2, n3);
+        elem++;
+
+        n1 = n;
+        n2 = n + N + 3;
+        n3 = n + N + 2;
+        create_elem_from_triple( elem, n1, n2, n3);
+        elem++;
+      }
+    }
+  }
+  
+  return;
+}
+
+void mesh::L_warning()
+{
+  if( isL)
+  {
+    if( N % 2 == 0)
+    {
+      std::cout
+        << "Cannot form an L shaped mesh with N = "
+        << N
+        << std::endl;
+
+      std::cout
+        << "N must be an odd number"
+        << std::endl;
+
+      std::abort();
+    }
+  }
+  return;
+} 
 
 mesh::~mesh()
 {
@@ -238,12 +352,27 @@ void mesh::perturb_node( int i,
   if( !left && !right)
   {
     xnew += p;
+    if( top && isCurved)
+    {
+      ynew = y_beta_curve( xnew);
+    }
   }
 
   node_matrix( i, 0) = xnew;
   node_matrix( i, 1) = ynew;
 
   return;
+}
+
+double mesh::y_beta_curve( double x)
+{
+  double beta = 1.0 / 4.0;
+  return y_beta_curve( x, beta);
+}
+
+double mesh::y_beta_curve( double x, double beta)
+{
+  return beta * x * ( 1.0 - x) + 1.0;
 }
 
 void mesh::calc_areas()
@@ -285,13 +414,8 @@ double mesh::calc_elem_area( int i)
 
 void mesh::create_nodes()
 {
-  if ( isL)
+  if( isCurved)
   {
-    // TODO: bonus 1
-  }
-  else if( isCurved)
-  {
-    double beta = 1.0 / 4.0;
     double dx = 1.0 / ( (double)N + 1.0);
 
     double x     = 0.0;
@@ -300,11 +424,12 @@ void mesh::create_nodes()
 
     for( int i = 0; i < (N+2); i++)
     {
-      double Y_top = beta * x * ( 1.0 - x) + 1.0;
-      double dy    = Y_top / ( (double) N + 1.0);
-
       for( int j = 0; j < (N+2); j++)
       {
+        double Y_top = y_beta_curve( x);
+        double dy    = Y_top / ( double (N) +1.0);
+        y = ((double) i) * dy;
+
         node_matrix( index, 0) = x;
         node_matrix( index, 1) = y;
 
@@ -315,7 +440,6 @@ void mesh::create_nodes()
         index++;
       }
       x =  0.0;
-      y += dy;
 
     }
   }
@@ -356,6 +480,7 @@ void mesh::check_boundary( int index)
 {
   bool interior = true;
 
+  // TODO: isL condition
 
   // Check top or bottom
   if ( index <= (N+1) )
@@ -501,13 +626,8 @@ void mesh::print_mesh_stats()
 
   std::cout
     << "Total area covered by the elements: " 
+    << std::scientific
     << checksum
-    << std::endl;
-
-  std::cout 
-    << "Side Lengths Matrix: "
-    << std::endl
-    << side_lengths
     << std::endl;
 
   return;
