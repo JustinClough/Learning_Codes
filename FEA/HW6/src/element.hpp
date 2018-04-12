@@ -1,6 +1,8 @@
 #ifndef ELEMENT_HPP
 #define ELEMENT_HPP
 
+#include "eig_wrap.hpp"
+
 class Element
 {
   public:
@@ -32,6 +34,23 @@ class Element
 
     // Calculates the length of the element
     void calc_length();
+
+    // The number of degrees of freedom per element
+    int dof_per_elem;
+
+    // The elemental stiffness matrix. 
+    // Does not take sum with mass
+    MatrixXd stiffness;
+
+    // The elemental mass matrix
+    MatrixXd mass;
+
+    // Calculates the elemental stiffness
+    // Does not sum with mass
+    void calc_stiffness();
+
+    // Calculates the elemental mass.
+    void calc_mass();
 
 };
 
