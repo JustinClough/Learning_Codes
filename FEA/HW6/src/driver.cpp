@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "mesh.hpp"
+
 void check_inputs( int argc, char** argv, int* pcn, int* pnp1)
 {
   if ( argc != 3)
@@ -34,13 +36,10 @@ void check_inputs( int argc, char** argv, int* pcn, int* pnp1)
 
 void drive_problem( int CaseNumber, int Np1)
 {
-  std::cout
-    << "CaseNumber = " << CaseNumber
-    << std::endl;
+  Mesh *mesh = new Mesh( Np1);
 
-  std::cout
-    << "Np1 = " << Np1
-    << std::endl;
+
+  delete mesh;
 
   return;
 }
