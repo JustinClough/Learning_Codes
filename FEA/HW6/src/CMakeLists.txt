@@ -4,6 +4,8 @@ driver.hpp
 driver.cpp
 mesh.hpp
 mesh.cpp
+element.hpp
+element.cpp
 fea_hw6.cpp)
 
 add_executable(hw6 ${HW6_SOURCES})

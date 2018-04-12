@@ -2,6 +2,7 @@
 #define MESH_HPP
 
 #include <vector>
+#include "element.hpp"
 
 class Mesh
 {
@@ -48,6 +49,9 @@ class Mesh
 
     // Estimated value of pi = 3.14...
     double pi;
+
+    // Vector of all elements
+    std::vector< Element> elems;
 
 };
 
