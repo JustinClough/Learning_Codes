@@ -11,6 +11,9 @@ class Element
     // Destructor
     ~Element();
 
+    // Gets the length of the element
+    double get_length();
+
   private:
     // Index of the left most node
     int left;
@@ -24,7 +27,11 @@ class Element
     // Location of the right most node
     double right_pos;
 
+    // The length of the element
+    double length;
 
+    // Calculates the length of the element
+    void calc_length();
 
 };
 

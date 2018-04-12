@@ -51,7 +51,7 @@ class Mesh
     double pi;
 
     // Vector of all elements
-    std::vector< Element> elems;
+    std::vector< Element*> elems;
 
 };
 

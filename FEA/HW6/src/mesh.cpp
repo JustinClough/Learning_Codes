@@ -26,6 +26,12 @@ Mesh::~Mesh()
 {
   nodes.clear();
 
+  for( size_t i = 0; i < elems.size(); i++)
+  {
+    delete elems[i];
+  }
+  elems.clear();
+
 }
 
 int Mesh::get_num_nodes()
@@ -64,6 +70,27 @@ void Mesh::print_stats()
       << std::endl;
   }
 
+  std::cout
+    << "Element Lengths: "
+    << std::endl;
+  double checksum = 0.0;
+  double length = 0.0;
+  for( size_t i = 0; i < elems.size(); i++)
+  {
+    length = elems[i]->get_length();
+    std::cout
+      << "Element " << i << " length: "
+      << length
+      << std::endl;
+    checksum += length;
+  }
+
+  std::cout
+    << "Total length covered by elements: "
+    << checksum
+    << std::endl;
+
+  return;
 }
 
 void Mesh::create_nodes()
@@ -85,7 +112,23 @@ void Mesh::create_nodes()
 
 void Mesh::create_elems()
 {
-  // TODO
+  int left  = 0;
+  int right = 1;
+
+  double xl  = 0.0;
+  double xr  = 0.0;
+  for( int i = 0; i < num_elems; i++)
+  {
+    xl = nodes[ left];
+    xr = nodes[ right];
+
+    Element* e = new Element( left, xl, right, xr);
+    elems.push_back( e);
+
+    left++;
+    right++;
+  }
+
   return;
 }
 
