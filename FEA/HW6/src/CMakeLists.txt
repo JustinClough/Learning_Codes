@@ -6,6 +6,8 @@ mesh.hpp
 mesh.cpp
 element.hpp
 element.cpp
+solution.hpp
+solution.cpp
 fea_hw6.cpp)
 
 add_executable(hw6 ${HW6_SOURCES})
