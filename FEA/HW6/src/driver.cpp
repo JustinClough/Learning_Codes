@@ -37,6 +37,7 @@ void check_inputs( int argc, char** argv, int* pcn, int* pnp1)
 void drive_problem( int CaseNumber, int Np1)
 {
   Mesh *mesh = new Mesh( Np1);
+  mesh->print_stats();
 
 
   delete mesh;

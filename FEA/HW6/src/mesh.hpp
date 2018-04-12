@@ -1,6 +1,7 @@
 #ifndef MESH_HPP
 #define MESH_HPP
 
+#include <vector>
 
 class Mesh
 {
@@ -20,6 +21,9 @@ class Mesh
     // Returns the number of elements
     int get_num_elems();
 
+    // Print out information about the mesh.
+    void print_stats();
+
   private:
     // The number of interior mesh points
     // Total mesh points are N+2 to account
@@ -31,6 +35,19 @@ class Mesh
 
     // The number of mesh elements
     int num_elems;
+
+    // Creates the nodes of the mesh.
+    // Calculates the locations of the nodes
+    void create_nodes();
+
+    // Creates the elements of the mesh.
+    void create_elems();
+
+    // Vector of all node locations
+    std::vector< double> nodes;
+
+    // Estimated value of pi = 3.14...
+    double pi;
 
 };
 
