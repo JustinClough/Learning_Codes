@@ -10,6 +10,9 @@ void check_inputs( int     argc,
                    double* pdt   );
 
 // Drives the problem
-void drive_problem( int CaseNumber, int Np1);
+void drive_problem( int CaseNumber,
+                    int Np1, 
+                    int method, 
+                    double dt      );
 
 #endif

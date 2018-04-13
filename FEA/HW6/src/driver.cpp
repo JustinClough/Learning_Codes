@@ -4,6 +4,7 @@
 #include <cstdlib>
 
 #include "mesh.hpp"
+#include "solution.hpp"
 
 void check_inputs( int     argc, 
                    char**  argv,
@@ -84,12 +85,17 @@ void check_inputs( int     argc,
   return;
 }
 
-void drive_problem( int CaseNumber, int Np1)
+void drive_problem( int CaseNumber, 
+                    int Np1, 
+                    int method, 
+                    double dt)
 {
   Mesh *mesh = new Mesh( Np1);
   mesh->print_stats();
 
+  Solution* s = new Solution( mesh, CaseNumber, method, dt);
 
+  delete s;
   delete mesh;
 
   return;
