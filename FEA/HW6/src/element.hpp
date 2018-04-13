@@ -16,6 +16,14 @@ class Element
     // Gets the length of the element
     double get_length();
 
+    // Gets the elemental stiffness matrix
+    MatrixXd get_stiffness();
+
+    // Gets the elemental mass matrix
+    MatrixXd get_mass();
+
+    void get_indices( int* L, int* R);
+
   private:
     // Index of the left most node
     int left;

@@ -61,3 +61,20 @@ void Element::calc_mass()
 
   return;
 }
+
+MatrixXd Element::get_stiffness()
+{
+  return stiffness;
+}
+
+MatrixXd Element::get_mass()
+{
+  return mass;
+}
+
+void Element::get_indices( int* L, int* R)
+{
+  *L = left;
+  *R = right;
+  return;
+}
