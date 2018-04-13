@@ -95,6 +95,19 @@ void drive_problem( int CaseNumber,
 
   Solution* s = new Solution( mesh, CaseNumber, method, dt);
 
+  s->assemble_system();
+  s->assign_boundary_conditions();
+
+  double T_end = 1.0;
+  s->solve( T_end);
+  s->calculate_errors();
+  s->print_data();
+
+  T_end = 10.0;
+  s->solve( T_end);
+  s->calculate_errors();
+  s->print_data();
+
   delete s;
   delete mesh;
 

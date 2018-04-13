@@ -19,6 +19,21 @@ class Solution
     // Destructs the solution 
     ~Solution();
 
+    // Assembles the linear system
+    void assemble_system();
+
+    // Assigns boundary conditions to the system
+    void assign_boundary_conditions();
+
+    // Solves the linear system up to time T
+    void solve( double T);
+
+    // Calculates the L2 and H1 solution errors
+    void calculate_errors();
+
+    // Prints information to the screen
+    void print_data();
+
   private:
     // Time integration method
     Method meth;
@@ -34,6 +49,10 @@ class Solution
 
     // Assigns the correct method
     Method assign_method( int method_);
+
+    // End simulation time
+    double T;
+
 };
 
 #endif

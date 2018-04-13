@@ -50,4 +50,33 @@ Method Solution::assign_method( int method_)
   return method;
 }
 
+void Solution:: assemble_system()
+{
+  // TODO
+  return;
+}
+
+void Solution:: assign_boundary_conditions()
+{
+  // TODO
+  return;
+}
+
+void Solution:: solve( double T)
+{
+  // TODO
+  return;
+}
+
+void Solution:: calculate_errors()
+{
+  // TODO
+  return;
+}
+
+void Solution:: print_data()
+{
+  // TODO
+  return;
+}
 
