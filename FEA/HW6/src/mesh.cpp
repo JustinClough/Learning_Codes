@@ -132,4 +132,8 @@ void Mesh::create_elems()
   return;
 }
 
+Element* Mesh::get_elem( int i)
+{
+  return elems[i];
+}
 

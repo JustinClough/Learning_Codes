@@ -25,6 +25,9 @@ class Mesh
     // Print out information about the mesh.
     void print_stats();
 
+    // Gets the ith element
+    Element* get_elem( int i);
+
   private:
     // The number of interior mesh points
     // Total mesh points are N+2 to account
