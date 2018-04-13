@@ -14,10 +14,20 @@ Solution::Solution( Mesh* mesh_,
   meth       = assign_method( method_);
   dt         = dt_;
 
+  int num_nodes = mesh->get_num_nodes();
+  
+  S = MatrixXd::Zero( num_nodes, num_nodes);
+  F = VectorXd::Zero( num_nodes);
+
 }
 
 Solution::~Solution()
 {
+  for( size_t i = 0; i < U.size(); i++)
+  {
+    delete U[i];
+  }
+  U.clear();
 }
 
 Method Solution::assign_method( int method_)
@@ -50,8 +60,35 @@ Method Solution::assign_method( int method_)
   return method;
 }
 
-void Solution:: assemble_system()
+void Solution::assemble_stiffness()
 {
+  MatrixXd k_elem;
+  int L = 0;
+  int R = 0;
+  for( int i = 0; i < mesh->get_num_elems(); i++)
+  {
+    Element* elem = mesh->get_elem(i);
+
+    k_elem = elem->get_stiffness();
+    elem->get_indices( &L, &R);
+
+    S( L, L) += k_elem( 0, 0);
+    S( L, R) += k_elem( 0, 1);
+    S( R, L) += k_elem( 1, 0);
+    S( R, R) += k_elem( 1, 1);
+  }
+
+  return;
+}
+
+void Solution::assemble_system()
+{
+  assemble_stiffness();
+
+  std::cout << "S = "
+    << std::endl 
+    << S
+    << std::endl ;
   // TODO
   return;
 }

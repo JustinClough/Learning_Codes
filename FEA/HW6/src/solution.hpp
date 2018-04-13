@@ -53,6 +53,17 @@ class Solution
     // End simulation time
     double T;
 
+    // Global stiffness matrix
+    MatrixXd S;
+
+    // Global Background Forcing Vector
+    VectorXd F;
+
+    // Vector of pointers to solutions
+    std::vector< VectorXd* > U;
+
+    // Assembles only the stifness matrix
+    void assemble_stiffness();
 };
 
 #endif
