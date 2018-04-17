@@ -106,13 +106,12 @@ void Solution::assemble_mass()
 void Solution::assemble_system()
 {
   assemble_stiffness();
+  assemble_mass();
 
   std::cout << "S = "
     << std::endl 
     << S
     << std::endl ;
-
-  assemble_mass();
 
   std::cout << "M = "
     << std::endl 
@@ -123,25 +122,59 @@ void Solution::assemble_system()
   return;
 }
 
-void Solution:: assign_boundary_conditions()
+void Solution::assign_boundary_conditions()
 {
   // TODO
   return;
 }
 
-void Solution:: solve( double T)
+void Solution::solve( double T)
+{
+  if( meth == fe)
+  {
+    forward_euler_solve( T);
+  }
+  else if( meth == be)
+  {
+    backward_euler_solve( T);
+  }
+  else if( meth == cn)
+  {
+    crank_nicolson_solve( T);
+  }
+  return;
+}
+
+VectorXd Solution::linear_solve( MatrixXd K, VectorXd Force)
+{
+  return K.fullPivLu().solve( Force);
+}
+
+void Solution::forward_euler_solve( double T)
 {
   // TODO
   return;
 }
 
-void Solution:: calculate_errors()
+void Solution::backward_euler_solve( double T)
 {
   // TODO
   return;
 }
 
-void Solution:: print_data()
+void Solution::crank_nicolson_solve( double T)
+{
+  // TODO
+  return;
+}
+
+void Solution::calculate_errors()
+{
+  // TODO
+  return;
+}
+
+void Solution::print_data()
 {
   // TODO
   return;

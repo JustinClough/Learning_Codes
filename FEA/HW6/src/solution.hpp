@@ -70,6 +70,21 @@ class Solution
 
     // Assembles only the mass matrix
     void assemble_mass();
+  
+    // Solve with forward Euler scheme up to
+    //  final time T.
+    void forward_euler_solve( double T);
+
+    // Solve with backward Euler scheme up to
+    //  final time T.
+    void backward_euler_solve( double T);
+
+    // Solve with Crank Nicolson scheme up to
+    //  final time T.
+    void crank_nicolson_solve( double T);
+
+    // Solve the passed linear system
+    VectorXd linear_solve( MatrixXd K, VectorXd Force);
 };
 
 #endif
