@@ -56,14 +56,20 @@ class Solution
     // Global stiffness matrix
     MatrixXd S;
 
+    // Global mass matrix
+    MatrixXd M;
+
     // Global Background Forcing Vector
     VectorXd F;
 
     // Vector of pointers to solutions
     std::vector< VectorXd* > U;
 
-    // Assembles only the stifness matrix
+    // Assembles only the stiffness matrix
     void assemble_stiffness();
+
+    // Assembles only the mass matrix
+    void assemble_mass();
 };
 
 #endif

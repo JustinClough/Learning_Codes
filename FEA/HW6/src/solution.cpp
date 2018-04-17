@@ -17,6 +17,7 @@ Solution::Solution( Mesh* mesh_,
   int num_nodes = mesh->get_num_nodes();
   
   S = MatrixXd::Zero( num_nodes, num_nodes);
+  M = MatrixXd::Zero( num_nodes, num_nodes);
   F = VectorXd::Zero( num_nodes);
 
 }
@@ -81,6 +82,27 @@ void Solution::assemble_stiffness()
   return;
 }
 
+void Solution::assemble_mass()
+{
+  MatrixXd m_elem;
+  int L = 0;
+  int R = 0;
+  for( int i = 0; i < mesh->get_num_elems(); i++)
+  {
+    Element* elem = mesh->get_elem(i);
+
+    m_elem = elem->get_mass();
+    elem->get_indices( &L, &R);
+
+    M( L, L) += m_elem( 0, 0);
+    M( L, R) += m_elem( 0, 1);
+    M( R, L) += m_elem( 1, 0);
+    M( R, R) += m_elem( 1, 1);
+  }
+  return;
+}
+
+
 void Solution::assemble_system()
 {
   assemble_stiffness();
@@ -89,6 +111,14 @@ void Solution::assemble_system()
     << std::endl 
     << S
     << std::endl ;
+
+  assemble_mass();
+
+  std::cout << "M = "
+    << std::endl 
+    << M
+    << std::endl ;
+
   // TODO
   return;
 }
