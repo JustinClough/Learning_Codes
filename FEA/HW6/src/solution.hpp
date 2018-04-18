@@ -22,8 +22,6 @@ class Solution
     // Assembles the linear system
     void assemble_system();
 
-    // Assigns boundary conditions to the system
-    void assign_boundary_conditions();
 
     // Solves the linear system up to time T
     void solve( double T);
@@ -103,6 +101,11 @@ class Solution
 
     // Assembles the background forcing vector
     void assemble_background_force();
+
+    // Assigns boundary conditions to the system
+    void assign_boundary_conditions( 
+                  MatrixXd &K, 
+                  VectorXd &Force  );
 };
 
 #endif

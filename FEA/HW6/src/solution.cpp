@@ -127,8 +127,32 @@ void Solution::assemble_system()
   return;
 }
 
-void Solution::assign_boundary_conditions()
+void Solution::assign_boundary_conditions( 
+                MatrixXd &K, 
+                VectorXd &Force)
 {
+  double left_bc_value  = 0.0;
+  double right_bc_value = 0.0;
+
+  int n = mesh->get_num_nodes();
+
+  double diag = K( 0, 0);
+  for( int i = 0; i < K.cols(); i++)
+  {
+    if( i != 0)
+    {
+      K( 0, i) = 0.0;
+    }
+  }
+  Force( 0) = diag * left_bc_value;
+  
+  diag = K( n-1, n-1);
+  for( int i = 0; i < (K.cols() - 1); i++)
+  {
+    K( n-1, i) = 0.0;
+  }
+  Force( n-1) = diag * right_bc_value;
+  
   
   // TODO
   return;
@@ -196,6 +220,7 @@ void Solution::set_initial_condition()
   u_proj( 0) = 0.0;
   u_proj( u_proj.rows() - 1) = 0.0;
 
+  assign_boundary_conditions( M, u_proj);
   VectorXd* u0 = linear_solve( M, u_proj);
   U.push_back( u0);
 
@@ -250,15 +275,23 @@ void Solution::forward_euler_solve( double T)
   int index   = 0;
   while( time < T)
   {
-    if( index != 0)
-    {
-      Force = (K-S) * ( *(U[index]));
-    }
+    Force = P * ( *(U[index]));
+
+    assign_boundary_conditions( K, Force);
     VectorXd* u = linear_solve( K, Force);
     U.push_back( u);
 
     time += dt;
     index++;
+  }
+
+  for( size_t index = 0; index < U.size(); index++)
+  {
+    std::cout
+      << "*(U[index]) = *(U[" << index << "]) = "
+      << std::endl
+      << *(U[index])
+      << std::endl;
   }
   
   return;
