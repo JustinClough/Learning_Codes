@@ -222,18 +222,6 @@ void Solution::set_initial_condition()
   VectorXd* u0 = linear_solve( M, u_proj);
   U.push_back( u0);
 
-  std::cout
-    << "u_proj = "
-    << std::endl
-    << u_proj
-    << std::endl;
-
-  std::cout
-    << "C_0 = "
-    << std::endl
-    << *u0
-    << std::endl;
-
   return;
 }
 
