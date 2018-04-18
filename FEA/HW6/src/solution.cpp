@@ -319,6 +319,36 @@ void Solution::crank_nicolson_solve( double T)
   return;
 }
 
+double Solution::get_analytical_derv( double x, double time)
+{
+  double answer = 0.0;
+  if( CaseNumber == 1)
+  {
+    answer = 2.0 * std::cos( 2.0 * x) * std::exp( -4.0 * time);
+  }
+  else if( CaseNumber == 2)
+  {
+    // TODO
+  }
+
+  return answer;
+}
+
+double Solution::get_analytical_solution( double x, double time)
+{
+  double answer = 0.0;
+  if( CaseNumber == 1)
+  {
+    answer = std::sin( 2.0 * x) * std::exp( -4.0 * time);
+  }
+  else if ( CaseNumber == 2)
+  {
+    // TODO
+  }
+
+  return answer;
+}
+
 void Solution::compute_L2_error()
 {
   L2_error = 0.0;

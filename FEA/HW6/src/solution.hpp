@@ -122,6 +122,11 @@ class Solution
     // Computes the H1 error
     void compute_H1_error();
 
+    // Gets the analytical solution
+    double get_analytical_solution( double x, double time);
+
+    // Gets the analytical solution space derivative
+    double get_analytical_derv( double x, double time);
 };
 
 #endif
