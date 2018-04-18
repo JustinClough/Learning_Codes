@@ -93,7 +93,7 @@ class Solution
     void set_initial_condition();
 
     // Gets the analytical solution
-    double get_analytic( double x);
+    double get_analytic_IC( double x);
 
     // Estimates the value of pi
     double calc_pi();

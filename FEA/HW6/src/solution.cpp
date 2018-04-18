@@ -134,7 +134,7 @@ void Solution::assign_boundary_conditions()
   return;
 }
 
-double Solution::get_analytic( double x)
+double Solution::get_analytic_IC( double x)
 {
   double answer = 0.0;
   if( CaseNumber == 1)
@@ -167,9 +167,9 @@ VectorXd Solution::get_u_proj_elem( int i)
   double xR = mesh->get_pos( nR);
   double xM = (xL + xR) / 2.0;
 
-  double ul = get_analytic( xL);
-  double um = get_analytic( xM);
-  double ur = get_analytic( xR);
+  double ul = get_analytic_IC( xL);
+  double um = get_analytic_IC( xM);
+  double ur = get_analytic_IC( xR);
   
   u_elem( 0) = ul + 2.0 * um;
   u_elem( 1) = ur + 2.0 * um;
