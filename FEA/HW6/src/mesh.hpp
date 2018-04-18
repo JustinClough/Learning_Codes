@@ -16,6 +16,9 @@ class Mesh
     // Returns the total number of nodes
     int get_num_nodes();
 
+    // Retruns the position of the ith node.
+    double get_pos( int i);
+
     // Returns the number of interior nodes
     int get_num_interior_nodes();
 

@@ -132,6 +132,11 @@ void Mesh::create_elems()
   return;
 }
 
+double Mesh::get_pos( int i)
+{
+  return nodes[i];
+}
+
 Element* Mesh::get_elem( int i)
 {
   return elems[i];
