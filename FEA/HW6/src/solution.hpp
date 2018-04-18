@@ -32,6 +32,9 @@ class Solution
     // Prints information to the screen
     void print_data();
 
+    // Clears the old solutions
+    void clear_solutions();
+
   private:
     // Estimated value of pi = 3.14...
     double pi;

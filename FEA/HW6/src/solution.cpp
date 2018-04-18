@@ -342,6 +342,16 @@ void Solution::calculate_errors()
 
 void Solution::print_data()
 {
+
+  for( size_t i = 0; i < U.size(); i++)
+  {
+    std::cout 
+      << "U[" << i << "] = "
+      << std::endl
+      << *(U[i])
+      << std::endl;
+  }
+
   std::cout  << std::scientific
     << std::endl
     << "Case Number: " << CaseNumber
@@ -374,6 +384,16 @@ void Solution::print_data()
     << std::endl;
 
   // TODO
+  return;
+}
+
+void Solution::clear_solutions()
+{
+  for( size_t i = 0; i < U.size(); i++)
+  {
+    delete U[i];
+  }
+  U.clear();
   return;
 }
 
