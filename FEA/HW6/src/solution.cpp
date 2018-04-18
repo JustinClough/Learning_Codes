@@ -153,8 +153,6 @@ void Solution::assign_boundary_conditions(
   }
   Force( n-1) = diag * right_bc_value;
   
-  
-  // TODO
   return;
 }
 
@@ -271,7 +269,7 @@ void Solution::forward_euler_solve( double T)
   MatrixXd P     = K - S;
 
 
-  double time = 0.0;
+  double time = dt;
   int index   = 0;
   while( time < T)
   {
