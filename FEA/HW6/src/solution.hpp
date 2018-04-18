@@ -35,6 +35,9 @@ class Solution
     void print_data();
 
   private:
+    // Estimated value of pi = 3.14...
+    double pi;
+
     // Time integration method
     Method meth;
 
@@ -84,7 +87,22 @@ class Solution
     void crank_nicolson_solve( double T);
 
     // Solve the passed linear system
-    VectorXd linear_solve( MatrixXd K, VectorXd Force);
+    VectorXd* linear_solve( MatrixXd K, VectorXd Force);
+
+    // Sets the initial conditions
+    void set_initial_condition();
+
+    // Gets the analytical solution
+    double get_analytic( double x);
+
+    // Estimates the value of pi
+    double calc_pi();
+
+    // Gets the projected initial condition for element i
+    VectorXd get_u_proj_elem( int i);
+
+    // Assembles the background forcing vector
+    void assemble_background_force();
 };
 
 #endif

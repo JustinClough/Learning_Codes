@@ -3,6 +3,11 @@
 #include <iostream>
 #include <cstdlib>
 
+double Solution::calc_pi()
+{
+  return std::atan( 1.0) * 4.0;
+}
+
 Solution::Solution( Mesh* mesh_, 
                     int CaseNumber_, 
                     int method_, 
@@ -13,6 +18,8 @@ Solution::Solution( Mesh* mesh_,
   CaseNumber = CaseNumber_;
   meth       = assign_method( method_);
   dt         = dt_;
+
+  pi = calc_pi();
 
   int num_nodes = mesh->get_num_nodes();
   
@@ -102,34 +109,114 @@ void Solution::assemble_mass()
   return;
 }
 
+void Solution::assemble_background_force()
+{
+  // since f(x,t) =def= 0 there is no
+  // work to be done.
+  return;
+}
+
 
 void Solution::assemble_system()
 {
   assemble_stiffness();
   assemble_mass();
 
-  std::cout << "S = "
-    << std::endl 
-    << S
-    << std::endl ;
+  assemble_background_force();
 
-  std::cout << "M = "
-    << std::endl 
-    << M
-    << std::endl ;
-
-  // TODO
   return;
 }
 
 void Solution::assign_boundary_conditions()
 {
+  
   // TODO
+  return;
+}
+
+double Solution::get_analytic( double x)
+{
+  double answer = 0.0;
+  if( CaseNumber == 1)
+  {
+    answer = std::sin( 2.0 * x);
+  }
+  else if( CaseNumber == 2)
+  {
+    if( x < (pi/2.0) )
+    {
+      answer = x;
+    }
+    else
+    {
+      answer = x - pi;
+    }
+  }
+  return answer;
+}
+
+VectorXd Solution::get_u_proj_elem( int i)
+{
+  VectorXd u_elem = VectorXd::Zero( 2);
+
+  int nL = 0;
+  int nR = 0;
+  mesh->get_elem( i)->get_indices( &nL, &nR);
+
+  double xL = mesh->get_pos( nL);
+  double xR = mesh->get_pos( nR);
+  double xM = (xL + xR) / 2.0;
+
+  double ul = get_analytic( xL);
+  double um = get_analytic( xM);
+  double ur = get_analytic( xR);
+  
+  u_elem( 0) = ul + 2.0 * um;
+  u_elem( 1) = ur + 2.0 * um;
+
+  double h = mesh->get_elem( i)->get_length();
+
+  u_elem *= ( h / 6.0);
+
+  return u_elem;
+}
+
+void Solution::set_initial_condition()
+{
+  VectorXd u_proj = VectorXd::Zero( F.rows());
+  for( int i = 0; i < mesh->get_num_elems(); i++)
+  {
+    VectorXd u_elem = get_u_proj_elem( i);
+
+    u_proj( i)   += u_elem( 0);
+    u_proj( i+1) += u_elem( 1);
+  }
+
+  // Set Zero DBCs
+  u_proj( 0) = 0.0;
+  u_proj( u_proj.rows() - 1) = 0.0;
+
+  VectorXd* u0 = linear_solve( M, u_proj);
+  U.push_back( u0);
+
+  std::cout
+    << "u_proj = "
+    << std::endl
+    << u_proj
+    << std::endl;
+
+  std::cout
+    << "C_0 = "
+    << std::endl
+    << *u0
+    << std::endl;
+
   return;
 }
 
 void Solution::solve( double T)
 {
+  set_initial_condition();
   if( meth == fe)
   {
     forward_euler_solve( T);
@@ -145,14 +232,35 @@ void Solution::solve( double T)
   return;
 }
 
-VectorXd Solution::linear_solve( MatrixXd K, VectorXd Force)
+VectorXd* Solution::linear_solve( MatrixXd K, VectorXd Force)
 {
-  return K.fullPivLu().solve( Force);
+  VectorXd* u = new VectorXd ();
+  *u = (K.fullPivLu().solve( Force));
+  return u;
 }
 
 void Solution::forward_euler_solve( double T)
 {
-  // TODO
+  MatrixXd K     = M / dt;
+  VectorXd Force = F;
+  MatrixXd P     = K - S;
+
+
+  double time = 0.0;
+  int index   = 0;
+  while( time < T)
+  {
+    if( index != 0)
+    {
+      Force = (K-S) * ( *(U[index]));
+    }
+    VectorXd* u = linear_solve( K, Force);
+    U.push_back( u);
+
+    time += dt;
+    index++;
+  }
+  
   return;
 }
 
