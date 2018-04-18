@@ -237,8 +237,9 @@ void Solution::set_initial_condition()
   return;
 }
 
-void Solution::solve( double T)
+void Solution::solve( double T_)
 {
+  T = T_;
   set_initial_condition();
   if( meth == fe)
   {
@@ -330,14 +331,60 @@ void Solution::crank_nicolson_solve( double T)
   return;
 }
 
+void Solution::compute_L2_error()
+{
+  L2_error = 0.0;
+  // TODO
+  return;
+}
+
+void Solution::compute_H1_error()
+{
+  H1_error = 0.0;
+  // TODO
+  return;
+}
+
 void Solution::calculate_errors()
 {
-  // TODO
+  compute_L2_error();
+  compute_H1_error();
   return;
 }
 
 void Solution::print_data()
 {
+  std::cout  << std::scientific
+    << std::endl
+    << "Case Number: " << CaseNumber
+    << std::endl
+    << "Method:      ";
+    if( meth == fe)
+    {
+      std::cout << "Forward Euler";
+    }
+    else if( meth == be)
+    {
+      std::cout << "Backward Euler";
+    }
+    else if( meth == cn)
+    {
+      std::cout << "Crank-Nicolson";
+    }
+    std::cout
+    << std::endl
+    << "Total time:  " << T
+    << std::endl
+    << "Time step:   " << dt
+    << std::endl
+    << "N+1:         " << mesh->get_num_nodes() - 1
+    << std::endl
+    << "L2_error:    " << L2_error
+    << std::endl
+    << "H1_error:    " << H1_error
+    << std::endl
+    << std::endl;
+
   // TODO
   return;
 }

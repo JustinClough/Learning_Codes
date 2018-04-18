@@ -106,6 +106,19 @@ class Solution
     void assign_boundary_conditions( 
                   MatrixXd &K, 
                   VectorXd &Force  );
+
+    // The L2 norm error
+    double L2_error;
+  
+    // The H1 norm error
+    double H1_error;
+
+    // Computes the L2 error
+    void compute_L2_error();
+
+    // Computes the H1 error
+    void compute_H1_error();
+
 };
 
 #endif
