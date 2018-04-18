@@ -91,12 +91,11 @@ void drive_problem( int CaseNumber,
                     double dt)
 {
   Mesh *mesh = new Mesh( Np1);
-  mesh->print_stats();
+  // mesh->print_stats();
 
   Solution* s = new Solution( mesh, CaseNumber, method, dt);
 
   s->assemble_system();
-  s->assign_boundary_conditions();
 
   double T_end = 1.0;
   s->solve( T_end);
