@@ -11,6 +11,7 @@ int main( int argc, char** argv)
 
   check_inputs( argc, argv, &cn, &np1, &method, &dt);
 
+  std::cout << std::scientific;
   drive_problem( cn, np1, method, dt);
 
   return 0;
