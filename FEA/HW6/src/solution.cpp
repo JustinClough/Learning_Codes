@@ -268,6 +268,50 @@ void Solution::forward_euler_solve( double T)
   VectorXd Force = F;
   MatrixXd P     = K - S;
 
+  double time = dt;
+  int index   = 0;
+  while( time < T)
+  {
+    Force = P * ( *(U[index]));
+
+    assign_boundary_conditions( K, Force);
+    VectorXd* u = linear_solve( K, Force);
+    U.push_back( u);
+
+    time += dt;
+    index++;
+  }
+
+  return;
+}
+
+void Solution::backward_euler_solve( double T)
+{
+  MatrixXd K     = M / dt + S;
+  VectorXd Force = F;
+  MatrixXd P     = M / dt;
+
+  double time = dt;
+  int index   = 0;
+  while( time < T)
+  {
+    Force = P * ( *(U[index]));
+
+    assign_boundary_conditions( K, Force);
+    VectorXd* u = linear_solve( K, Force);
+    U.push_back( u);
+
+    time += dt;
+    index++;
+  }
+  return;
+}
+
+void Solution::crank_nicolson_solve( double T)
+{
+  MatrixXd K     = M / dt + S / 2.0;
+  VectorXd Force = F;
+  MatrixXd P     = M / dt - S / 2.0;
 
   double time = dt;
   int index   = 0;
@@ -283,27 +327,6 @@ void Solution::forward_euler_solve( double T)
     index++;
   }
 
-  for( size_t index = 0; index < U.size(); index++)
-  {
-    std::cout
-      << "*(U[index]) = *(U[" << index << "]) = "
-      << std::endl
-      << *(U[index])
-      << std::endl;
-  }
-  
-  return;
-}
-
-void Solution::backward_euler_solve( double T)
-{
-  // TODO
-  return;
-}
-
-void Solution::crank_nicolson_solve( double T)
-{
-  // TODO
   return;
 }
 
