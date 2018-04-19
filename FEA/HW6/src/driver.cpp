@@ -103,10 +103,10 @@ void drive_problem( int CaseNumber,
   s->print_data();
   s->clear_solutions();
 
-  T_end = 10.0;
-  s->solve( T_end);
-  s->calculate_errors();
-  s->print_data();
+//  T_end = 10.0;
+//  s->solve( T_end);
+//  s->calculate_errors();
+//  s->print_data();
 
   delete s;
   delete mesh;

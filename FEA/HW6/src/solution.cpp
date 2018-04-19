@@ -131,12 +131,9 @@ void Solution::assign_boundary_conditions(
                 MatrixXd &K, 
                 VectorXd &Force)
 {
-  double left_bc_value  = 0.0;
-  double right_bc_value = 0.0;
-
   int n = mesh->get_num_nodes();
 
-  double diag = K( 0, 0);
+  K( 0, 0) = 1.0;
   for( int i = 0; i < K.cols(); i++)
   {
     if( i != 0)
@@ -144,15 +141,15 @@ void Solution::assign_boundary_conditions(
       K( 0, i) = 0.0;
     }
   }
-  Force( 0) = diag * left_bc_value;
+  Force( 0) = 0.0;
   
-  diag = K( n-1, n-1);
+  K( n-1, n-1) = 1.0;
   for( int i = 0; i < (K.cols() - 1); i++)
   {
     K( n-1, i) = 0.0;
   }
-  Force( n-1) = diag * right_bc_value;
-  
+  Force( n -1) = 0.0;
+
   return;
 }
 
@@ -219,6 +216,7 @@ void Solution::set_initial_condition()
   u_proj( u_proj.rows() - 1) = 0.0;
 
   assign_boundary_conditions( M, u_proj);
+
   VectorXd* u0 = linear_solve( M, u_proj);
   U.push_back( u0);
 
@@ -247,7 +245,7 @@ void Solution::solve( double T_)
 VectorXd* Solution::linear_solve( MatrixXd K, VectorXd Force)
 {
   VectorXd* u = new VectorXd ();
-  *u = (K.fullPivLu().solve( Force));
+  *u = K.fullPivLu().solve( Force);
   return u;
 }
 
@@ -298,18 +296,70 @@ void Solution::backward_euler_solve( double T)
 
 void Solution::crank_nicolson_solve( double T)
 {
-  MatrixXd K     = M / dt + S / 2.0;
+  MatrixXd K     = M  + S * dt / 2.0;
   VectorXd Force = F;
-  MatrixXd P     = M / dt - S / 2.0;
+  MatrixXd P     = M  - S * dt / 2.0;
 
   double time = dt;
   int index   = 0;
-  while( time < T)
+  while( time <= T)
   {
     Force = P * ( *(U[index]));
 
+//    std::cout 
+//      << "M = "
+//      << std::endl
+//      << M
+//      << std::endl
+//      << "S = "
+//      << std::endl
+//      << S
+//      << std::endl
+//      << "dt = " << dt << std::endl;
+  
+
     assign_boundary_conditions( K, Force);
     VectorXd* u = linear_solve( K, Force);
+
+//    std::cout 
+//      << "Ax = b"
+//      << std::endl
+//      << "A = "
+//      << std::endl
+//      << K
+//      << std::endl
+//      << "b = "
+//      << std::endl
+//      << Force
+//      << std::endl
+//      << "x = "
+//      << std::endl
+//      << *u
+//      << std::endl;
+
+//    std::cout << "Exact Solution at time = " << time << std::endl;
+//    for( int i = 0; i < mesh->get_num_nodes(); i++)
+//    {
+//      double position = mesh->get_pos( i);
+//      double solution = get_analytical_solution( position, time);
+//
+//      std::cout 
+//        << "u(" << position << ") = "
+//        << solution
+//        << std::endl;
+//    }
+//
+//    std::cout << "My Solution at time = " << time << std::endl;
+//    for( int i = 0; i < mesh->get_num_nodes(); i++)
+//    {
+//      double position = mesh->get_pos( i);
+//
+//      std::cout 
+//        << "Uh(" << position << ") = "
+//        << (*u)(i)
+//        << std::endl;
+//    }
+  
     U.push_back( u);
 
     time += dt;
@@ -349,30 +399,278 @@ double Solution::get_analytical_solution( double x, double time)
   return answer;
 }
 
+double Solution::linear_interpolant(
+                    double xl,
+                    double xr,
+                    double x,
+                    double fl,
+                    double fr)
+{
+  double slope = (fr - fl) / (xr - xl);
+
+  double ans = fl + (x - xl) * slope; 
+
+  return ans;
+}
+
+double Solution::get_elemental_L2( int i)
+{
+  double M = 3.0;
+
+  VectorXd sol = *( U[ U.size() -1]);
+  double time = dt * (U.size() - 1);
+
+//  std::cout << "Exact Solution at time = " << time << std::endl;
+//  for( int j = 0; j < mesh->get_num_nodes(); j++)
+//  {
+//    double position = mesh->get_pos( j);
+//    double solution = get_analytical_solution( position, time);
+//
+//    std::cout 
+//      << "u(" << position << ") =   "
+//      << solution
+//      << std::endl;
+//    std::cout 
+//      << "sol(" << position << ") = "
+//      << sol(j)
+//      << std::endl;
+//  }
+//
+
+  int nl = 0;
+  int nr = 0;
+  mesh->get_elem( i)->get_indices( &nl, &nr);
+
+  double uhl = sol( nl);
+  double uhr = sol( nr);
+
+  double xl = mesh->get_pos( nl);
+  double xr = mesh->get_pos( nr);
+  double h = mesh->get_elem( i)->get_length();
+
+  double x1 = xl + h / M * 1.0;
+  double x2 = xl + h / M * 2.0;
+  double x3 = xl + h / M * 3.0;
+
+  double u1 = get_analytical_solution( x1, time);
+  double u2 = get_analytical_solution( x2, time);
+  double u3 = get_analytical_solution( x3, time);
+  
+  double uh1 = linear_interpolant( xl, xr, x1, uhl, uhr);
+  double uh2 = linear_interpolant( xl, xr, x2, uhl, uhr);
+  double uh3 = linear_interpolant( xl, xr, x3, uhl, uhr);
+
+  double e1 = uh1 - u1;
+  double e2 = uh2 - u2;
+  double e3 = uh3 - u3;
+
+//  std::cout 
+//    << "u1 = " << u1
+//    << std::endl
+//    << "u2 = " << u2
+//    << std::endl
+//    << "u3 = " << u3
+//    << std::endl;
+//
+//  std::cout 
+//    << "uh1 = " << uh1
+//    << std::endl
+//    << "uh2 = " << uh2
+//    << std::endl
+//    << "uh3 = " << uh3
+//    << std::endl;
+//
+//  std::cout 
+//    << "e1 = " << e1
+//    << std::endl
+//    << "e2 = " << e2
+//    << std::endl
+//    << "e3 = " << e3
+//    << std::endl;
+
+  double e1sq = e1 * e1;
+  double e2sq = e2 * e2;
+  double e3sq = e3 * e3;
+
+//  std::cout 
+//    << "e1^2 = " << e1sq 
+//    << std::endl
+//    << "e2^2 = " << e2sq 
+//
+//    << std::endl
+//    << "e3^2 = " << e3sq 
+//    << std::endl;
+
+  double ans = e1sq + e2sq + e3sq;
+
+  ans *= ( h / M);
+
+
+  return ans;
+}
+
 void Solution::compute_L2_error()
 {
-  L2_error = 0.0;
-  // TODO
+  double error = 0.0;
+  for( int i = 0; i < mesh->get_num_elems(); i++)
+  {
+    double tmp = get_elemental_L2( i);
+    error += tmp;
+  }
+  
+  L2_error = std::sqrt( error);
   return;
+}
+
+double max_3( double x, double y, double z)
+{
+  if( x > y && x > z)
+  {
+    return x;
+  }
+  else if( y > x && y > z)
+  {
+    return y;
+  }
+  else if( z > x && z > y)
+  {
+    return z;
+  }
+  else
+  {
+    std::cout 
+      << "Error calculating max( . . .)"
+      << std::endl;
+
+    std::abort();
+  }
+
+}
+
+double Solution::get_elemental_Linf( int i)
+{
+  double M = 3.0;
+
+  VectorXd sol = *( U[ U.size() -1]);
+  double time = dt * (U.size() - 1);
+
+  int nl = 0;
+  int nr = 0;
+  mesh->get_elem( i)->get_indices( &nl, &nr);
+
+  double uhl = sol( nl);
+  double uhr = sol( nr);
+
+  double xl = mesh->get_pos( nl);
+  double xr = mesh->get_pos( nr);
+  double h = mesh->get_elem( i)->get_length();
+
+  double x1 = xl + h / M * 1.0;
+  double x2 = xl + h / M * 2.0;
+  double x3 = xl + h / M * 3.0;
+
+  double u1 = get_analytical_solution( x1, time);
+  double u2 = get_analytical_solution( x2, time);
+  double u3 = get_analytical_solution( x3, time);
+  
+  double uh1 = linear_interpolant( xl, xr, x1, uhl, uhr);
+  double uh2 = linear_interpolant( xl, xr, x2, uhl, uhr);
+  double uh3 = linear_interpolant( xl, xr, x3, uhl, uhr);
+
+  double e1 = std::abs(uh1 - u1);
+  double e2 = std::abs(uh2 - u2);
+  double e3 = std::abs(uh3 - u3);
+
+  double ans = max_3( e1, e2, e3);
+
+  return ans;
+}
+
+void Solution::compute_Linf_error()
+{
+  double winner = 0.0;
+  double challenger = 0.0;
+  for( int i = 0; i < mesh->get_num_elems(); i++)
+  {
+    challenger = get_elemental_Linf( i);
+
+    if( challenger > winner)
+    {
+      winner = challenger;
+    }
+  }
+  Linf_error = winner;
+  return;
+
 }
 
 void Solution::compute_H1_error()
 {
-  H1_error = 0.0;
-  // TODO
+  double error = 0.0;
+  for( int i = 0; i < mesh->get_num_elems(); i++)
+  {
+    double tmp = get_elemental_H1( i);
+    error += tmp;
+  }
+
+  error += L2_error;
+  
+  H1_error = std::sqrt( error);
   return;
+}
+
+double Solution::get_elemental_H1( int i)
+{
+  double M = 3.0;
+
+  VectorXd sol = *( U[ U.size() -1]);
+  double time = dt * (U.size() - 1);
+
+  int nl = 0;
+  int nr = 0;
+  mesh->get_elem( i)->get_indices( &nl, &nr);
+
+  double uhl = sol( nl);
+  double uhr = sol( nr);
+
+  double xl = mesh->get_pos( nl);
+  double h = mesh->get_elem( i)->get_length();
+
+  double x1 = xl + h / M * 1.0;
+  double x2 = xl + h / M * 2.0;
+  double x3 = xl + h / M * 3.0;
+
+  double u1 = get_analytical_derv( x1, time);
+  double u2 = get_analytical_derv( x2, time);
+  double u3 = get_analytical_derv( x3, time);
+  
+  double uh = (uhr - uhl) / h;
+
+  double e1 = uh - u1;
+  double e2 = uh - u2;
+  double e3 = uh - u3;
+
+  double e1sq = e1 * e1;
+  double e2sq = e2 * e2;
+  double e3sq = e3 * e3;
+
+  double ans = e1sq + e2sq + e3sq;
+
+  ans *= ( h / M);
+
+  return ans;
 }
 
 void Solution::calculate_errors()
 {
   compute_L2_error();
   compute_H1_error();
+  compute_Linf_error();
   return;
 }
 
 void Solution::print_data()
 {
-
   for( size_t i = 0; i < U.size(); i++)
   {
     std::cout 
@@ -381,7 +679,6 @@ void Solution::print_data()
       << *(U[i])
       << std::endl;
   }
-
   std::cout  << std::scientific
     << std::endl
     << "Case Number: " << CaseNumber
@@ -411,6 +708,8 @@ void Solution::print_data()
     << std::endl
     << "H1_error:    " << H1_error
     << std::endl
+    << "Linf_error:  " << Linf_error
+    << std::endl
     << std::endl;
 
   // TODO
@@ -424,6 +723,9 @@ void Solution::clear_solutions()
     delete U[i];
   }
   U.clear();
+
+  L2_error = 0.0;
+  H1_error = 0.0;
   return;
 }
 

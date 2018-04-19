@@ -116,17 +116,40 @@ class Solution
     // The H1 norm error
     double H1_error;
 
+    // The L_inf norm error
+    double Linf_error;
+
     // Computes the L2 error
     void compute_L2_error();
 
     // Computes the H1 error
     void compute_H1_error();
 
+    // Computes the L_inf error
+    void compute_Linf_error();
+
     // Gets the analytical solution
     double get_analytical_solution( double x, double time);
 
     // Gets the analytical solution space derivative
     double get_analytical_derv( double x, double time);
+
+    // Gets the elemental L2 error for element i
+    double get_elemental_L2( int i);
+
+    // Returns the linear interpolant 
+    double linear_interpolant( 
+                    double xl,
+                    double xr,
+                    double x,
+                    double fl,
+                    double fr  );
+
+    // Gets the elemental H1 error
+    double get_elemental_H1( int i);
+
+    // Gets the elemental Linf error
+    double get_elemental_Linf( int i);
 };
 
 #endif
