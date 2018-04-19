@@ -306,60 +306,9 @@ void Solution::crank_nicolson_solve( double T)
   {
     Force = P * ( *(U[index]));
 
-//    std::cout 
-//      << "M = "
-//      << std::endl
-//      << M
-//      << std::endl
-//      << "S = "
-//      << std::endl
-//      << S
-//      << std::endl
-//      << "dt = " << dt << std::endl;
-  
-
     assign_boundary_conditions( K, Force);
     VectorXd* u = linear_solve( K, Force);
 
-//    std::cout 
-//      << "Ax = b"
-//      << std::endl
-//      << "A = "
-//      << std::endl
-//      << K
-//      << std::endl
-//      << "b = "
-//      << std::endl
-//      << Force
-//      << std::endl
-//      << "x = "
-//      << std::endl
-//      << *u
-//      << std::endl;
-
-//    std::cout << "Exact Solution at time = " << time << std::endl;
-//    for( int i = 0; i < mesh->get_num_nodes(); i++)
-//    {
-//      double position = mesh->get_pos( i);
-//      double solution = get_analytical_solution( position, time);
-//
-//      std::cout 
-//        << "u(" << position << ") = "
-//        << solution
-//        << std::endl;
-//    }
-//
-//    std::cout << "My Solution at time = " << time << std::endl;
-//    for( int i = 0; i < mesh->get_num_nodes(); i++)
-//    {
-//      double position = mesh->get_pos( i);
-//
-//      std::cout 
-//        << "Uh(" << position << ") = "
-//        << (*u)(i)
-//        << std::endl;
-//    }
-  
     U.push_back( u);
 
     time += dt;
@@ -420,23 +369,6 @@ double Solution::get_elemental_L2( int i)
   VectorXd sol = *( U[ U.size() -1]);
   double time = dt * (U.size() - 1);
 
-//  std::cout << "Exact Solution at time = " << time << std::endl;
-//  for( int j = 0; j < mesh->get_num_nodes(); j++)
-//  {
-//    double position = mesh->get_pos( j);
-//    double solution = get_analytical_solution( position, time);
-//
-//    std::cout 
-//      << "u(" << position << ") =   "
-//      << solution
-//      << std::endl;
-//    std::cout 
-//      << "sol(" << position << ") = "
-//      << sol(j)
-//      << std::endl;
-//  }
-//
-
   int nl = 0;
   int nr = 0;
   mesh->get_elem( i)->get_indices( &nl, &nr);
@@ -464,42 +396,9 @@ double Solution::get_elemental_L2( int i)
   double e2 = uh2 - u2;
   double e3 = uh3 - u3;
 
-//  std::cout 
-//    << "u1 = " << u1
-//    << std::endl
-//    << "u2 = " << u2
-//    << std::endl
-//    << "u3 = " << u3
-//    << std::endl;
-//
-//  std::cout 
-//    << "uh1 = " << uh1
-//    << std::endl
-//    << "uh2 = " << uh2
-//    << std::endl
-//    << "uh3 = " << uh3
-//    << std::endl;
-//
-//  std::cout 
-//    << "e1 = " << e1
-//    << std::endl
-//    << "e2 = " << e2
-//    << std::endl
-//    << "e3 = " << e3
-//    << std::endl;
-
   double e1sq = e1 * e1;
   double e2sq = e2 * e2;
   double e3sq = e3 * e3;
-
-//  std::cout 
-//    << "e1^2 = " << e1sq 
-//    << std::endl
-//    << "e2^2 = " << e2sq 
-//
-//    << std::endl
-//    << "e3^2 = " << e3sq 
-//    << std::endl;
 
   double ans = e1sq + e2sq + e3sq;
 
@@ -538,11 +437,18 @@ double max_3( double x, double y, double z)
   }
   else
   {
-    std::cout 
-      << "Error calculating max( . . .)"
-      << std::endl;
-
-    std::abort();
+    if( x == y)
+    {
+      return x;
+    }
+    else if( x == z)
+    {
+      return x;
+    }
+    else
+    {
+      return y;
+    } 
   }
 
 }
@@ -671,6 +577,7 @@ void Solution::calculate_errors()
 
 void Solution::print_data()
 {
+#if 0
   for( size_t i = 0; i < U.size(); i++)
   {
     std::cout 
@@ -679,6 +586,7 @@ void Solution::print_data()
       << *(U[i])
       << std::endl;
   }
+#endif
   std::cout  << std::scientific
     << std::endl
     << "Case Number: " << CaseNumber
@@ -712,7 +620,6 @@ void Solution::print_data()
     << std::endl
     << std::endl;
 
-  // TODO
   return;
 }
 

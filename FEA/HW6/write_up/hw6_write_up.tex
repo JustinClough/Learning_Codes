@@ -1,0 +1,274 @@
+\documentclass[a4paper, 12pt]{article}
+\title{}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage[justification=centering]{caption}
+\usepackage{enumerate}
+\usepackage{multirow}
+\usepackage{listings}
+\lstset{
+    escapechar=`,
+    language=C++,
+    numbers=left,
+    tabsize=2,
+    prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+    frame=single,
+    breaklines=true,
+}
+\usepackage{graphicx}
+\graphicspath{ {./} }
+\usepackage{nameref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\usepackage{tikz}
+\usetikzlibrary{calc,patterns,decorations.pathmorphing,decorations.markings,positioning,automata}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{makecell}
+\usepackage{ulem}
+\usepackage{verbatim}
+
+\begin{document}
+
+\section*{Part II: Implementation} \label{sec:intro}
+The purpose of this exercise was to use the Finite Element Method (FEM) 
+to approximate, and study, the solution to the problem presented in 
+Eq. \ref{eq:StrongForm}.
+
+\begin{align}
+u_t &= u_{xx}  \label{eq:StrongForm} \\
+u(0,t) = 0 &, u(\pi, t) = 0 
+\end{align}
+
+\noindent
+This equation was solved on the domain $x\in[0,\pi]$ and $t\in(0, T]$.
+It was subject to the initial conditions
+
+\begin{equation}
+u(x,0) = \sin(2x)
+\end{equation}
+
+\noindent
+and
+
+\[
+  u(x, 0) = \begin{cases}
+    x \quad x \in (0, \frac{\pi}{2}] \\
+    x - \pi \quad x \in( \frac{\pi}{2}, \pi)
+  \end{cases}
+\]
+
+\noindent
+The problem domain was divided into a uniform and structured mesh.
+The rule for determining element size is shown in the equation below.
+
+\begin{equation}
+  h =  \frac{ \pi}{ N+1}
+\end{equation}
+
+\noindent
+Here, $N$ is the number of degrees of freedom; $N+1$ is the number of elements.
+Tests were conducted for $N=10, 20, 40, 80$ for the first initial condition. 
+
+A computer code was written to evaluate the posed problems. 
+The results follow this section and the code itself 
+is appended to this report.
+Tabulated data, in the form of error norms and convergence order 
+for the first initial condition
+are presented in Tables \ref{tab:feT1} through \ref{tab:cnT10}.
+Figure \ref{fig:jump} shows the approximated solution
+to the second initial condition at various times.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=14cm, height=11cm]{jump}
+  \caption{ Approximated solution to initial condition 2.
+            Backward Euler with a time step size of 0.01.
+            Mesh has 10 elements.}
+  \label{fig:jump}
+\end{figure}
+
+\begin{table}[H]
+\caption{Errors and convergence orders for Forward Euler, final time of 1.0.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|c| c| c| c| c|}
+\hline
+ $N+1$  & $\Delta t$ & $||e_h(\cdot)||_{L^2([0,1])}$ & Order  & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order& $||e_h(\cdot)||_h$& Order \\
+ \hline            %   L_2         % O(L_2)% L_inf     % O(L_inf)%  H_1        %O(H_1) 
+     10  & 7.4e-03 &  4.086e-03 & -     & 3.460e-03 & -     & 6.495e-02 & -     \\
+     20  & 1.9e-03 &  1.076e-03 & 1.925 & 9.123e-04 & 1.923 & 3.317e-02 & 0.970 \\
+     40  & 4.6e-04 &  2.960e-04 & 1.862 & 2.280e-04 & 2.001 & 1.651e-02 & 1.001 \\
+     80  & 1.1e-04 &  6.647e-05 & 2.154 & 5.686e-05 & 2.004 & 8.234e-03 & 1.004 \\
+\hline
+\end{tabular}
+\label{tab:feT1}
+\end{table}
+
+\begin{table}[H]
+\caption{Errors and convergence orders for Backward Euler, final time of 1.0.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|c| c| c| c| c|}
+\hline
+ $N+1$  & $\Delta t$ & $||e_h(\cdot)||_{L^2([0,1])}$ & Order  & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order& $||e_h(\cdot)||_h$& Order \\
+ \hline            %   L_2         % O(L_2)% L_inf     % O(L_inf)%  H_1        %O(H_1) 
+     10  & 0.1     & 1.661e-02 & -     & 1.348e-02 & -     & 1.338e-01 & -\\
+     20  & 0.05    & 1.022e-02 & 0.700 & 8.375e-03 & 0.689 & 1.033e-01 & 0.373\\
+     40  & 0.025   & 4.877e-03 & 1.067 & 3.935e-03 & 1.089 & 7.057e-02 & 0.549\\
+     80  & 0.0125  & 2.285e-03 & 1.097 & 1.832e-03 & 1.103 & 4.803e-02 & 0.557\\
+\hline
+\end{tabular}
+\label{tab:beT1}
+\end{table}
+
+\begin{table}[H]
+\caption{Errors and convergence orders for Crank-Nicolson, final time of 1.0.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|c|c| c| c| c| c|}
+\hline
+ $N+1$  & $\Delta t$ &  $||e_h(\cdot)||_{L^2([0,1])}$ & Order  & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order& $||e_h(\cdot)||_h$& Order \\
+ \hline           %   L_2         % O(L_2)% L_inf     % O(L_inf)%  H_1        %O(H_1) 
+     10  & 0.1    & 4.000e-03 & -     & 3.387e-03 & -     & 6.424e-02 & -     \\
+     20  & 0.05   & 1.202e-03 & 1.737 & 1.025e-03 & 1.726 & 3.517e-02 & 0.869 \\
+     40  & 0.025  & 2.812e-04 & 2.010 & 2.409e-04 & 2.089 & 1.697e-02 & 1.051 \\
+     80  & 0.0125 & 6.539e-05 & 2.101 & 5.599e-05 & 2.105 & 8.169e-03 & 1.055 \\
+\hline
+\end{tabular}
+\label{tab:cnT1}
+\end{table}
+
+\begin{table}[H]
+\caption{Errors and convergence orders for Forward Euler, final time of 10.0.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|c| c| c| c| c|}
+\hline
+ $N+1$  & $\Delta t$  & $||e_h(\cdot)||_{L^2([0,1])}$ & Order  & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order& $||e_h(\cdot)||_h$& Order \\
+ \hline            %   L_2         % O(L_2)% L_inf     % O(L_inf)%  H_1        %O(H_1) 
+     10  & 7.4e-03 &  4.632e-18 & - & 3.282e-18 & - & 6.494e-09 & -\\
+     20  & 1.9e-03 &  1.794e-18 & - & 2.481e-18 & - & 1.339e-09 & -\\
+     40  & 4.6e-04 &  5.797e-19 & - & 5.012e-19 & - & 7.614e-10 & -\\
+     80  & 1.1e-04 &  4.741e-19 & - & 4.175e-19 & - & 6.885e-10 & -\\
+\hline
+\end{tabular}
+\label{tab:feT10}
+\end{table}
+
+\begin{table}[H]
+\caption{Errors and convergence orders for Backward Euler, final time of 10.0.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|c| c| c| c| c|}
+\hline
+ $N+1$  & $\Delta t$ & $||e_h(\cdot)||_{L^2([0,1])}$ & Order  & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order& $||e_h(\cdot)||_h$& Order \\
+ \hline            %   L_2         % O(L_2)% L_inf     % O(L_inf)%  H_1        %O(H_1) 
+     10  & 0.1     & 1.183e-15 & - & 9.250e-16 & - & 3.441e-08 & -\\
+     20  & 0.05    & 1.604e-16 & - & 1.266e-16 & - & 1.268e-08 & -\\
+     40  & 0.025   & 2.967e-17 & - & 2.368e-17 & - & 5.441e-09 & -\\
+     80  & 0.0125  & 8.485e-18 & - & 6.756e-18 & - & 2.901e-09 & -\\
+\hline
+\end{tabular}
+\label{tab:beT10}
+\end{table}
+
+\begin{table}[H]
+\caption{Errors and convergence orders for Crank-Nicolson, final time of 10.0.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|c| c| c| c| c|}
+\hline
+ $N+1$  & $\Delta t$ &  $||e_h(\cdot)||_{L^2([0,1])}$ & Order  & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order& $||e_h(\cdot)||_h$& Order \\
+ \hline           %   L_2         % O(L_2)% L_inf     % O(L_inf)%  H_1        %O(H_1) 
+     10  & 0.1    & 4.558e-18 & - & 3.624e-18 & - & 2.134e-09 & -\\
+     20  & 0.05   & 2.415e-18 & - & 1.932e-18 & - & 1.932e-09 & -\\
+     40  & 0.025  & 6.413e-19 & - & 5.181e-19 & - & 8.008e-10 & -\\
+     80  & 0.0125 & 3.650e-19 & - & 3.350e-19 & - & 6.041e-10 & -\\
+\hline
+\end{tabular}
+\label{tab:cnT10}
+\end{table}
+
+The curves in Figure \ref{fig:jump} show that the 
+numerical solution decays over time to the expected solution.
+The time step size for the Forward Euler solves was chosen based
+on the relation
+
+\begin{equation}
+  \Delta t \leq \frac{ (\Delta x)^2} {4 C_r^2}
+\end{equation}
+
+\noindent
+where, the constant $C_r^2$ is bounded by
+
+\begin{equation}
+  C_r \leq \sqrt{3} r^2.
+\end{equation}
+
+\noindent
+Since linear elements were used, $r = 1$.
+Time step sizes for Backward Euler and Crank-Nicolson 
+were refined on the same order as the mesh. 
+In essence, when the number of elements 
+doubled, the size of the time step halved.
+For the shorter time period ($T=1.0$):
+The Forward Euler scheme shows 
+second order convergence in $L^\infty$ 
+and $L^2$ norms but only
+first order in $H^1$;
+The Backward Euler scheme shows 
+first order convergence in $L^\infty$ 
+and $L^2$ norms but only
+a convergence order of $0.5$ in $H^1$;
+The Crank-Nicolson scheme shows 
+second order convergence in $L^\infty$ 
+and $L^2$ norms but only
+first order in $H^1$;
+Orders of convergence were not computed for
+the longer time interval ($T=10.0$) 
+as the solutions all converged to 
+near machine precision.
+
+
+The \texttt{Eigen} software package
+was used as the linear solver for this project. 
+The matrix inversion method used was LU with full pivoting.
+
+\newpage
+\appendix
+\section{Source Code and Headers} \label{sec:code}
+
+\subsection{fea\_hw6.cpp} \label{subsec:fea_hw6.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW6/src/fea_hw6.cpp}
+
+\subsection{driver.cpp} \label{subsec:driver.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW6/src/driver.cpp}
+\subsection{driver.hpp} \label{subsec:driver.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW6/src/driver.hpp}
+
+\subsection{element.cpp} \label{subsec:element.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW6/src/element.cpp}
+\subsection{element.hpp} \label{subsec:element.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW6/src/element.hpp}
+
+\subsection{mesh.cpp} \label{subsec:mesh.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW6/src/mesh.cpp}
+\subsection{mesh.hpp} \label{subsec:mesh.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW6/src/mesh.hpp}
+
+\subsection{solution.cpp} \label{subsec:solution.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW6/src/solution.cpp}
+\subsection{solution.hpp} \label{subsec:solution.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW6/src/solution.hpp}
+
+\subsection{eig\_wrap.hpp} \label{subsec:eig_wrap.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW6/src/eig_wrap.hpp}
+
+\subsection{CMakeLists.txt} \label{subsec:CMakeLists.txt}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/HW6/src/CMakeLists.txt}
+
+\end{document}
