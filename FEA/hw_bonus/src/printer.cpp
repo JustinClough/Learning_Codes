@@ -6,6 +6,7 @@
 Printer::Printer()
 {
   entries = 0;
+  tab = "  ";
 }
 
 Printer::~Printer()
@@ -66,11 +67,62 @@ void Printer::calc_orders()
   return;
 }
 
+void Printer::pad( int p)
+{
+  for( int i = 0; i < p; i++)
+  {
+    std::cout << " ";
+  }
+  return;
+}
+
+void Printer::print_table_header()
+{
+  std::cout << "L2"    ; 
+  pad( 12);
+  std::cout << "L2_o"  ; 
+  pad( 10);
+  std::cout << "Linf"  ;
+  pad( 10);
+  std::cout << "Linf_o";
+  pad( 8);
+  std::cout << "H1"    ;
+  pad( 12);
+  std::cout << "H1_o"  ;
+  pad( 10);
+
+  std::cout << std::endl;
+  return;
+}
+
+void Printer::print_row( int i)
+{
+  std::cout <<
+
+    L2[i] << tab << L2_order[i]
+    << tab <<
+    Linf[i] << tab << Linf_order[i]
+    << tab <<
+    H1[i] << tab << H1_order[i]
+
+    << std::endl;
+
+
+  return;
+}
+
 void Printer::print()
 {
   calc_orders();
 
   std::cout << std::scientific;
-  // TODO
+
+  print_table_header();
+  for( int i = 0; i < entries; i++)
+  {
+    print_row( i);
+  }
+  std::cout << std::endl;
+
   return;
 }

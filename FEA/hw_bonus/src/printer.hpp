@@ -2,6 +2,7 @@
 #define PRINTER_HPP
 
 #include <vector>
+#include <string>
 
 class Printer
 {
@@ -21,6 +22,9 @@ class Printer
   private:
     // Amount of data collected
     int entries; 
+
+    // Two spaces 
+    std::string tab;
 
     // Vector of mesh sizes
     std::vector< int> mesh_sizes;
@@ -50,6 +54,15 @@ class Printer
     void calc_order(
           std::vector< double>& errors,
           std::vector< double>& orders);
+
+    // Printers row i of the solution table
+    void print_row( int i);
+
+    // Prints the table header
+    void print_table_header();
+
+    // Pads with p spaces
+    void pad( int p);
 };
 
 #endif 
