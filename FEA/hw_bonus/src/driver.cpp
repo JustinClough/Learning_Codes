@@ -56,12 +56,11 @@ void drive( int Np1, int method, Printer* printer)
   return;
 }
 
-
 void drive_problem( int method)
 {
   Printer* printer = new Printer();
 
-  int nN = 6;
+  int nN  = 6;
   int N[] = {10, 20, 40, 80, 160, 320};
 
   for( int i = 0; i < nN; i++)
@@ -73,6 +72,3 @@ void drive_problem( int method)
 
   return;
 }
-
-
-
