@@ -8,6 +8,8 @@ solution.cpp
 solution.hpp
 driver.cpp
 driver.hpp
+printer.cpp
+printer.hpp
 fea_bonus.cpp)
 
 add_executable(bonus ${BONUS_SOURCES})
