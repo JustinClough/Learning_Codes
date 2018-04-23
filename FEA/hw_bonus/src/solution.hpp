@@ -2,12 +2,13 @@
 #define SOLUTION_HPP
 
 #include "mesh.hpp"
+#include "printer.hpp"
 
 class Solution
 {
   public:
     // Constructs the solution.
-    Solution( Mesh* mesh_, int method_);
+    Solution( Mesh* mesh_, Printer* printer_, int method_);
    
     // Destructs the solution 
     ~Solution();
@@ -30,6 +31,9 @@ class Solution
 
     // Pointer to the mesh
     Mesh* mesh;
+
+    // Pointer to the printer
+    Printer* printer;
 
     // Global stiffness matrix
     MatrixXd K;

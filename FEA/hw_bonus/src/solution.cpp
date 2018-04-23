@@ -3,12 +3,14 @@
 #include <iostream>
 #include <cstdlib>
 
-Solution::Solution( Mesh* mesh_, 
-                    int method_ )
+Solution::Solution( Mesh*    mesh_, 
+                    Printer* printer_,
+                    int      method_  )
 {
 
-  mesh   = mesh_;
-  method = method_;
+  mesh    = mesh_;
+  printer = printer_;
+  method  = method_;
 
   int num_nodes = mesh->get_num_nodes();
   

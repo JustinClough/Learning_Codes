@@ -56,16 +56,19 @@ void check_inputs( int     argc,
 void drive_problem( int Np1, 
                     int method)
 {
-  Mesh *mesh = new Mesh( Np1);
+  Mesh* mesh = new Mesh( Np1);
   mesh->print_stats();
 
-  Solution* s = new Solution( mesh, method);
+  Printer* printer = new Printer();
+
+  Solution* s = new Solution( mesh, printer, method);
 
   s->assemble_system();
   s->solve();
   s->calculate_errors();
   s->print_data();
 
+  delete printer;
   delete s;
   delete mesh;
 
