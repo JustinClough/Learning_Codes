@@ -28,9 +28,6 @@ class Solution
     // Method to earth mesh
     int method;
 
-    // The time step size
-    double dt;
-
     // Pointer to the mesh
     Mesh* mesh;
 
