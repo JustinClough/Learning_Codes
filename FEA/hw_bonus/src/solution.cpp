@@ -5,7 +5,7 @@
 
 double calc_pi()
 {
-  return 4.0 * atan( 1.0)
+  return 4.0 * atan( 1.0);
 }
 
 Solution::Solution( Mesh*    mesh_, 
@@ -49,6 +49,18 @@ void Solution::assemble_stiffness()
   }
 
   return;
+}
+
+double Solution::get_analytical_force( double x)
+{
+  double tmp1 =  pi * pi * std::sin( pi * x);
+  double tmp2 = 2.0 * pi * std::cos( pi * x);
+  double tmp3 = std::sin( pi * x);
+  double expx = std::exp( x);
+
+  double ans = (tmp1 - tmp2 - tmp3) * expx;
+
+  return ans;
 }
 
 void Solution::assemble_force()
@@ -106,7 +118,7 @@ void Solution::linear_solve()
 
 double Solution::get_analytical_derv( double x)
 {
-  double tmp1 = pi * std::cos( pi * x)
+  double tmp1 = pi * std::cos( pi * x);
   double tmp2 = std::sin( pi * x);
   double expx = std::exp( x);
 
@@ -117,9 +129,7 @@ double Solution::get_analytical_derv( double x)
 
 double Solution::get_analytical_solution( double x)
 {
-  // TODO
-  (void) x;
-  double answer = 0.0;
+  double answer = std::sin( pi * x) * std::exp( x);
 
   return answer;
 }

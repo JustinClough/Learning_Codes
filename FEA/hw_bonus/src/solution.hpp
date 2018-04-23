@@ -100,6 +100,9 @@ class Solution
 
     // Gets the elemental Linf error
     double get_elemental_Linf( int i);
+
+    // Returns the analytical force at x
+    double get_analytical_force( double x);
 };
 
 #endif
