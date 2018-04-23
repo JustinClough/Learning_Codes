@@ -68,6 +68,8 @@ void drive_problem( int method)
     drive( N[i], method, printer);
   }
 
+  printer->print();
+
   delete printer;
 
   return;
