@@ -3,6 +3,11 @@
 #include <iostream>
 #include <cstdlib>
 
+double calc_pi()
+{
+  return 4.0 * atan( 1.0)
+}
+
 Solution::Solution( Mesh*    mesh_, 
                     Printer* printer_,
                     int      method_  )
@@ -11,6 +16,8 @@ Solution::Solution( Mesh*    mesh_,
   mesh    = mesh_;
   printer = printer_;
   method  = method_;
+
+  pi = calc_pi();
 
   int num_nodes = mesh->get_num_nodes();
   
@@ -64,7 +71,7 @@ void Solution::assign_boundary_conditions()
   int n = mesh->get_num_nodes();
 
   // TODO
-  K( 0, 0) = 1.0;
+  double diag = K( 0, 0);
   for( int i = 0; i < K.cols(); i++)
   {
     if( i != 0)
@@ -86,6 +93,7 @@ void Solution::assign_boundary_conditions()
 
 void Solution::solve()
 {
+  assign_boundary_conditions();
   linear_solve();
   return;
 }
@@ -98,9 +106,12 @@ void Solution::linear_solve()
 
 double Solution::get_analytical_derv( double x)
 {
-  // TODO 
-  (void) x;
-  double answer = 0.0;
+  double tmp1 = pi * std::cos( pi * x)
+  double tmp2 = std::sin( pi * x);
+  double expx = std::exp( x);
+
+  double answer = (tmp1 + tmp2) * expx;
+
   return answer;
 }
 

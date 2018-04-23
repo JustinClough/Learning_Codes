@@ -53,9 +53,13 @@ class Solution
     // The L_inf norm error
     double Linf_error;
 
+    // Estimate value of pi
+    double pi;
+
     // Assembles only the stiffness matrix
     void assemble_stiffness();
 
+    // Assembles only the force vector
     void assemble_force();
 
     // Solve the passed linear system
