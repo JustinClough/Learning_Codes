@@ -86,7 +86,7 @@ void Solution::assign_boundary_conditions()
 
 void Solution::solve()
 {
-  // TODO
+  linear_solve();
   return;
 }
 
@@ -339,28 +339,12 @@ void Solution::calculate_errors()
 
 void Solution::print_data()
 {
-  std::cout  << std::scientific
-    << std::endl
-    << "Method:      ";
-    if( method == 0)
-    {
-      std::cout << "Zero Left-DBC";
-    }
-    else if( method == 1)
-    {
-      std::cout << "Zero Average";
-    }
-    std::cout
-    << std::endl
-    << "N+1:         " << mesh->get_num_nodes() - 1
-    << std::endl
-    << "L2_error:    " << L2_error
-    << std::endl
-    << "H1_error:    " << H1_error
-    << std::endl
-    << "Linf_error:  " << Linf_error
-    << std::endl
-    << std::endl;
+  int num_nodes = mesh->get_num_nodes() - 1;
+  printer->add( 
+                num_nodes,  
+                L2_error,   
+                Linf_error,   
+                H1_error   );
 
   return;
 }
