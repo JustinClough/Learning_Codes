@@ -8,13 +8,12 @@
 
 void check_inputs( int     argc, 
                    char**  argv,
-                   int*    pnp1,
                    int*    pmeth)
 {
-  if ( argc != 3)
+  if ( argc != 2)
   {
     std::cout 
-      << "Usage: hw6 <N+1> <method>"
+      << "Usage: hw6 <method>"
       << std::endl
       << "method = 0: Zero Left-DBC"
       << std::endl
@@ -24,8 +23,7 @@ void check_inputs( int     argc,
     std::abort();
   }
 
-  *pnp1  = std::atoi( argv[1]);
-  *pmeth = std::atoi( argv[2]);
+  *pmeth = std::atoi( argv[1]);
 
   if( *pmeth != 0 && *pmeth != 1)
   {
@@ -37,29 +35,13 @@ void check_inputs( int     argc,
     std::abort();
   }
 
-  if( *pnp1 <= 0)
-  {
-    std::cout 
-      << "Impossible Number of Nodes = "
-      << *pnp1
-      << std::endl;
-
-    std::abort();
-
-  }
-
-  std::cout << "np1 = " << *pnp1 << std::endl;
   std::cout << "method = " << *pmeth << std::endl;
   return;
 }
 
-void drive_problem( int Np1, 
-                    int method)
+void drive( int Np1, int method, Printer* printer)
 {
   Mesh* mesh = new Mesh( Np1);
-  mesh->print_stats();
-
-  Printer* printer = new Printer();
 
   Solution* s = new Solution( mesh, printer, method);
 
@@ -68,9 +50,26 @@ void drive_problem( int Np1,
   s->calculate_errors();
   s->print_data();
 
-  delete printer;
   delete s;
   delete mesh;
+
+  return;
+}
+
+
+void drive_problem( int method)
+{
+  Printer* printer = new Printer();
+
+  int nN = 6;
+  int N[] = {10, 20, 40, 80, 160, 320};
+
+  for( int i = 0; i < nN; i++)
+  {
+    drive( N[i], method, printer);
+  }
+
+  delete printer;
 
   return;
 }
