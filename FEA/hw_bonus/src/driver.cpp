@@ -59,11 +59,14 @@ void drive_problem( int Np1,
   Mesh *mesh = new Mesh( Np1);
   mesh->print_stats();
 
-//  Solution* s = new Solution( mesh, CaseNumber, method, dt);
+  Solution* s = new Solution( mesh, method);
 
- // s->assemble_system();
+  s->assemble_system();
+  s->solve();
+  s->calculate_errors();
+  s->print_data();
 
-  //delete s;
+  delete s;
   delete mesh;
 
   return;
