@@ -10,5 +10,7 @@ int main( int argc, char** argv)
 
   check_inputs( argc, argv, &np1, &method);
 
+  drive_problem( np1, method);
+
   return 0;
 }
