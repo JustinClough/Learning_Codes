@@ -44,6 +44,9 @@ class Solution
     // Solution Vector
     VectorXd U;
 
+    // Residual Vector
+    VectorXd R;
+
     // The L2 norm error
     double L2_error;
   
@@ -103,6 +106,18 @@ class Solution
 
     // Returns the analytical force at x
     double get_analytical_force( double x);
+
+    // Gets the elemental force contribution
+    VectorXd get_elem_force( Element* elem);
+
+    // Assigns the zero left DBC
+    void assign_zero_left_dbc();
+
+    // Assigns a zero average condition
+    void assign_zero_average();
+
+    // Assigns the NBC
+    void assign_nbc();
 };
 
 #endif

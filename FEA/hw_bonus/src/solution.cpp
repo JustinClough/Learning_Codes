@@ -3,11 +3,6 @@
 #include <iostream>
 #include <cstdlib>
 
-double calc_pi()
-{
-  return 4.0 * atan( 1.0);
-}
-
 Solution::Solution( Mesh*    mesh_, 
                     Printer* printer_,
                     int      method_  )
@@ -17,7 +12,7 @@ Solution::Solution( Mesh*    mesh_,
   printer = printer_;
   method  = method_;
 
-  pi = calc_pi();
+  pi = 4.0 * atan( 1.0);
 
   int num_nodes = mesh->get_num_nodes();
   
@@ -63,9 +58,48 @@ double Solution::get_analytical_force( double x)
   return ans;
 }
 
+VectorXd Solution::get_elem_force( Element* elem)
+{
+  VectorXd f_elem = VectorXd::Zero( 2);
+
+  int nL = 0;
+  int nR = 0;
+  elem->get_indices( &nL, &nR);
+
+  double xL = mesh->get_pos( nL);
+  double xR = mesh->get_pos( nR);
+  double xM = (xL + xR) / 2.0;
+
+  double fl = get_analytical_force( xL);
+  double fm = get_analytical_force( xM);
+  double fr = get_analytical_force( xR);
+
+  f_elem( 0) = fl + 2.0 * fm;
+  f_elem( 1) = fr + 2.0 * fm;
+
+  double h = elem->get_length();
+
+  f_elem *= (h / 6.0);
+
+  return f_elem;
+}
+
 void Solution::assemble_force()
 {
-  // TODO
+  VectorXd f_elem;
+  int L = 0;
+  int R = 0;
+  for( int i = 0; i < mesh->get_num_elems(); i++)
+  {
+    Element* elem = mesh->get_elem(i);
+
+    f_elem = get_elem_force( elem);
+    elem->get_indices( &L, &R);
+
+    F( L) += f_elem( 0);
+    F( R) += f_elem( 1);
+  }
+
   return;
 }
 
@@ -80,33 +114,81 @@ void Solution::assemble_system()
 
 void Solution::assign_boundary_conditions()
 {
-  int n = mesh->get_num_nodes();
+  assign_nbc();
+  if( method == 0)
+  {
+    assign_zero_left_dbc();
+  }
+  else if( method == 1)
+  {
+    assign_zero_average();
+  }
 
-  // TODO
-  double diag = K( 0, 0);
-  for( int i = 0; i < K.cols(); i++)
+  return;
+}
+
+void Solution::assign_nbc()
+{
+  double alpha =  pi;
+  double beta  = -pi * std::exp( 1);
+
+  int n = F.rows();
+
+  F( 0)   += alpha;
+  F( n-1) += beta;
+
+  return;
+}
+
+void Solution::assign_zero_left_dbc()
+{
+  double diag      = K( 0, 0);
+  double DBC_value = 0.0;
+
+  int n = K.cols();
+  for( int i = 0; i < n; i++)
   {
     if( i != 0)
     {
       K( 0, i) = 0.0;
     }
   }
-  F( 0) = 0.0;
-  
-  K( n-1, n-1) = 1.0;
-  for( int i = 0; i < (K.cols() - 1); i++)
-  {
-    K( n-1, i) = 0.0;
-  }
-  F( n -1) = 0.0;
 
+  F( 0) = diag * DBC_value;
+
+  return;
+}
+
+void Solution::assign_zero_average()
+{
+  // TODO
   return;
 }
 
 void Solution::solve()
 {
+
   assign_boundary_conditions();
   linear_solve();
+  
+  R = F - K * U;
+
+  std::cout 
+    << "K = " << std::endl
+    << K << std::endl;
+
+  std::cout 
+    << "F = " << std::endl
+    << F << std::endl;
+
+  std::cout
+    << "U = " << std::endl
+    << U << std::endl;
+
+  std::cout
+    << "R = " << std::endl
+    << R << std::endl;
+
   return;
 }
 
