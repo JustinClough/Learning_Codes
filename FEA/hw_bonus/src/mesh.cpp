@@ -96,7 +96,7 @@ void Mesh::print_stats()
 void Mesh::create_nodes()
 {
   const double x0 = 0.0;
-  const double L  = pi;
+  const double L  = 1.0;
 
   const double dx = (L - x0) / num_elems;
 
