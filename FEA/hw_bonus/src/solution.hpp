@@ -110,8 +110,8 @@ class Solution
     // Gets the elemental force contribution
     VectorXd get_elem_force( Element* elem);
 
-    // Assigns the zero left DBC
-    void assign_zero_left_dbc();
+    // Assigns the left DBC
+    void assign_left_dbc();
 
     // Assigns a zero average condition
     void assign_zero_average();

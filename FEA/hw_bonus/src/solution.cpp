@@ -117,7 +117,7 @@ void Solution::assign_boundary_conditions()
   assign_nbc();
   if( method == 0)
   {
-    assign_zero_left_dbc();
+    assign_left_dbc();
   }
   else if( method == 1)
   {
@@ -140,10 +140,10 @@ void Solution::assign_nbc()
   return;
 }
 
-void Solution::assign_zero_left_dbc()
+void Solution::assign_left_dbc()
 {
   double diag      = K( 0, 0);
-  double DBC_value = 0.0;
+  double DBC_value = -(1.0 + std::exp( 1)) * pi / ( 1.0 + pi * pi);
 
   int n = K.cols();
   for( int i = 0; i < n; i++)
@@ -173,22 +173,6 @@ void Solution::solve()
   
   R = F - K * U;
 
-  std::cout 
-    << "K = " << std::endl
-    << K << std::endl;
-
-  std::cout 
-    << "F = " << std::endl
-    << F << std::endl;
-
-  std::cout
-    << "U = " << std::endl
-    << U << std::endl;
-
-  std::cout
-    << "R = " << std::endl
-    << R << std::endl;
-
   return;
 }
 
@@ -211,7 +195,10 @@ double Solution::get_analytical_derv( double x)
 
 double Solution::get_analytical_solution( double x)
 {
-  double answer = std::sin( pi * x) * std::exp( x);
+  double front = std::sin( pi * x) * std::exp( x);
+  double backC = (1.0 + std::exp( 1)) * pi / ( 1.0 + pi * pi);
+
+  double answer = front - backC;
 
   return answer;
 }
