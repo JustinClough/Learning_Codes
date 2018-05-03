@@ -61,11 +61,12 @@ void drive_problem( int method)
   Printer* printer = new Printer();
 
   int nN  = 6;
-  int N[] = {10, 20, 40, 80, 160, 320};
+  int N   = 10;
 
   for( int i = 0; i < nN; i++)
   {
-    drive( N[i], method, printer);
+    drive( N, method, printer);
+    N *= 2;
   }
 
   printer->print();
