@@ -60,8 +60,8 @@ void drive_problem( int method)
 {
   Printer* printer = new Printer();
 
-  int nN  = 6;
-  int N   = 10;
+  int nN  = 9;
+  int N   = 5;
 
   for( int i = 0; i < nN; i++)
   {
