@@ -21,12 +21,19 @@ Printer::~Printer()
   H1_order.clear();
 }
 
-void Printer::add( int N, double L2_, double Linf_, double H1_)
+void Printer::add( int N, 
+                   double L2_, 
+                   double Linf_, 
+                   double H1_, 
+                   double t_a, 
+                   double t_s)
 {
   mesh_sizes.push_back( N);
-  L2.push_back( L2_);
-  Linf.push_back( Linf_);
-  H1.push_back( H1_);
+  L2.push_back(         L2_);
+  Linf.push_back(       Linf_);
+  H1.push_back(         H1_);
+  assembly.push_back(   t_a);
+  solve.push_back(      t_s);
 
   entries++;
 
@@ -78,6 +85,8 @@ void Printer::pad( int p)
 
 void Printer::print_table_header()
 {
+  std::cout << "N"     ; 
+  pad( 3);
   std::cout << "L2"    ; 
   pad( 12);
   std::cout << "L2_o"  ; 
@@ -90,6 +99,10 @@ void Printer::print_table_header()
   pad( 12);
   std::cout << "H1_o"  ;
   pad( 10);
+  std::cout << "Assembly";
+  pad( 6);
+  std::cout << "Solve";
+  pad( 9);
 
   std::cout << std::endl;
   return;
@@ -99,11 +112,24 @@ void Printer::print_row( int i)
 {
   std::cout <<
 
-    L2[i] << tab << L2_order[i]
+    mesh_sizes[i] << tab <<
+
+    L2[i] << tab 
+    << L2_order[i]
+
     << tab <<
-    Linf[i] << tab << Linf_order[i]
+    Linf[i] << tab 
+    << Linf_order[i]
+
     << tab <<
-    H1[i] << tab << H1_order[i]
+    H1[i] << tab 
+    << H1_order[i]
+
+    << tab <<
+    assembly[i]
+
+    << tab <<
+    solve[i]
 
     << std::endl;
 

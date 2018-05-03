@@ -17,7 +17,12 @@ class Printer
     void print();
 
     // Adds solution data
-    void add( int N, double L2_, double Linf_, double H1_);
+    void add( int N, 
+              double L2_, 
+              double Linf_, 
+              double H1_, 
+              double t_a, 
+              double t_s);
 
   private:
     // Amount of data collected
@@ -37,6 +42,12 @@ class Printer
 
     // Vector of H1 errors
     std::vector< double> H1;
+
+    // Vector of Assembly times;
+    std::vector< double> assembly;
+
+    // Vector of solve times
+    std::vector< double> solve;
 
     // Vector of L2 orders
     std::vector< double> L2_order;

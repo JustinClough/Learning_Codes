@@ -19,6 +19,10 @@ Solution::Solution( Mesh*    mesh_,
   K = MatrixXd::Zero( num_nodes, num_nodes);
   F = VectorXd::Zero( num_nodes);
   U = VectorXd::Zero( num_nodes);
+
+  zK = MatrixXd::Zero( num_nodes + 1, num_nodes + 1);
+  zF = VectorXd::Zero( num_nodes + 1);
+  zU = VectorXd::Zero( num_nodes + 1);
 }
 
 Solution::~Solution()
@@ -106,8 +110,18 @@ void Solution::assemble_force()
 
 void Solution::assemble_system()
 {
+  timespec ts;
+  clock_gettime( CLOCK_REALTIME, &ts);
+
   assemble_stiffness();
   assemble_force();
+
+  timespec tf;
+  clock_gettime( CLOCK_REALTIME, &tf);
+
+  double b = 1.0e9;
+  t_a = b * (tf.tv_sec - ts.tv_sec) + tf.tv_nsec - ts.tv_nsec;
+  t_a /= b;
 
   return;
 }
@@ -134,7 +148,7 @@ void Solution::assign_nbc()
 
   int n = F.rows();
 
-  F( 0)   += alpha;
+  F( 0)   -= alpha;
   F( n-1) += beta;
 
   return;
@@ -159,26 +173,120 @@ void Solution::assign_left_dbc()
   return;
 }
 
+VectorXd Solution::get_H_vector()
+{
+  VectorXd H = VectorXd::Zero( K.rows());
+
+  for( int i = 0; i < mesh->get_num_elems(); i++)
+  {
+    double hi = mesh->get_elem( i)->get_length();
+
+    double inc = hi / 2.0;
+
+    H( i)   += inc;
+    H( i+1) += inc;
+  }
+
+  return H;
+}
+
 void Solution::assign_zero_average()
 {
   // TODO
+
+  //     __     __
+  //zk = | K | H |
+  //     |_H'| g_|
+
+  double corner = 0.0;
+  VectorXd H = get_H_vector();
+  for( int row = 0; row < zK.rows(); row++)
+  {
+    for( int col = 0; col < zK.cols(); col++)
+    {
+      // Upper left block
+      if( row < K.rows() && col < K.cols())
+      {
+        zK( row, col) = K( row, col);
+      }
+    }
+  }
+
+  const int COL = zK.cols();
+  for( int row = 0; row < H.rows(); row++)
+  {
+    zK( row, COL - 1) = H( row);
+  }
+
+  const int ROW = zK.rows();
+  for( int col = 0; col < H.rows(); col++)
+  {
+    zK( ROW - 1, col) = H(col);
+    corner += H( col);
+
+  }
+  
+  corner *= 1.0;
+
+  zK( zK.rows() - 1, zK.cols() - 1) = corner;
+
+  for( int row = 0; row < zF.rows(); row++)
+  {
+    if( row < F.rows())
+    {
+      zF( row) = F( row);
+    }
+    else
+    {
+      zF( row) = 0.0;
+    }
+  }
+
   return;
 }
 
 void Solution::solve()
 {
+  timespec ts;
+  clock_gettime( CLOCK_REALTIME, &ts);
 
   assign_boundary_conditions();
   linear_solve();
   
-  R = F - K * U;
+  timespec tf;
+  clock_gettime( CLOCK_REALTIME, &tf);
+
+  double b = 1.0e9;
+  t_s = b * (tf.tv_sec - ts.tv_sec) + tf.tv_nsec - ts.tv_nsec;
+  t_s /= b;
+
+  if( method == 0)
+  {
+    R = F - K * U;
+  }
+  else
+  {
+    for( int i = 0; i < U.rows(); i++)
+    {
+      U(i) = zU(i);
+    }
+    zR = zF - zK * zU;
+  }
 
   return;
 }
 
 void Solution::linear_solve()
 {
-  U = K.fullPivLu().solve( F);
+  if( method == 0)
+  {
+    U = K.fullPivLu().solve( F);
+  }
+  else
+  {
+    zU = zK.fullPivLu().solve( zF);
+  }
+
   return;
 }
 
@@ -434,7 +542,9 @@ void Solution::print_data()
                 num_nodes,  
                 L2_error,   
                 Linf_error,   
-                H1_error   );
+                H1_error,
+                t_a,
+                t_s        );
 
   return;
 }

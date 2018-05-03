@@ -44,8 +44,20 @@ class Solution
     // Solution Vector
     VectorXd U;
 
+    // Global stiffness matrix for Zero-Average condition
+    MatrixXd zK;
+
+    // Global Background Forcing Vector for Zero-Average condition
+    VectorXd zF;
+
+    // Solution vector for zero-average conditions
+    VectorXd zU;
+
     // Residual Vector
     VectorXd R;
+
+    // Residual Vector for zero-average conditions
+    VectorXd zR;
 
     // The L2 norm error
     double L2_error;
@@ -118,6 +130,15 @@ class Solution
 
     // Assigns the NBC
     void assign_nbc();
+
+    // Gets the H vector for the zero average assignment
+    VectorXd get_H_vector();
+
+    // Assembly time
+    double t_a;
+
+    // Solve time
+    double t_s;
 };
 
 #endif
