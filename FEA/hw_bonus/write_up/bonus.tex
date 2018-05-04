@@ -1,0 +1,292 @@
+\documentclass[a4paper, 12pt]{article}
+\title{}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage[justification=centering]{caption}
+\usepackage{enumerate}
+\usepackage{multirow}
+\usepackage{listings}
+\lstset{
+    escapechar=`,
+    language=C++,
+    numbers=left,
+    tabsize=2,
+    prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+    frame=single,
+    breaklines=true,
+}
+\usepackage{graphicx}
+\graphicspath{ {./} }
+\usepackage{nameref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\usepackage{tikz}
+\usetikzlibrary{calc,patterns,decorations.pathmorphing,decorations.markings,positioning,automata}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{makecell}
+\usepackage{ulem}
+\usepackage{verbatim}
+
+\begin{document}
+
+\section*{Bonus Problem: Pure Neumann Problem} \label{sec:intro}
+The purpose of this exercise was to use the Finite Element Method (FEM) 
+to approximate, and study, the solution to the problem presented in 
+Eq. \ref{eq:StrongForm}.
+
+\begin{align}
+   -u_{xx} &= f               \label{eq:StrongForm} \\
+u_x(0) = \alpha &, u_x(1) = \beta
+\end{align}
+
+\noindent
+This equation was solved on the domain $x\in[0,1]$.
+The given forcing function $f$ and boundary conditions 
+$\alpha$, and $\beta$ meet the condition
+shown in Equation \ref{f_cond}.
+
+\begin{equation} \label{f_cond}
+  \int_0^1 f dx = \alpha - \beta
+\end{equation}
+
+\noindent
+As posed, this problem has the solution $U(x) + C$ where $C$ is 
+any constant. 
+Two methods are considered in this report to remove the ambiguity
+of this constant:
+(1) Prescribe a Dirichlet condition at a node;
+(2) Prescribe a zero-average condition on the solution.
+
+The problem domain was divided into a uniform and structured mesh.
+The rule for determining element size is shown in the equation below.
+
+\begin{equation}
+  h =  \frac{ 1}{ N+1}
+\end{equation}
+
+\noindent
+Here, $N$ is the number of degrees of freedom; $N+1$ is the number of elements.
+Tests were conducted for $N= 5, 10, 20, ..., 640, 1280$.
+All tests used the manufactured solution shown
+in Equation \ref{manSolution}.
+
+\begin{equation} \label{manSolution}
+  u(x) = sin( \pi x) e^x - \frac{(1+e)\pi}{1+\pi^2}
+\end{equation}
+
+\noindent
+This manufactured solution was chosen as it is smooth and 
+has a zero average over the interval $x\in[0,1]$.
+A computer code was written to evaluate the posed problem
+with the two methods.
+
+The Dirichlet condition used was the 
+value of the manufactured solution evaluated at $x=0$.
+Written out explicitly, $u(0) = b$ where
+
+\begin{equation}
+  b = - \frac{(1+e)\pi}{1+\pi^2}
+\end{equation}
+
+\noindent
+It was implemented with the method discussed in lecture
+and shown in previous homework assignments.
+In practice as the solution is not known beforehand,
+assigning the Dirichlet boundary condition as any known number
+(or more conveniently, as zero) would lead to similar 
+convergence order results.
+E.g., choosing $b = 0$ instead would still 
+lead to similar convergence rates and solve times.
+
+The zero-average was imposed by enforcing
+
+\begin{equation}
+  \int_0^1 u dx = 0
+\end{equation}
+
+\noindent
+To implement this constraint, first the base FE system 
+was constructed:
+
+\begin{equation} \label{original_system}
+  K \underline{U} = \underline{F}
+\end{equation}
+
+\noindent
+Next, the zero-average condition was discretized 
+by approximating $u$ as $u^h$, the FE solution,
+and using the shape functions in the elements:
+
+\begin{align}
+  \int_0^1 u dx &\approx \sum_{i=1}^N \int_{e_i} (u^h_{i,1} \phi_{i,1} + u^h_{i,2} \phi_{i,2}) dx \\
+  \int_{e_i} (u^h_{i,1} \phi_{i,1} + u^h_{i,2} \phi_{i,2}) dx &= (u^h_{i,1} + u^h_{i,2}) \frac{h_i}{2} 
+\end{align}
+
+\noindent
+where $e_i$ is the $i$th element, 
+$u^h_{i,k}$ is the FE solution at the $i$th element's $k$th node, 
+and
+$\phi_{i,k}$ is the basis function of the $i$th element's $k$th node.
+A vector $H$ was then defined as:
+
+\begin{equation}
+  \underline{H} = \frac{1}{2}
+    \begin{bmatrix}
+      h_1\\
+      h_1 + h_2\\
+      \vdots\\
+      h_{i-1} + h_i\\
+      \vdots\\
+      h_{N-1} + h_N\\
+      h_N
+    \end{bmatrix}
+\end{equation}
+
+\noindent
+This then allowed the zero average condition to be written as
+$\underline{H} \cdot \underline{U} = 0$.
+Adding this condition to Equation \ref{original_system}
+then gives the block structure:
+
+\begin{equation}
+  \begin{bmatrix}
+    K   \\
+    H^T 
+  \end{bmatrix}
+  \underline{U} =
+  \begin{bmatrix}
+    \underline{F} \\
+    0
+  \end{bmatrix}
+\end{equation}
+
+\noindent
+which has a new stiffness matrix that is $N+2 \times N+1$. 
+To instead force this back to a square and symmetric system, 
+the system below is used instead:
+
+\begin{equation}
+  \begin{bmatrix}
+    K   & H \\
+    H^T & \gamma
+  \end{bmatrix}
+  \begin{bmatrix}
+    \underline{U}  \\
+    c
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    \underline{F} \\
+    0
+  \end{bmatrix}
+\end{equation}
+
+\noindent
+with $\gamma = \sum_{i=1}^N H_i$ to also preserve
+diagonal dominance. 
+Note that since $K \underline{U} = \underline{F}$
+is a valid solution, then $c=0$.
+
+The results follow this section and the code itself 
+is appended to this report.
+Tabulated data, in the form of error norms, convergence order, 
+assembly, and solve times are shown in
+Tables \ref{tab:zdbc} and \ref{tab:zAve}.
+
+\begin{table}[H]
+\caption{ Error measures, convergence orders, and timing data for the assigned Dirichlet condition.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+ $N+1$&  $||e_h(\cdot)||_{L^2(\Omega_c)}$ & Order & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order & $||e_h(\cdot)||_{H^1}$ & Order & Assembly & Solve \\
+ \hline   % L_2         O(L_2)   L_inf       O(L_inf)   H_1       O(H_1)    assembly    solve
+5    & 5.575e-02 & 0.000 & 9.803e-02 & 0.000 & 9.888e-01 & 0.000 & 3.17e-05 & 1.56e-05\\
+10   & 1.390e-02 & 2.003 & 2.524e-02 & 1.957 & 4.918e-01 & 1.007 & 1.06e-05 & 1.55e-05\\
+20   & 3.473e-03 & 2.000 & 6.355e-03 & 1.989 & 2.451e-01 & 1.004 & 1.89e-05 & 4.13e-05\\
+40   & 8.681e-04 & 2.000 & 1.591e-03 & 1.997 & 1.223e-01 & 1.002 & 3.67e-05 & 1.75e-04\\
+80   & 2.170e-04 & 2.000 & 3.979e-04 & 1.999 & 6.113e-02 & 1.001 & 7.16e-05 & 1.00e-03\\
+160  & 5.425e-05 & 2.000 & 9.947e-05 & 2.000 & 3.055e-02 & 1.000 & 1.41e-04 & 6.60e-03\\
+320  & 1.356e-05 & 2.000 & 2.486e-05 & 1.999 & 1.527e-02 & 1.000 & 2.85e-04 & 1.90e-02\\
+640  & 3.391e-06 & 2.000 & 6.217e-06 & 1.999 & 7.635e-03 & 1.000 & 1.87e-04 & 1.22e-01\\
+1280 & 8.477e-07 & 2.000 & 1.554e-06 & 1.999 & 3.817e-03 & 1.000 & 4.73e-04 & 1.08e+00\\
+\hline
+\end{tabular}
+\label{tab:zdbc}
+\end{table}
+
+\begin{table}[H]
+\caption{ Error measures, convergence orders, and timing data for the zero-average condition.}
+\vspace{0.1in}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+ $N+1$&  $||e_h(\cdot)||_{L^2(\Omega_c)}$ & Order & $||e_h(\cdot)||_{L^\infty([0,1])}$ & Order & $||e_h(\cdot)||_{H^1}$ & Order & Assembly & Solve \\
+ \hline   % L_2         O(L_2)   L_inf       O(L_inf)   H_1       O(H_1)    assembly    solve
+5    & 4.350e-02 & 0.000 & 5.861e-02 & 0.000 & 9.882e-01 & 0.000 & 2.94e-05 & 1.83e-05\\
+10   & 1.090e-02 & 1.995 & 1.553e-02 & 1.916 & 4.917e-01 & 1.006 & 1.06e-05 & 1.75e-05\\
+20   & 2.729e-03 & 1.998 & 4.038e-03 & 1.943 & 2.451e-01 & 1.004 & 1.94e-05 & 4.78e-05\\
+40   & 6.824e-04 & 1.999 & 1.027e-03 & 1.974 & 1.223e-01 & 1.002 & 3.74e-05 & 1.93e-04\\
+80   & 1.706e-04 & 1.999 & 2.590e-04 & 1.987 & 6.113e-02 & 1.001 & 7.32e-05 & 1.06e-03\\
+160  & 4.265e-05 & 1.999 & 6.503e-05 & 1.994 & 3.055e-02 & 1.000 & 1.42e-04 & 6.87e-03\\
+320  & 1.066e-05 & 1.999 & 1.629e-05 & 1.997 & 1.527e-02 & 1.000 & 2.88e-04 & 2.03e-02\\
+640  & 2.665e-06 & 1.999 & 4.076e-06 & 1.998 & 7.635e-03 & 1.000 & 1.89e-04 & 1.27e-01\\
+1280 & 6.664e-07 & 2.000 & 1.019e-06 & 1.999 & 3.817e-03 & 1.000 & 4.77e-04 & 1.11e+00\\
+\hline
+\end{tabular}
+\label{tab:zAve}
+\end{table}
+
+From the calculated data in Tables \ref{tab:zdbc} and \ref{tab:zAve},
+it appears that more nodes are needed for the zero-average method
+to achieve a similar level of accuracy to the assigned Dirichlet condition.
+Assembly and solve times for both methods are on par with one another.
+Adjusting the $\gamma$ value to be in the range of zero to ten times 
+the original appeared to have no noticeable effect on the values reported on.
+The \texttt{Eigen} software package
+was used as the linear solver for this project. 
+The matrix inversion method used was LU with full pivoting.
+
+\newpage
+\appendix
+\section{Source Code and Headers} \label{sec:code}
+
+\subsection{fea\_bonus.cpp} \label{subsec:fea_bonus.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/hw_bonus/src/fea_bonus.cpp}
+
+\subsection{driver.cpp} \label{subsec:driver.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/hw_bonus/src/driver.cpp}
+\subsection{driver.hpp} \label{subsec:driver.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/hw_bonus/src/driver.hpp}
+
+\subsection{element.cpp} \label{subsec:element.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/hw_bonus/src/element.cpp}
+\subsection{element.hpp} \label{subsec:element.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/hw_bonus/src/element.hpp}
+
+\subsection{mesh.cpp} \label{subsec:mesh.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/hw_bonus/src/mesh.cpp}
+\subsection{mesh.hpp} \label{subsec:mesh.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/hw_bonus/src/mesh.hpp}
+
+\subsection{solution.cpp} \label{subsec:solution.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/hw_bonus/src/solution.cpp}
+\subsection{solution.hpp} \label{subsec:solution.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/hw_bonus/src/solution.hpp}
+
+\subsection{printer.cpp} \label{subsec:printer.cpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/hw_bonus/src/printer.cpp}
+\subsection{printer.hpp} \label{subsec:printer.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/hw_bonus/src/printer.hpp}
+
+\subsection{eig\_wrap.hpp} \label{subsec:eig_wrap.hpp}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/hw_bonus/src/eig_wrap.hpp}
+
+\subsection{CMakeLists.txt} \label{subsec:CMakeLists.txt}
+\lstinputlisting{/lore/clougj/Learning_Codes/FEA/hw_bonus/src/CMakeLists.txt}
+
+\end{document}
