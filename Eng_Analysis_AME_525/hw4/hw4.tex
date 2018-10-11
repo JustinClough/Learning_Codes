@@ -1,0 +1,691 @@
+\documentclass[11pt]{homework}
+
+\newcommand{\hwname}{Justin L. Clough}
+\newcommand{\hwemail}{jlclough@usc.edu}
+\newcommand{\hwtype}{Homework}
+\newcommand{\hwnum}{4}
+\newcommand{\hwclass}{AME: 525}
+
+\usepackage{amsmath}
+ \usepackage{delarray}
+
+\begin{document}
+\maketitle
+
+\question
+\emph{Find:}
+\newline
+Solve by Gauss-Jordan reduction:
+\begin{align*}
+x_1 + 2 x_2 + 2 x_3 &= 1 \\
+2 x_1 + 2 x_2 + 3 x_3 &= 3 \\
+x_1 - x_2 + 3 x_3 &= 5 
+\end{align*}
+
+\noindent
+\emph{Solution:}
+\newline
+\[
+\left[
+  \begin{array}{ccc|c}
+  1 & 2 & 2 & 1  \\
+  2 & 2 & 3 & 3 \\
+  1 & -1 & 3 & 5 \\
+  \end{array}
+\right]
+\]
+Add -3 row 1 to row 2 and -1 row 1 to row 3:
+\[
+\left[
+  \begin{array}{ccc|c}
+  1 & 2 & 2 & 1  \\
+  0 & -2 & -1 & 1 \\
+  0 & -3 & 1 & 4 \\
+  \end{array}
+\right]
+\]
+Divide row 2 by -2:
+\[
+\left[
+  \begin{array}{ccc|c}
+  1 & 2 & 2 & 1  \\
+  0 & 1 & \frac{1}{2} & -\frac{1}{2} \\
+  0 & -3 & 1 & 4 \\
+  \end{array}
+\right]
+\]
+Add 3 row 2 to row 3:
+\[
+\left[
+  \begin{array}{ccc|c}
+  1 & 2 & 2 & 1  \\
+  0 & 1 & \frac{1}{2} & -\frac{1}{2} \\
+  0 & 0 & \frac{5}{2} & \frac{5}{2} \\
+  \end{array}
+\right]
+\]
+Divide row 3 by $\frac{5}{2}$:
+\[
+\left[
+  \begin{array}{ccc|c}
+  1 & 2 & 2 & 1  \\
+  0 & 1 & \frac{1}{2} & -\frac{1}{2} \\
+  0 & 0 & 1 & 1 \\
+  \end{array}
+\right]
+\]
+Add $-\frac{1}{2}$ row 3 to row 2 and -2 row 3 to row 1.
+\[
+\left[
+  \begin{array}{ccc|c}
+  1 & 2 & 0 & -1  \\
+  0 & 1 & 0 & -1 \\
+  0 & 0 & 1 & 1 \\
+  \end{array}
+\right]
+\]
+Add -2 row 2 to row 1.
+\[
+\left[
+  \begin{array}{ccc|c}
+  1 & 0 & 0 & 1  \\
+  0 & 1 & 0 & -1 \\
+  0 & 0 & 1 & 1 \\
+  \end{array}
+\right]
+\]
+So $\vec x=( 1, -1, 1)$.
+
+\question
+\emph{Find:}
+\newline
+Solve by Gauss-Jordan reduction:
+\begin{align*}
+2 x_1 +  x_3 &= 4 \\
+x_1 - 2 x_2 + 2 x_3 &= 7 \\
+3 x_1 + 2 x_2  &= 1 
+\end{align*}
+
+\noindent
+\emph{Solution:}
+\newline
+\[
+\left[
+  \begin{array}{ccc|c}
+  2 & 0 & 1 & 4  \\
+  1 & -2 & 2 & 7 \\
+  3 & 2 & 0 & 1 \\
+  \end{array}
+\right]
+\]
+
+Divide row 1 by 2.
+\[
+\left[
+  \begin{array}{ccc|c}
+  1 & 0 & \frac{1}{2} & 2  \\
+  1 & -2 & 2 & 7 \\
+  3 & 2 & 0 & 1 \\
+  \end{array}
+\right]
+\]
+
+Add -1 row 1 to row 2 and -3 row 1 to row 3.
+\[
+\left[
+  \begin{array}{ccc|c}
+  1 & 0  & \frac{1}{2} &  2 \\
+  0 & -2 & \frac{3}{2} &  5 \\
+  0 & 2 & -\frac{3}{2} & -5 \\
+  \end{array}
+\right]
+\]
+
+Add 1 row 2 to row 3.
+\[
+\left[
+  \begin{array}{ccc|c}
+  1 & 0  & \frac{1}{2} &  2 \\
+  0 & -2 & \frac{3}{2} &  5 \\
+  0 & 0 & 0 & 0 \\
+  \end{array}
+\right]
+\]
+Divide row 2 by -2.
+\[
+\left[
+  \begin{array}{ccc|c}
+  1 & 0 & \frac{1}{2} &  2 \\
+  0 & 1 & -\frac{3}{4} & -\frac{5}{2} \\
+  0 & 0 & 0 & 0 \\
+  \end{array}
+\right]
+\]
+
+So, the solutions have the form:
+\begin{equation*}
+x = \alpha
+  \begin{bmatrix}
+    -\frac{1}{2} \\
+     \frac{3}{4} \\
+     1
+  \end{bmatrix}
+  +
+  \begin{bmatrix}
+  2 \\
+  -\frac{5}{2} \\
+  0
+  \end{bmatrix}
+\quad \forall \alpha \in \mathcal{R}
+\end{equation*}
+ 
+\question*{ \S 11.2 page 366: 17, 19, 21, and 23 }
+\emph{Find:}
+\newline
+In each of Problems 17, 19, 21, and 23, find $A_r$ and 
+produce a matrix $\Omega_r$ such that $\Omega_r A = A_r$.
+\newline
+17. 
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  2 & 2 \\
+  1 & 1 
+  \end{bmatrix}
+\end{equation*}
+19. 
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  -3 & 4 & 4 \\
+  0 & 0  & 0
+  \end{bmatrix}
+\end{equation*}
+21. 
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  8 & 2 &1 & 0 \\
+  0 & 1 &1 & 3 \\
+  4 & 0 &0 & -3 
+  \end{bmatrix}
+\end{equation*}
+
+23. 
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  0  \\
+  -3  \\
+  1 \\
+  1 
+  \end{bmatrix}
+\end{equation*}
+
+\emph{Solution:}
+\newline
+17. Let $\Omega_r = E_2 E_1$:
+\begin{align*}
+\Omega_r A = A_r &=
+  \begin{bmatrix}
+  1 & 1 \\
+  0 & 0 
+  \end{bmatrix} \\
+\text{Multiply row 1 by $\frac{1}{2}$}
+\Rightarrow
+E_1 &= 
+  \begin{bmatrix}
+  \frac{1}{2} & 0 \\
+  0           & 1 \\
+  \end{bmatrix} \\
+\text{Add -1 row 1 to row 2}
+\Rightarrow
+E_2 &= 
+  \begin{bmatrix}
+  1  & 0 \\
+  -1 & 1 
+  \end{bmatrix} \\
+\Rightarrow
+\Omega_r = E_2 E_1 &=
+  \begin{bmatrix}
+  \frac{1}{2} & 0 \\
+  -\frac{1}{2} & 1
+  \end{bmatrix}
+\end{align*}
+
+19. Let $\Omega_r = E_1$:
+\begin{align*}
+  \Omega_r A = A_r &= 
+  \begin{bmatrix}
+  1 & -\frac{4}{3} & -\frac{4}{3} \\
+  0 & 0 & 0 \\
+  \end{bmatrix} \\
+\text{Multiply row 1 by $-\frac{1}{3}$}
+\Rightarrow
+E_1 &= 
+  \begin{bmatrix}
+  -\frac{1}{3} & 0 \\
+  0 & 0
+  \end{bmatrix} \\
+\Rightarrow
+\Omega_r = E_1 &= 
+  \begin{bmatrix}
+  -\frac{1}{3} & 0 \\
+  0 & 0
+  \end{bmatrix} \\
+\end{align*}
+21. Let $\Omega_r = E_5 E_4 E_3 E_2 E_1$:
+\begin{align*}
+  \Omega_r A = A_r &=
+  \begin{bmatrix}
+  1 & 0 & 0 & -\frac{3}{4} \\
+  0 & 1 & 0 & 3 \\
+  0 & 0 & 1 & 0
+  \end{bmatrix} \\
+\text{Multiply row 1 by $\frac{1}{8}$}
+\Rightarrow
+E_1 &=
+  \begin{bmatrix}
+    \frac{1}{8} & 0 & 0 \\
+    0 & 1 & 0 \\
+    0 & 0 & 1
+  \end{bmatrix} \\
+\text{Add -4 row 1 to row 3}
+\Rightarrow
+E_2 &=
+  \begin{bmatrix}
+    1 & 0 & 0 \\
+    0 & 1 & 0 \\
+    -4 & 0 & 1
+  \end{bmatrix}\\\
+\text{Add row 2 to row 3 and $-\frac{1}{4}$ row 2 to row 1}
+\Rightarrow
+E_3 &=
+  \begin{bmatrix}
+    1 & -\frac{1}{4} & 0 \\
+    0 & 1 & 0 \\
+    0 & 1 & 1
+  \end{bmatrix} \\
+\text{Multiply row 3 by 2}
+\Rightarrow
+E_4 &=
+  \begin{bmatrix}
+    1 & 0 & 0 \\
+    0 & 1 & 0 \\
+    0 & 0 & 2
+  \end{bmatrix}\\
+\text{Add -1 row 3 to row 2, $\frac{1}{8}$ row 3 to row 1}
+\Rightarrow
+E_5 &=
+  \begin{bmatrix}
+    1 & 0 & \frac{1}{8} \\
+    0 & 1 & -1 \\
+    0 & 0 & 1
+  \end{bmatrix}\\
+\Omega_r =E_5 E_4 E_3 E_2 E_1 &=
+  \begin{bmatrix}
+  0 & 0 & \frac{1}{4} \\
+  1 & -1 & -2 \\
+  -1& 2 & 2 
+  \end{bmatrix}
+\end{align*}
+
+23. Let $\Omega_r = E_2 E_1$:
+\begin{align*}
+\Omega_r A = A_r &=
+  \begin{bmatrix}
+  1 \\
+  0 \\
+  0 \\
+  0
+  \end{bmatrix}\\
+\text{Switch rows 1 and 4}
+\Rightarrow
+E_1 &= 
+  \begin{bmatrix}
+  0 & 0 & 0 & 1 \\
+  0 & 1 & 0 & 0 \\
+  0 & 0 & 1 & 0 \\
+  1 & 0 & 0 & 0 
+  \end{bmatrix}\\
+\text{Add 3 row 1 to row 2, -1 row 1 to row 3}
+\Rightarrow
+E_2 &=
+  \begin{bmatrix}
+  1 & 0 & 0 & 0 \\
+  3 & 1 & 0 & 0 \\
+  -1 & 0 & 1 & 0 \\
+  0 & 0 & 0 & 1 
+  \end{bmatrix} \\
+\Rightarrow
+\Omega_r = E_2 E_1 &=
+  \begin{bmatrix}
+  0 & 0 & 0 & 1 \\
+  0 & 1 & 0 & 3 \\
+  0 & 0 & 1 & -1 \\
+  1 & 0 & 0 & 1 
+  \end{bmatrix}
+\end{align*}
+
+
+\question*{7-10}
+\emph{Find:}
+\newline
+Find the reduced form of the matrix 
+and use this to determine the rank of the matrix. 
+Also find the basis for the row space of the matrix
+and a basis for the column space.
+\newline
+7.
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  1 & -1 & 4 \\
+  0 & 1 & 3 \\
+  2 & -1 & 11 
+  \end{bmatrix}
+\end{equation*}
+8.
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  6 & 0 & 0 & 1 & 1 \\
+  12 & 0 & 0 & 2 & 2 \\
+  1 & -1 & 0 & 0 & 0 
+  \end{bmatrix}
+\end{equation*}
+9.
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  1 & 0 & 0 \\
+  2 & 0 & 0 \\
+  1 & 0 & -1 \\
+  3 & 0 & 0 
+  \end{bmatrix}
+\end{equation*}
+10.
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  -3 & 2 & 1 & 1 & 0 \\
+  6 & -4 & -2 & -2 & 0
+  \end{bmatrix}
+\end{equation*}
+
+\emph{Solution:}
+\newline
+7.
+\begin{equation*}
+A_r =
+  \begin{bmatrix}
+  1 & 0 & 7 \\
+  0 & 1 & 3 \\
+  0 & 0 & 0
+  \end{bmatrix}
+\end{equation*}
+The rank of $A$ is 2. 
+A row space basis for $A$ is 
+$\vec r_1 = (1, 0, 7)$ with 
+$\vec r_2 = (0, 1, 3)$.
+A column space basis for $A$ is
+$\vec c_1 = (1, 0, 2)$ with
+$\vec c_2 = (0, 1, 1)$.
+\newline
+\newline
+8.
+\begin{equation*}
+A_r =
+  \begin{bmatrix}
+   1 & 0 & 0 & \frac{1}{6} & \frac{1}{6}\\
+   0 & 1 & 0 & \frac{1}{6} & \frac{1}{6}\\
+   0 & 0 & 0 &0 &0 
+  \end{bmatrix}
+\end{equation*}
+The rank of $A$ is 2.
+A row space basis for $A$ is 
+$\vec r_1 = (1,0, 0, \frac{1}{6}, \frac{1}{6})$ with
+$\vec r_2 = (0, -1, 0, -\frac{1}{6}, -\frac{1}{6})$.
+A column space basis for $A$ is
+$\vec c_1 = ( 0,0,-1)$
+$\vec c_2 = (1,2,0)$.
+\newline
+\newline
+9. 
+\begin{equation*}
+A_r = 
+  \begin{bmatrix}
+  1 & 0 \\
+  0 & 1 \\
+  0 & 0 \\
+  0 & 0 
+  \end{bmatrix}
+\end{equation*}
+The rank of $A$ is 2.
+A row space basis for $A$ is
+$\vec r_1 = (1,0)$ with
+$\vec r_2 = (0,1)$.
+A column space basis for $A$ is
+$\vec c_1 = (1,2, 0, 3)$ with
+$\vec c_2 = (0, 0, 1, 0)$.
+\newline
+\newline
+10.
+\begin{equation*}
+A_r =
+  \begin{bmatrix}
+  1 & -\frac{2}{3} & -\frac{1}{3} & -\frac{1}{3} & 0 \\
+  0& 0& 0& 0& 0 
+  \end{bmatrix}
+\end{equation*}
+The rank of $A$ is 1.
+A row space basis for $A$ is
+$\vec r_1 = ( 1 , -\frac{2}{3} , -\frac{1}{3} , -\frac{1}{3} , 0 )$.
+A column space basis for $A$ is
+$\vec c_1 = (1, -2)$.
+
+
+\question*{ \S 11.3 page 372: 6, 8, 10, and 12}
+\emph{Find:}
+\newline
+In each of Problems 6, 8, 10, and 12, 
+use the reduced coefficient matrix to write a general solution 
+ in terms of one or more column matrices. 
+Also determine the dimension of the solution space
+and a basis for this space.
+\newline
+6. 
+\begin{align*}
+6 x_1 - x_2 +x_3 &= 0 \\
+x_1 - x_4 + 2 x_5 &= 0 \\
+x_1 - 2 x_5 &= 0 
+\end{align*}
+
+8.
+\begin{align*}
+8x_1 -2 x_3 +x_6 &= 0 \\
+2x_1 - x_2 +3 x_4 - x_6 &=0 \\
+x_2 +x_3 - 2 x_5 -x_6 &= 0 \\
+x_4 - 3 x_5 +2 x_6 &= 0 
+\end{align*}
+
+10.
+\begin{align*}
+4 x_1 - 3 x_2 +x_4 +x_5 - 3 x_6 &= 0 \\
+2x_2 +4x_4 -x_5 -6x_6 &= 0 \\
+3x_1 - 2x_2 +4 x_5 - x_6 &= 0\\
+2x_1 + x_2 - 3 x_3 +4 x_4 &= 0
+\end{align*}
+
+12. 
+\begin{align*}
+2x_1 - 4 x_5 + x_7 +x_8 &= 0\\
+2x_2 - x_6 + x_7 - x_8 &= 0 \\
+x_3 - 4 x_4 + x_5 &= 0 \\
+x_2 - x_3 + x_4 &= 0 \\
+x_2 - x_5 + x_6 - x_7 &= 0 
+\end{align*}
+
+\emph{Solution:}
+\newline
+6. The reduced coefficient matrix is:
+\begin{equation*}
+A_r = 
+  \begin{bmatrix}
+  1 & 0 & 0 & 0 & -2 \\
+  0 & 1 & -1 & 0 & -12 \\
+  0 & 0 & 0 & 1 & -4 
+  \end{bmatrix}
+\end{equation*}
+The general solution has the form:
+\begin{equation}
+\vec x = 
+  \alpha_1 
+  \begin{bmatrix}
+    0 \\
+    -1 \\
+    1 \\
+    0\\
+    0
+  \end{bmatrix}
+  +
+  \alpha_2
+  \begin{bmatrix}
+  -2 \\
+  -12 \\
+  0 \\
+  -4 \\
+  1
+  \end{bmatrix}
+  \quad \forall \alpha_1 , \alpha_2 \in \mathcal{R}
+\end{equation}
+The dimension of the solution space is 2.
+A basis for this space is
+$\vec u_1 = ( 0 , -1 , 1 , 0, 0)$ with
+$\vec u_2 = ( -2 , -12 , 0 , -4 , 1)$.
+\newline
+\newline
+8. The reduce coefficient matrix is:
+\begin{equation*}
+A_r = 
+  \begin{bmatrix}
+  1 & 0 & 0 & 0 & \frac{7}{2} & -4 \\
+  0 & 1 & 0 & 0 & \frac{20}{3} & \frac{9}{2} \\
+  0 & 0 & 1 & 0 & \frac{14}{3} & \frac{11}{2} \\
+  0 & 0 & 0 & 1 & -3 & 2
+  \end{bmatrix}
+\end{equation*}
+The general solution has the form:
+\begin{equation*}
+\vec x =
+  \alpha_1 
+  \begin{bmatrix}
+    \frac{7}{2} \\
+    \frac{20}{3} \\
+    \frac{14}{3} \\
+    -3\\
+    1 \\
+    0
+  \end{bmatrix}
+  +
+  \alpha_2
+  \begin{bmatrix}
+  -4 \\
+  \frac{9}{2} \\
+  \frac{11}{2} \\
+  2 \\
+  0 \\
+  1
+  \end{bmatrix}
+  \quad \forall \alpha_1 , \alpha_2 \in \mathcal{R}
+\end{equation*}
+
+The dimension of the solution space is 2.
+A basis for this space is
+$\vec u_1 = ( \frac{7}{2} , \frac{20}{3} , \frac{14}{3} , -3, 1 , 0)$ 
+with 
+$\vec u_2 = ( -4 , \frac{9}{2} , \frac{11}{2} , 2 , 0 , 1)$.
+\newline
+\newline
+10. The reduced coefficient matrix is:
+\begin{equation*}
+A_r = 
+  \begin{bmatrix}
+  1 & 0 & 0 & 0 & -\frac{9}{20} & \frac{76}{5} \\
+  0 & 1 & 0 & 0 & -\frac{31}{10} & -\frac{183}{5} \\
+  0 & 0 & 1 & 0 & -\frac{9}{10} & -\frac{27}{5} \\
+  0 & 0 & 0 & 1 & \frac{13}{10} & -\frac{84}{5} 
+  \end{bmatrix}
+\end{equation*}
+The general solution has the form:
+\begin{equation*}
+\vec x =
+  \alpha_1 
+  \begin{bmatrix}
+  -\frac{9}{2} \\
+  -31 \\
+  -9 \\
+  13 
+  \end{bmatrix}
+  + \alpha_2
+  \begin{bmatrix}
+  76 \\
+  -183 \\
+  -27 \\
+  -84 
+  \end{bmatrix}
+\end{equation*}
+
+The dimension of the solution space is 2.
+A basis for this space is
+$\vec u_1 = ( -\frac{9}{2} , -31 , -9 , 13)$ with
+$\vec u_2 = ( 76 , -183 , -27 , -84 )$.
+\newline
+\newline
+12.
+The reduced coefficient matrix is:
+\begin{equation*}
+A_r = 
+  \begin{bmatrix}
+  1 & 0 & 0 & 0 & 0 & -1          & \frac{1}{2} & \frac{1}{2} \\
+  0 & 1 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & \frac{1}{2} \\
+  0 & 0 & 1 & 0 & 0 & \frac{1}{2} & \frac{1}{6} & -\frac{5}{6} \\
+  0 & 0 & 0 & 1 & 0 & 0           & \frac{2}{3} & 0 \\
+  0 & 0 & 0 & 0 & 1 & -\frac{1}{2} & \frac{3}{2} & -\frac{1}{2} \\
+  \end{bmatrix}
+\end{equation*}
+The general solution has the form:
+\begin{equation*}
+\vec x = \alpha_1
+  \begin{bmatrix}
+  -2 \\
+  1 \\
+  1 \\
+  0 \\
+  -1
+  \end{bmatrix}
+  + \alpha_2 
+  \begin{bmatrix}
+  3 \\
+  3 \\
+  1 \\
+  4 \\
+  9
+  \end{bmatrix}
+  +\alpha_3 
+  \begin{bmatrix}
+  3 \\
+  3 \\
+  -5 \\
+  0 \\
+  -3
+  \end{bmatrix}
+\quad \forall \alpha_1 , \alpha_2 ,\alpha_3 \in \mathcal{R}
+\end{equation*}
+The dimention of the solution space is 3.
+A basis for this space is 
+$\vec u_1 =( -2 , 1 , 1 , 0 , -1)$,
+$\vec u_2 =( 3 , 3 , 1 , 4 , 9)$, with
+$\vec u_3 =( 3 , 3 , -5 , 0 , -3)$.
+
+\end{document}
