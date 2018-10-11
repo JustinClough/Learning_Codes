@@ -1,0 +1,523 @@
+\documentclass[11pt]{homework}
+
+\newcommand{\hwname}{Justin L. Clough}
+\newcommand{\hwemail}{jlclough@usc.edu}
+\newcommand{\hwtype}{Homework}
+\newcommand{\hwnum}{5}
+\newcommand{\hwclass}{AME: 525}
+
+\usepackage{amsmath}
+ \usepackage{delarray}
+
+\begin{document}
+\maketitle
+
+\question*{\S 11.4 page 379: 2, 8, 10, 12, 14}
+\emph{Find:}
+\newline
+In each of Problems 2, 8, 10, 12, and 14, 
+find a general solution of the system
+or
+show that it is inconsistent.
+\newline
+2.
+\begin{align*}
+4 x_1 - 2 x_2 + 3 x_3 + 10 x_4 &= 1 \\
+x_1 - 3 x_4 &= 8 \\
+2x_1 - 3 x_2 + x_4 &= 16
+\end{align*}
+8. 
+\begin{align*}
+2 x_1 - 3 x_3 &= 1 \\
+x_1 - x_2 + x_3 &= 1 \\
+2 x_1 - 4 x_2 +x_3 &= 2 
+\end{align*}
+10.
+\begin{align*}
+3x_1 - 2 x_2 &= -1 \\
+4x_1 + 3x_2 &= 4
+\end{align*}
+12. 
+\begin{align*}
+-4 x_1 + 5 x_2 - 6 x_3 &= 2 \\
+2 x_1 - 6 x_2 +x_3 &= -5 \\
+-6 x_1 + 16 x_2 - 11 x_3 &= 1
+\end{align*}
+14.
+\begin{align*}
+-6 x_1 + 2 x_2 - x_3 + x_4 &= 0 \\
+x_1 + 4 x_2 -x_4 &= -5 \\
+x_1 + x_2 + x_3 - 7 x_4 &= 0
+\end{align*}
+\newpage
+\emph{Solution:}
+\newline
+\newline
+2. Let $ A \vec x = \vec b$ where
+\begin{equation*}
+  [A: \vec b] = 
+  \left[
+  \begin{array}{cccc|c}
+  4 & -2 & 3 & 10 & 1 \\
+  1 & 0 &  0 & -3 & 8 \\
+  2 & -3 & 0 & 1  & 16
+  \end{array}
+  \right]
+\end{equation*}
+Reducing $[A: \vec b]$ to $[A_r: \vec b_r]$ yields
+\begin{equation*}
+  [A_r: \vec b_r] = 
+  \left[
+  \begin{array}{cccc|c}
+  1 & 0 & 0 & -3            & 8 \\
+  0 & 1 & 0 & -\frac{7}{3}  & 0 \\
+  0 & 0 & 1 & -\frac{20}{9} & -\frac{31}{3}
+  \end{array}
+  \right]
+\end{equation*}
+So the general solution is:
+\begin{equation*}
+  \begin{bmatrix}
+  x_1 \\
+  x_2 \\
+  x_3 \\
+  x_4
+  \end{bmatrix}
+  =
+  \alpha
+  \begin{bmatrix}
+  3 \\
+  \frac{7}{3} \\
+  \frac{20}{3} \\
+  1
+  \end{bmatrix}
+  +
+  \begin{bmatrix}
+  8 \\
+  0 \\
+  -\frac{31}{3} \\
+  0
+  \end{bmatrix}
+  \quad \forall \quad \alpha \in \mathcal{R}
+\end{equation*}
+
+8. Let $ A \vec x = \vec b$ where
+\begin{equation*}
+  [A: \vec b] =
+  \left[
+  \begin{array}{ccc|c}
+  2 & 0 & -3 & 1 \\
+  1 & -1 & 1 & 1 \\
+  2 & -4 & 1 & 2
+  \end{array}
+  \right]
+\end{equation*}
+Reducing $[A: \vec b]$ to $[A_r: \vec b_r]$ yields
+\begin{equation*}
+  [A_r: \vec b_r] = 
+  \left[
+  \begin{array}{ccc|c}
+  1 & 0 & 0 & \frac{1}{2} \\
+  0 & 1 & 0 & -\frac{1}{4} \\
+  0 & 0 & 1 & 0
+  \end{array}
+  \right]
+\end{equation*}
+So the general solution is:
+\begin{equation*}
+  \begin{bmatrix}
+    x_1 \\
+    x_2 \\
+    x_3 
+  \end{bmatrix}
+  = 
+  \begin{bmatrix}
+  \frac{1}{2} \\
+  -\frac{1}{4} \\
+  0
+  \end{bmatrix}
+\end{equation*}
+
+10. Let $ A \vec x = \vec b$ where
+\begin{equation*}
+  [A: \vec b] = 
+  \left[
+  \begin{array}{cc|c}
+  3 & -2 & 1  \\
+  4 & 3 &  4
+  \end{array}
+  \right]
+\end{equation*}
+Reducing $[A: \vec b]$ to $[A_r: \vec b_r]$ yields
+\begin{equation*}
+  [A_r: \vec b_r] = 
+  \left[
+  \begin{array}{cc|c}
+  1 & 0 & \frac{5}{17} \\
+  0 & 1 & \frac{16}{17}
+  \end{array}
+  \right]
+\end{equation*}
+So the general solution is:
+\begin{equation*}
+  \begin{bmatrix}
+  x_1 \\
+  x_2 
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  \frac{5}{17} \\
+  \frac{16}{17}
+  \end{bmatrix}
+\end{equation*}
+
+12. Let $ A \vec x = \vec b$ where
+\begin{equation*}
+  [A: \vec b] = 
+  \left[
+  \begin{array}{ccc|c}
+  -4 & 5 & -6 & 2  \\
+   2 & -6 & 1 & -5  \\
+  -6 & 16 & -11 & 1  
+  \end{array}
+  \right]
+\end{equation*}
+Reducing $[A: \vec b]$ to $[A_r: \vec b_r]$ yields
+\begin{equation*}
+  [A_r: \vec b_r] = 
+  \left[
+  \begin{array}{ccc|c}
+  1 & 0 & 0 & -\frac{137}{48} \\
+  0 & 1 & 0 & \frac{1}{6} \\
+  0 & 0 & 1 & \frac{41}{24}
+  \end{array}
+  \right]
+\end{equation*}
+So the general solution is:
+\begin{equation*}
+  \begin{bmatrix}
+  x_1 \\
+  x_2 \\
+  x_3
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  -\frac{137}{48} \\
+  \frac{1}{6} \\
+  \frac{41}{24}        
+  \end{bmatrix}
+\end{equation*}
+
+14. Let $ A \vec x = \vec b$ where
+\begin{equation*}
+  [A: \vec b] = 
+  \left[
+  \begin{array}{cccc|c}
+  -6 & 2 & -1 & 1 & 0  \\
+   1 & 4 & 0 & -1 & -5  \\
+  1 & 1 & 1 & -7  & 0
+  \end{array}
+  \right]
+\end{equation*}
+Reducing $[A: \vec b]$ to $[A_r: \vec b_r]$ yields
+\begin{equation*}
+  [A_r: \vec b_r] = 
+  \left[
+  \begin{array}{cccc|c}
+  1 & 0 & 0 & \frac{21}{23}  & -\frac{15}{23} \\
+  0 & 1 & 0 & -\frac{11}{23} & -\frac{25}{23} \\
+  0 & 0 & 1 & -\frac{40}{23} & \frac{40}{23} 
+  \end{array}
+  \right]
+\end{equation*}
+So the general solution is:
+\begin{equation*}
+  \begin{bmatrix}
+  x_1 \\
+  x_2 \\
+  x_3 \\
+  x_4
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  -\frac{15}{23} \\
+  -\frac{25}{23} \\
+  \frac{40}{23}  \\
+  0
+  \end{bmatrix}
+  + \alpha
+  \begin{bmatrix}
+  -\frac{21}{23}  \\
+  \frac{11}{23} \\
+  \frac{40}{23} \\
+  1
+  \end{bmatrix}
+  \quad \forall \quad \alpha \in \mathcal{R}
+\end{equation*}
+
+\newpage
+\question*{\S 11.6 page 389: 2, 4}
+\emph{Find:}
+\newline
+Calculate the determinants.
+\newline
+2.
+\begin{equation*}
+  \begin{vmatrix}
+  2 & -3 & 7 \\
+  14 & 1 & 1 \\
+  -13& -1 & 5 
+  \end{vmatrix}
+\end{equation*}
+4.
+\begin{equation*}
+  \begin{vmatrix}
+  2 & -5 & 8 \\
+  4 & 3 & 8 \\
+  13 & 0 & -4
+  \end{vmatrix}
+\end{equation*}
+\newline
+\emph{Solution:}
+\newline
+2.
+\begin{align*}
+  \begin{vmatrix}
+    2 & -3 & 7 \\
+    14 & 1 & 1 \\
+    -13& -1 & 5 
+  \end{vmatrix}
+  &=
+  (-1)^{1+1} 2 
+  \begin{vmatrix}
+    1 & 1 \\
+    -1 & 5 
+  \end{vmatrix}
+  +
+  (-1)^{1+2} (-3)
+  \begin{vmatrix}
+    14 & 1 \\
+    -13 & 5 
+  \end{vmatrix}
+  +
+  (-1)^{1+3} 7
+  \begin{vmatrix}
+    14 & 1 \\
+    -13 & -1 
+  \end{vmatrix} \\
+  &=
+  2 (1 \times 5 - (-1) \times 1)
+  +
+  3 (14 \times 5 - 1 \times (-13))
+  +
+  7 (14 \times (-1) - 1 \times (-13)) \\
+  &= 12 + 264 - 7 \\
+  &= 254
+\end{align*}
+
+4.
+\begin{align*}
+  \begin{vmatrix}
+  2 & -5 & 8 \\
+  4 & 3 & 8 \\
+  13 & 0 & -4
+  \end{vmatrix}
+  &=
+  (-1)^{1+1}
+  13
+  \begin{vmatrix}
+    -5 & 8 \\
+    3 & 8
+  \end{vmatrix}
+  + (-1)^{1+2}
+  0
+  \begin{vmatrix}
+    2 & 8 \\
+    4 & 8
+  \end{vmatrix}
+  + (-1)^{1+3}
+  -4
+  \begin{vmatrix}
+    2 & -5 \\
+    4 & 3
+  \end{vmatrix} \\
+  &= 
+  13 (-5 \times 8 - 8 \times 3)
+  + 0
+  -4 (2 \times 3 - 4 \times (-5)) \\
+  &= -832 - 104 \\
+  &= -936
+\end{align*}
+
+\newpage
+\question*{8, 9}
+\emph{Find:}
+\newline
+Calculate the determinants.
+\newline
+8.
+\begin{equation*}
+  \begin{vmatrix}
+  1 & 1 & 6 \\
+  2 & -2& 1 \\
+  3 & -1& 4
+  \end{vmatrix}
+\end{equation*}
+9.
+\begin{equation*}
+  \begin{vmatrix}
+  4 & 3 & -5 & 6 \\
+  1 & -5& 15 & 2 \\
+  0 & -5& 1  & 7 \\
+  8 & 9 & 0  & 15 
+  \end{vmatrix}
+\end{equation*} 
+
+\emph{Solution:}
+\newline
+8.
+\begin{align*}
+  \begin{vmatrix}
+  1 & 1 & 6 \\
+  2 & -2& 1 \\
+  3 & -1& 4
+  \end{vmatrix}
+  &= 
+  (-1)^{1+1}
+  1
+  \begin{vmatrix}
+    -2 & 1 \\
+    -1 & 4
+  \end{vmatrix}
+  + (-1)^{1+2}
+  1
+  \begin{vmatrix}
+    2 & 1 \\
+    3 & 4
+  \end{vmatrix}
+  + (-1)^{1+3}
+  6
+  \begin{vmatrix}
+    2 & -2 \\
+    3 & -1
+  \end{vmatrix} \\
+  &= 
+    1 ( (-2) \times 4 - (-1) \times 1)
+  - 1 ( 2 \times 4 - 1 \times 3)
+  + 6 ( 2 \times (-1) - (-2) \times 3)\\
+  &= -7 -5 + 24 \\
+  &= 12
+\end{align*}
+9.
+\begin{align*}
+  \begin{vmatrix}
+  4 & 3  & -5 & 6 \\
+  1 & -5 & 15 & 2 \\
+  0 & -5 & 1  & 7 \\
+  8 & 9  & 0  & 15 
+  \end{vmatrix}
+  &= 
+  (-1)^{1+1}
+  4
+  \begin{vmatrix}
+  -5 & 15 & 2 \\
+  -5 & 1  & 7 \\
+  9  & 0  & 15 
+  \end{vmatrix}
+  +
+  (-1)^{2+1}
+  1
+  \begin{vmatrix}
+  3  & -5 & 6 \\
+  -5 & 1  & 7 \\
+  9  & 0  & 15 
+  \end{vmatrix}\\
+  & \quad +
+  (-1)^{3+1}
+  0
+  \begin{vmatrix}
+  3  & -5 & 6 \\
+  -5 & 15 & 2 \\
+  9  & 0  & 15 
+  \end{vmatrix}
+  +
+  (-1)^{4+1}
+  8
+  \begin{vmatrix}
+  3  & -5 & 6 \\
+  -5 & 15 & 2 \\
+  -5 & 1  & 7 
+  \end{vmatrix} \\
+  &= 
+  4 \left(
+  (-1)^{3+1}
+  9
+  \begin{vmatrix}
+  15 & 2 \\
+  1  & 7 
+  \end{vmatrix}
+  + 0
+  + (-1)^{3+3}
+  15
+  \begin{vmatrix}
+  -5 & 15 \\
+  -5 & 1   
+  \end{vmatrix}
+  \right) \\
+  & \quad - 1 \left(
+  (-1)^{3+1}
+  9
+  \begin{vmatrix}
+   -5 & 6 \\
+   1  & 7 
+  \end{vmatrix}
+  + 0
+  + (-1)^{3+3}
+  15
+  \begin{vmatrix}
+  3  & -5 \\
+  -5 & 1  
+  \end{vmatrix}
+  \right) \\
+  & \quad + 0
+  + 8 \left(
+  (-1)^{1+1}
+  3
+  \begin{vmatrix}
+   15 & 2 \\
+   1  & 7 
+  \end{vmatrix} 
+  + (-1)^{1+2}
+  (-5)
+  \begin{vmatrix}
+  -5 & 2 \\
+  -5 & 7 
+  \end{vmatrix} 
+  + (-1)^{1+3}
+  6
+  \begin{vmatrix}
+  -5 & 15 \\
+  -5 & 1  
+  \end{vmatrix} 
+  \right) \\
+  &= 
+  4 \left(
+  9 ( 15 \times 7 - 2 \times 1)
+  + 15 ( (-5) \times 1 - 15 \times (-5))
+  \right) \\
+  & \quad - 1 \left(
+  9 ((-5) \times 7 - 1 \times 6)
+  + 15 (3 \times (-5) - (-5) \times 1)
+  \right) \\
+  & \quad + 0
+  + 8 \left(
+  3 (15 \time 7 - 1 \times 2)
+  + 5 ( (-5) \times 7 - (-5) \times 2)
+  + 6 ( (-5) \times 1 - (-5) \times 15)
+  \right) \\
+  &=
+  4 ( 927 + 1050) -1 ( -369 - 150) + 8 ( 309 -125 +420) \\
+  &= 3775 
+\end{align*}
+
+\end{document}
