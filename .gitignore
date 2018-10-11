@@ -5,6 +5,10 @@
 latex_practice/**/*.log
 latex_practice/**/*.aux
 
+#Ignore all intermediate TeX files in Eng_Analysis_AME_525
+Eng_Analysis_AME_525/**/*.log
+Eng_Analysis_AME_525/**/*.aux
+
 #Ignore build directories
 build/
 
