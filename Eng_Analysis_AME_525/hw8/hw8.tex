@@ -257,6 +257,7 @@ D &=
 Since $( \vec e_2, \vec e_1) \neq 0$, 
 then the set of eigenvectors are not orthogonal.
 
+\newpage
 \question
 \emph{Find:}
 \newline
@@ -274,8 +275,150 @@ A =
 
 \emph{Solution:}
 \newline
+First find eigenvalues of $A$:
+\begin{align*}
+\det (\lambda I - A) = 
+  \begin{vmatrix}
+    \lambda -2 & 4 & 0 \\
+    4 & \lambda & 0 \\
+    0 & 0 & \lambda 
+  \end{vmatrix}
+  &= 0 \\
+  &= \lambda ( (\lambda - 2)\lambda - (4)(4)) \\
+  &= \lambda ( \lambda^2 - 2 \lambda - 16) 
+\end{align*}
+which has solutions $\lambda = 0, 1\pm \sqrt{17}$.
+The corresponding eigenvectors are:
+\begin{align*}
+  \text{When $\lambda = 0$:}
+    \begin{bmatrix}
+      -2 & 4 & 0 \\
+      4 & 0  & 0 \\
+      0 & 0 & 0  
+    \end{bmatrix}
+    \begin{bmatrix}
+      \vec e_1
+    \end{bmatrix}
+    &=
+    \begin{bmatrix}
+      \vec 0
+    \end{bmatrix} \\
+    \Rightarrow
+    \begin{bmatrix}
+      \vec e_1
+    \end{bmatrix}
+    &=
+    \begin{bmatrix}
+    0 \\
+    0 \\
+    1
+    \end{bmatrix} \\
+  \text{When $\lambda = 1+\sqrt{17}$:}
+    \begin{bmatrix}
+      -1 + \sqrt{17} & 4 & 0 \\
+      4 & 1+\sqrt{17}  & 0 \\
+      0 & 0 & 1+\sqrt{17}
+    \end{bmatrix}
+    \begin{bmatrix}
+      \vec e_2
+    \end{bmatrix}
+    &=
+    \begin{bmatrix}
+      \vec 0
+    \end{bmatrix} \\
+    \Rightarrow
+    \begin{bmatrix}
+      \vec e_2
+    \end{bmatrix}
+    &=
+    \begin{bmatrix}
+    4 \\
+    1 - \sqrt{17}\\
+    0
+    \end{bmatrix} \\
+  \text{When $\lambda = 1 - \sqrt{17}$:}
+    \begin{bmatrix}
+      -1 - \sqrt{17} & 4 & 0 \\
+      4 & 1-\sqrt{17}  & 0 \\
+      0 & 0 & 1-\sqrt{17}
+    \end{bmatrix}
+    \begin{bmatrix}
+      \vec e_3
+    \end{bmatrix}
+    &=
+    \begin{bmatrix}
+      \vec 0
+    \end{bmatrix} \\
+    \Rightarrow
+    \begin{bmatrix}
+      \vec e_3
+    \end{bmatrix}
+    &=
+    \begin{bmatrix}
+    4 \\
+    1 + \sqrt{17}\\
+    0
+    \end{bmatrix}
+\end{align*}
+Construct $D$ such that $D_{ij} = (\vec e_i, \vec e_j)$. 
+If the eigenvectors are orthogonal, 
+then $D$ will be a diagonal matrix.
+\begin{align*}
+D &= 
+  \begin{bmatrix}
+  (\vec e_i, \vec e_j)
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+  1 & 0 & 0 \\
+  0 & 34 - 2 \sqrt{17} & 0 \\
+  0 & 0 & 34 - 2 \sqrt{17} 
+  \end{bmatrix}
+\end{align*}
+So the eigenvectors are orthogonal.
+Construct $Q$ such that it has
+columns of eigenvectors:
+\begin{align*}
+Q &= 
+  \begin{bmatrix}
+  | & | & |  \\
+  \vec e_1 & \vec e_2 & \vec e_3 \\
+  | & | & |
+  \end{bmatrix}\\
+  &=
+  \begin{bmatrix}
+  0 & 4 & 4 \\ 
+  0 & 1- \sqrt{17} & 1+\sqrt{17} \\
+  1 & 0 & 0
+  \end{bmatrix}
+\end{align*}
+Check that $Q$ diagonalizes $A$:
+\begin{align*}
+Q^T A Q &=
+  \begin{bmatrix}
+  0 & 0 & 1 \\
+  4 & 1-\sqrt{17} & 0 \\
+  4 & 1+\sqrt{17} & 0 
+  \end{bmatrix}
+  \begin{bmatrix}
+  2 & -4 & 0 \\
+  -4 & 0 & 0 \\
+  0 &  0 & 0
+  \end{bmatrix}
+  \begin{bmatrix}
+  0 & 4 & 4 \\ 
+  0 & 1- \sqrt{17} & 1+\sqrt{17} \\
+  1 & 0 & 0
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+  0 & 0 & 0 \\
+  0 & 1+\sqrt{17} & 0 \\
+  0 & 0 & 1-\sqrt{17}
+  \end{bmatrix}
+\end{align*}
 
-
+\newpage
 \question
 \emph{Find:}
 \newline
@@ -294,5 +437,182 @@ A =
 \emph{Solution:}
 \newline
 
+First find eigenvalues of $A$:
+\begin{align*}
+\det (\lambda I - A) = 
+  \begin{vmatrix}
+  \lambda - 1 & -3 & 0 \\
+  -3 & \lambda & -1 \\
+  0 & -1 & \lambda-1
+  \end{vmatrix}
+  &= 0 \\
+  &= (\lambda-1) (\lambda( \lambda -1) - (-1)(-1)) -(-3) ((-3)(\lambda - 1)) \\
+  &= (\lambda-1) (\lambda^2 - \lambda - 10) 
+\end{align*}
+which has solutions $\lambda = 1, \frac{1}{2} \pm \frac{\sqrt{41}}{2}$.
+The corresponding eigenvectors are:
+\begin{align*}
+  \text{When $\lambda = 1$:}
+  \begin{bmatrix}
+  0 & -3 & 0 \\
+  -3 & 1 & -1 \\
+  0 & -1 & 0
+  \end{bmatrix}
+  \begin{bmatrix}
+    \vec e_1
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+    \vec 0
+  \end{bmatrix} \\
+  \begin{bmatrix}
+    \vec e_1
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+  1 \\
+  0 \\
+  -3
+  \end{bmatrix} \\
+  \text{When $\lambda = \frac{1}{2} + \frac{\sqrt{41}}{2}$:}
+  \begin{bmatrix}
+  \frac{-1}{2} + \frac{\sqrt{41}}{2} & -3 & 0 \\
+  -3 & \frac{1}{2} + \frac{\sqrt{41}}{2} & -1 \\
+  0 & -1 & \frac{1}{2} + \frac{\sqrt{41}}{2}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \vec e_2
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+    \vec 0
+  \end{bmatrix} \\
+  \begin{bmatrix}
+    \vec e_2
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+  6 \\  
+  -1 + \sqrt{41} \\
+  2
+  \end{bmatrix} \\
+  \text{When $\lambda = \frac{1}{2} - \frac{\sqrt{41}}{2}$:}
+  \begin{bmatrix}
+  \frac{-1}{2} - \frac{\sqrt{41}}{2} & -3 & 0 \\
+  -3 & \frac{1}{2} - \frac{\sqrt{41}}{2} & -1 \\
+  0 & -1 & \frac{1}{2} - \frac{\sqrt{41}}{2}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \vec e_3
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+    \vec 0
+  \end{bmatrix} \\
+  \begin{bmatrix}
+    \vec e_3
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+  6 \\  
+  -1 - \sqrt{41} \\
+  2
+  \end{bmatrix} 
+\end{align*}
+Construct $D$ such that $D_{ij} = (\vec e_i, \vec e_j)$. 
+If the eigenvectors are orthogonal, 
+then $D$ will be a diagonal matrix.
+\begin{align*}
+D &= 
+  \begin{bmatrix}
+  (\vec e_i, \vec e_j)
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+  10 & 0 & 0 \\ 
+  0 & 205-2\sqrt{41} & 0 \\
+  0 & 0 & 205 - 2\sqrt{41}
+  \end{bmatrix}
+\end{align*}
+So the eigenvectors are orthogonal.
+Construct $Q$ such that it has
+columns of eigenvectors:
+\begin{align*}
+Q &= 
+  \begin{bmatrix}
+  | & | & |  \\
+  \vec e_1 & \vec e_2 & \vec e_3 \\
+  | & | & |
+  \end{bmatrix}\\
+  &=
+  \begin{bmatrix}
+  1 & 6 & 6 \\
+  0 & -1+\sqrt{41} & -1-\sqrt{41} \\
+  -3 & 2 & 2
+  \end{bmatrix}
+\end{align*}
+Check that $Q$ diagonalizes $A$:
+\begin{align*}
+Q^T A Q &=
+  \begin{bmatrix}
+  1 & 0 & -3 \\
+  6 & -1+\sqrt{41} & 2 \\
+  6 & -1-\sqrt{41} & 2 
+  \end{bmatrix}
+  \begin{bmatrix}
+  1 & 3 & 0 \\
+  3 & 0 & 1 \\
+  0 & 1 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  1 & 6 & 6 \\
+  0 & -1+\sqrt{41} & -1-\sqrt{41} \\
+  -3 & 2 & 2
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+  1 & 0 & 0 \\
+  0 & \frac{1}{2}+\frac{\sqrt{41}}{2} & 0 \\
+  0 & 0 & \frac{1}{2}-\frac{\sqrt{41}}{2}
+  \end{bmatrix}
+\end{align*}
+
+\question*{\S 12.3 page 421: 12 and 14}
+\emph{Find:}
+\newline
+In each of Problems 12 and 14, 
+determine whether the matrix unitary, hermitian
+skew-hermitian, or none of these.
+Find the eigenvalues.
+\newline
+12.
+\begin{equation*}
+  A = 
+  \begin{bmatrix}
+  \frac{1}{\sqrt{2}} & \frac{i}{\sqrt{2}} & 0 \\
+  -\frac{1}{\sqrt{2}} & \frac{i}{\sqrt{2}} & 0 \\
+  0 & 0 & 1
+  \end{bmatrix}
+\end{equation*}
+14. 
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  -1 & 0 & 3-i \\
+  0 & 1 & 0 \\
+  3+i & 0 & 0
+  \end{bmatrix}
+\end{equation*}
+
+\emph{Solution:}
+\newline
+
+12. First check to see if $A$ is unitary:
+\begin{align*}
+\bar{A}A &=
+  \begin{bmatrix}
+  a
+  \end{bmatrix}
+\end{align*}
 
 \end{document}
