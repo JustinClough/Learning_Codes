@@ -1,0 +1,283 @@
+\documentclass[11pt]{homework}
+
+\newcommand{\hwname}{Justin L. Clough}
+\newcommand{\hwemail}{jlclough@usc.edu}
+\newcommand{\hwtype}{Homework}
+\newcommand{\hwnum}{3}
+\newcommand{\hwclass}{AME: 525}
+
+\begin{document}
+\maketitle
+
+\question*{ \S 11.2: Page 366: 2, 4, 6, 8}
+\emph{Find:}
+\newline
+In each of the problems 2, 4, 6, and 8, form $B$ from $A$ by 
+performing the elementary row operation(s),
+then produce a matrix $\Omega$ such that $\Omega A = B$.
+\newline
+\newline
+2. Add 6 times row two to row three.
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  3 & -6 \\
+  1 & 1 \\
+  8 & -2 \\
+  0 & 3 
+  \end{bmatrix}
+\end{equation*}
+4. Interchange rows two and three, 
+and then add the negative of row one to row two.
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  -4 & 6 & -3 \\
+  12 & 4 & -4 \\
+  1 & 3 & 0 
+  \end{bmatrix}
+\end{equation*}
+
+6. Add row one to row three,
+then add $\sqrt{3}$ times row one to row two,
+then multiply row three by 4, 
+and finally add row two to row three.
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  3 & -4 & 5 & 9 \\
+  2 & 1 & 3 & -6 \\
+  1 & 14 & 2 & 6 
+  \end{bmatrix}
+\end{equation*}
+
+8. Interchange row two and three,
+then add 3 times row two to row three,
+then interchange rows one and three,
+and then multiply row three by 4.
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  0 & -9 & 14 \\
+  1 & 5 & 2 \\
+  9 & 15 & 0 
+  \end{bmatrix}
+\end{equation*}
+\newpage
+\emph{Solution:}
+\newline
+2. 
+\begin{equation*}
+B = 
+  \begin{bmatrix}
+  3 & -6 \\
+  1 & 1 \\
+  14 & 4 \\
+  0 & 3 
+  \end{bmatrix}
+\end{equation*}
+\begin{align*}
+\Omega A &= B \\
+\Omega  
+  \begin{bmatrix}
+  3 & -6 \\
+  1 & 1 \\
+  8 & -2 \\
+  0 & 3 
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+  3 & -6 \\
+  1 & 1 \\
+  14 & 4 \\
+  0 & 3 
+  \end{bmatrix} \\
+\text{Add 6 times row two to three}
+\Rightarrow 
+\Omega &= 
+  \begin{bmatrix}
+  1 & 0 & 0 & 0 \\
+  0 & 1 & 0 & 0 \\
+  0 & 6 & 1 & 0 \\
+  0 & 0 & 0 & 1 
+  \end{bmatrix}
+\end{align*}
+4. Let $\Omega = E_2 E_1$:
+\begin{equation*}
+B = 
+  \begin{bmatrix}
+  -4 & 6 & -3 \\
+  5 & -3 & 3  \\
+  12 & 4 & -4
+  \end{bmatrix}
+\end{equation*}
+\begin{align*}
+\Omega A &= B \\
+E_2 E_1
+  \begin{bmatrix}
+  -4 & 6 & -3 \\
+  12 & 4 & -4 \\
+  1 & 3 & 0 
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+  -4 & 6 & -3 \\
+  5 & -3 & 3  \\
+  12 & 4 & -4
+  \end{bmatrix} \\
+\text{Interchange rows two and three}
+\Rightarrow 
+E_1 &= 
+  \begin{bmatrix}
+  1 & 0 & 0  \\
+  0 & 0 & 1  \\
+  0 & 1 & 0
+  \end{bmatrix} \\
+\text{Add negative of row one to two}
+\Rightarrow 
+E_2 &= 
+  \begin{bmatrix}
+  1 & 0 & 0  \\
+  -1 & 1 & 0  \\
+  0 & 0 & 1
+  \end{bmatrix} \\
+\Rightarrow 
+\Omega = E_2 E_1 &=
+  \begin{bmatrix}
+  1 & 0 & 0  \\
+  -1 & 0 & 1  \\
+  0 & 1 & 0
+  \end{bmatrix}
+\end{align*}
+\newpage
+6. Let $\Omega = E_4 E_3 E_2 E_1$:  
+\begin{equation*}
+B = 
+  \begin{bmatrix}
+  3 & -4 & 5 & 9 \\
+  3\sqrt{3}+2 & -4 \sqrt{3} +1 & 5 \sqrt{3} +3 & 9 \sqrt{3} -6 \\
+  3\sqrt{3}+18 & -4 \sqrt{3} +41 & 5 \sqrt{3} +31 & 9 \sqrt{3} +54
+  \end{bmatrix}
+\end{equation*}
+\begin{align*}
+\Omega A &= B \\
+E_4 E_3 E_2 E_1
+  \begin{bmatrix}
+  3 & -4 & 5 & 9 \\
+  2 & 1 & 3 & -6 \\
+  1 & 14 & 2 & 6 
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+  3 & -4 & 5 & 9 \\
+  3\sqrt{3}+2 & -4 \sqrt{3} +1 & 5 \sqrt{3} +3 & 9 \sqrt{3} -6 \\
+  3\sqrt{3}+18 & -4 \sqrt{3} +41 & 5 \sqrt{3} +31 & 9 \sqrt{3} +54
+  \end{bmatrix} \\
+\text{Add row one to three}
+\Rightarrow 
+E_1 &= 
+  \begin{bmatrix}
+  1 & 0 & 0  \\
+  0 & 1 & 0  \\
+  1 & 0 & 1
+  \end{bmatrix} \\
+\text{Add $\sqrt{3}$ time row one to two}
+\Rightarrow 
+E_2 &= 
+  \begin{bmatrix}
+  1 & 0 & 0  \\
+  \sqrt{3} & 1 & 0  \\
+  0 & 0 & 1
+  \end{bmatrix} \\
+\text{Multiply row three by 4}
+\Rightarrow 
+E_3 &= 
+  \begin{bmatrix}
+  1 & 0 & 0  \\
+  0 & 1 & 0  \\
+  0 & 0 & 4
+  \end{bmatrix} \\
+\text{Add row two to three}
+\Rightarrow 
+E_4 &= 
+  \begin{bmatrix}
+  1 & 0 & 0  \\
+  0 & 1 & 0  \\
+  0 & 1 & 1
+  \end{bmatrix} \\
+\Rightarrow 
+\Omega = E_4 E_3 E_2 E_1 &=
+  \begin{bmatrix}
+  1 & 0 & 0  \\
+  \sqrt{3} & 1 & 0  \\
+  \sqrt{3}+4 & 1 & 4
+  \end{bmatrix} 
+\end{align*}
+
+\newpage
+8. Let $\Omega = E_4 E_3 E_2 E_1$:  
+\begin{equation*}
+B = 
+  \begin{bmatrix}
+  28 & 50 & 2 \\
+  9  & 15 & 0 \\
+  0  &-36 & 56
+  \end{bmatrix}
+\end{equation*}
+\begin{align*}
+\Omega A &= B \\
+E_4 E_3 E_2 E_1
+  \begin{bmatrix}
+  0 & -9 & 14 \\
+  1 & 5 & 2 \\
+  9 & 15 & 0 
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+  28 & 50 & 2 \\
+  9  & 15 & 0 \\
+  0  &-36 & 56
+  \end{bmatrix} \\
+\text{Interchange row two and three}
+\Rightarrow 
+E_1 &= 
+  \begin{bmatrix}
+  1 & 0 & 0  \\
+  0 & 0 & 1  \\
+  0 & 1 & 0
+  \end{bmatrix} \\
+\text{Add 3 times row two to three}
+\Rightarrow 
+E_2 &= 
+  \begin{bmatrix}
+  1 & 0 & 0  \\
+  0 & 1 & 0  \\
+  0 & 3 & 1
+  \end{bmatrix} \\
+\text{Interchange rows one and three}
+\Rightarrow 
+E_3 &= 
+  \begin{bmatrix}
+  0 & 0 & 1  \\
+  0 & 1 & 0  \\
+  1 & 0 & 0
+  \end{bmatrix} \\
+\text{Multiply row three by 4}
+\Rightarrow 
+E_4 &= 
+  \begin{bmatrix}
+  1 & 0 & 0  \\
+  0 & 1 & 0  \\
+  0 & 0 & 4
+  \end{bmatrix} \\
+\Rightarrow 
+\Omega = E_4 E_3 E_2 E_1 &=
+  \begin{bmatrix}
+  0 & 1 & 3  \\
+  0 & 0 & 1  \\
+  4 & 0 & 0
+  \end{bmatrix} 
+\end{align*}
+
+
+\end{document}
