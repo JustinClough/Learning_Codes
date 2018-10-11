@@ -1,0 +1,587 @@
+\documentclass[11pt]{homework}
+
+\newcommand{\hwname}{Justin L. Clough}
+\newcommand{\hwemail}{jlclough@usc.edu}
+\newcommand{\hwtype}{Homework}
+\newcommand{\hwnum}{2}
+\newcommand{\hwclass}{AME: 525}
+
+\begin{document}
+\maketitle
+
+\question*{ \S 10.4: Page 338: 8, 10, 12, 14, 16, 19,20}
+\emph{Find:}
+\newline
+For questions 8 through 16, determine whether the vectors are 
+linearly independent or dependent in the appropriate $\mathcal{R}^n$.
+\newline
+\newline
+8.  $\vec u_1 = 3i +2j, \quad \vec u_2 = i - j$ in $\mathcal{R}^3$.
+\newline
+10. $\vec u_1 = <1,0,0,0>, \quad \vec u_2 = <0,1,1,0>, \quad \vec u_3 = <-4,6,6,0>$ in $\mathcal{R}^4$.
+\newline
+12. $\vec u_1 = <0,1,1,1>, \quad \vec u_2 = <-3,2,4,4>, \quad \vec u_3 = <-2,2,34,2>, \quad \vec u_4 = <1,1,-6,-2>$ in $\mathcal{R}^4$.
+\newline
+14. $\vec u_1 = <-1,1,0,0,0>, \quad \vec u_2 = <0,-1,1,0,0>, \quad \vec u_3 = <0,1,1,1,0>$ in $\mathcal{R}^5$.
+\newline
+16. $\vec u_1 = <3,0,0,4>, \quad \vec u_2 = <2,0,0,8>$ in $\mathcal{R}^4$.
+\newline
+
+\emph{Solution:}
+\newline
+For any set of vectors, $\{\vec u_i\}_{i=1}^{n}$, if a set of constants $a_i$ can be chosen
+with $a_i \neq 0 \forall i=1,2,...,n$ such that $\sum_{i=1}^{n} a_i \vec u_i = \vec 0$ then 
+the set of vectors are linearly dependent.
+
+8. 
+\begin{align*}
+a_1 ( 3i + 2j) + a_2 (i - j) &= \vec 0 \\
+  \Rightarrow \quad i: \quad 3 a_1 &= -a_2 \\
+  \Rightarrow \quad j: \quad 2 a_1 &= a_2 \\
+  \Rightarrow \quad 3 a_1 &= -2 a_1 \\
+  \Rightarrow \quad 3 &= -2
+\end{align*}
+The vectors are \textbf{linearly independent}.
+
+10. 
+\begin{equation*}
+a_1(1,0,0,0) + a_2 (0,1,1,0) +a_3 (-4,6,6,0) = \vec 0 
+\end{equation*}
+
+Choose $a_3 = 1$, $a_1 = 4$, and $a_2 = -6$.
+
+\begin{equation*}
+(4)(1,0,0,0) + (-6) (0,1,1,0) + (1) (-4,6,6,0) = \vec 0 
+\end{equation*}
+The vectors are \textbf{linearly dependent}.
+
+\newpage
+12. 
+\begin{equation*}
+a_1 (0,1,1,1) + a_2  (-3,2,4,4) + a_3  (-2,2,34,2) +  a_4  (1,1,-6,-2) = \vec 0
+\end{equation*}
+
+\begin{align*}
+\begin{bmatrix}
+  0 & -3  & -2 & 1 \\
+  1 &  2  &  2 & 1 \\
+  1 &  4  & 34 & -6 \\
+  1 &  4  &  2 & -2 
+\end{bmatrix}
+\begin{bmatrix}
+ a_1 \\
+ a_2 \\
+ a_3 \\
+ a_4 
+\end{bmatrix}
+&=
+\begin{bmatrix}
+ 0 \\
+ 0 \\
+ 0 \\
+ 0 
+\end{bmatrix} 
+\\
+\begin{bmatrix}
+U
+\end{bmatrix}
+\vec a 
+&= 
+\vec 0
+\end{align*}
+
+Since $\det ([U]) = -240 \neq 0$ then $\vec a = \vec 0$;
+the set of vectors are \textbf{linearly independent}.
+
+14. 
+\begin{equation*}
+a_1  (-1,1,0,0,0) + a_2  (0,-1,1,0,0) + a_3  (0,1,1,1,0) = \vec 0 
+\end{equation*}
+\begin{align*}
+& \Rightarrow i: -a_1 = 0  \\
+& \Rightarrow j: a_1 - a_2 + a_3 = 0  \\
+& \Rightarrow k: a_2 + a_3 = 0  \\
+& \Rightarrow l: a_3 = 0  
+\end{align*}
+
+The set of vectors are \textbf{linearly independent}.
+
+16. 
+\begin{equation*}
+a_1  (3,0,0,4) + a_2  (2,0,0,8) = \vec 0
+\end{equation*}
+\begin{align*}
+& \Rightarrow i: 3 a_1 + 2 a_2 = 0  \\
+& \Rightarrow j:  0 = 0 \\
+& \Rightarrow k:  0 = 0 \\
+& \Rightarrow l: 4 a_1 + 8 a_2 = 0
+\end{align*}
+\begin{align*}
+\Rightarrow a_2 &= -\frac{3}{2} a_1 \\
+ 4 a_1 + 8 ( -\frac{3}{2} a_1) &= 0 \\
+ 4 - 3 &= 0
+\end{align*}
+
+The set of vectors are \textbf{linearly independent}.
+
+\newpage
+\emph{Find:}
+\newline
+For questions 19 and 20, show that the set $\mathcal{S}$ is 
+a subspace of the appropriate $\mathcal{R}^n$ and find the 
+basis for this subspace and its dimension.
+\newline
+\newline
+19. $\mathcal{S}$ consists of all vectors in $\mathcal{R}^n$ 
+with zero second component.
+\newline
+20. $\mathcal{S}$ consists of all vectors in $\mathcal{R}^6$
+of the form $(x, x, y, y, 0, z)$.
+
+\emph{Solution:}
+
+19. Consider $\vec x \in \mathcal{S} \subset \mathcal{R}^n$ 
+such that $\vec x = (a, 0, b_1, b_2, ..., b_{n-2})$ where
+$ a, b_i \in \mathcal{R} \quad \forall i=1,2,...,n-2$.
+Check first that $\mathcal{S}$ is a subspace of $\mathcal{R}^n$:
+\begin{enumerate}
+  \item $\vec 0 \in \mathcal{S}$?
+        Choose $a = b_i = 0 \forall i$ such that $\vec x = \vec 0$.
+  \item Sum of two vectors in $\mathcal{S}$ remains in $\mathcal{S}$?
+        Let $\vec y = (c, 0, d_1, d_2, ..., d_{n-2}) \in \mathcal{S}$ and 
+        $\vec z = \vec y + \vec x$, then
+        $\vec z = (a + c, 0, b_1+d_1, b_2+d_2, ..., b_{n-2}+d_{n-2}) \in \mathcal{S}$.
+  \item Product of any vector in $\mathcal{S}$ with any real scalar is real?
+        Let $k\in \mathcal{R}$ and $ \vec w = k \vec x$, then
+        $\vec w = (ka, 0, kb_1, kb_2,...,kb_{n-2})$ with $ ka, kb_i \in \mathcal{R} \forall i$.
+\end{enumerate}
+So $\mathcal{S} \subset \mathcal{R}^n$.
+\newline
+The set of basis vectors are:
+\begin{align*}
+ \hat{e}_1 &= (1, 0, 0, 0, ..., 0, 0) \\
+ \hat{e}_2 &= (0, 0, 1, 0, ..., 0, 0) \\
+ \hat{e}_3 &= (0, 0, 0, 1, ..., 0, 0) \\
+           &\vdots     \\
+ \hat{e}_{n-2} &= (0, 0, 0, 0, ..., 1, 0) \\
+ \hat{e}_{n-1} &= (0, 0, 0, 0, ..., 0, 1) \\
+\end{align*}
+There are $n-1$ basis vectors so the dimension of $\mathcal{S}$ is $n-1$.
+\newline
+\newline
+20. Consider $\vec u \in \mathcal{S} \subset \mathcal{R}^6$
+such that $\vec u = ( x,x, y,y, 0, z)$ where $x, y, z \in \mathcal{R}$.
+Check first that $\mathcal{S}$ is a subspace of $\mathcal{R}^6$:
+\begin{enumerate}
+  \item $\vec 0 \in \mathcal{S}$? 
+        Choose $x,y,z = 0$ such that $\vec u = (0,0,0,0,0,0) = \vec 0$.
+  \item Sum of two vectors in $\mathcal{S}$ remains in $\mathcal{S}$?
+        Let $\vec v = ( a,a, b,b, 0, c) \in \mathcal{S}$ and
+        $ \vec w = \vec v + \vec u$, then
+        $\vec w = (a+x, a+x, b+y, b+y, 0, c+z) \in \mathcal{S}$.
+  \item Product of any vector in $\mathcal{S}$ with any real scalar is real?
+        Let $k \in \mathcal{R}$ and $\vec \eta = k \vec u$, then
+        $\vec \eta = (kx, kx, ky,  ky, 0, kz)$ with $kx, ky, kz \in \mathcal{R}$.
+\end{enumerate}
+So $\mathcal{S} \subset \mathcal{R}^6$.
+\newline
+The set of basis vectors are:
+\begin{align*}
+  \hat{e}_1 &= (1, 1, 0, 0, 0, 0) \\
+  \hat{e}_2 &= (0, 0, 1, 1, 0, 0) \\
+  \hat{e}_3 &= (0, 0, 0, 0, 0, 1)
+\end{align*}
+There are 3 basis vectors so the dimension of $\mathcal{S}$ is 3.
+
+\question*{ \S 10.5: Page 342: 5, 7}
+\emph{Find:}
+\newline
+For questions 5 and 7, use the Gram-Schmidt process to find an
+orthogonal basis spanning the same subspace of $\mathcal{R}^n$ 
+as the given set of basis vectors.
+\newline
+5. $\vec u_1 = (0, -1, 2, 0)$ and $\vec u_2 = (0, 3, -4, 0)$
+\newline
+7. $\vec u_1 = (-1, 0, 3, 0, 4)$, $\vec u_2 = (4, 0, -1, 0, 3)$, and $\vec u_3 = (0,0,-1, 0, 5)$.
+
+\emph{Solution:}
+
+5. The first basis vector $\hat{e}_1$:
+
+\begin{align*}
+||\vec u_1|| &= \sqrt{1 + 4} \\
+             &= \sqrt{5}
+\end{align*}
+\begin{align*}
+\hat{e}_1 &= \frac{\vec u_1}{||\vec u_1||} \\
+          &= (0, -\frac{1}{\sqrt{5}}, \frac{2}{\sqrt{5}}, 0) 
+\end{align*}
+The second basis vector $\hat{e}_2$:
+\begin{align*}
+\vec v_2 &= \vec u_2 - (u_2, \hat{e}_1) \hat{e}_1 \\
+         &= \begin{bmatrix}
+             0 \\   
+             3 \\   
+            -4 \\  
+             0
+            \end{bmatrix}
+            - (\frac{-3}{\sqrt{5}} + \frac{-8}{\sqrt{5}})
+            \begin{bmatrix}
+            0 \\ 
+            -\frac{1}{\sqrt{5}} \\ 
+            \frac{2}{\sqrt{5}} \\
+            0
+            \end{bmatrix} \\
+         &= (0, \frac{4}{5}, \frac{2}{5}, 0) \\
+||\vec v_2|| &= \sqrt{\frac{16}{25} + \frac{4}{25}} = \frac{2}{\sqrt{5}}
+\end{align*}
+\begin{align*}
+\hat{e}_2 &= \frac{\vec v_2}{||\vec v_2||} \\
+          &= (0, \frac{2}{\sqrt{5}}, \frac{1}{\sqrt{5}}, 0)
+\end{align*}
+\newpage
+7. The first basis vector $\hat{e}_1$:
+\begin{align*}
+||\vec u_1|| &= \sqrt{1 + 9 + 16} \\
+             &= \sqrt{26}
+\end{align*}
+\begin{align*}
+\hat{e}_1 &= \frac{\vec u_1}{||\vec u_1||} \\
+          &= (-\frac{1}{\sqrt{26}}, 0, \frac{3}{\sqrt{26}}, 0, \frac{4}{\sqrt{26}} ) 
+\end{align*}
+The second basis vector $\hat{e}_2$:
+\begin{align*}
+\vec v_2 &= \vec u_2 - (u_2, \hat{e}_1) \hat{e}_1 \\
+         &= \begin{bmatrix}
+             4 \\   
+             0 \\   
+            -1 \\  
+             0 \\
+             3
+            \end{bmatrix}
+            - (\frac{-4 -3 +12}{\sqrt{26}})
+            \begin{bmatrix}
+            -\frac{1}{\sqrt{26}} \\
+            0 \\
+            \frac{3}{\sqrt{26}} \\
+            0 \\
+             \frac{4}{\sqrt{26}} 
+            \end{bmatrix} \\
+         &= (\frac{109}{26}, 0,  \frac{-41}{26}, 0, \frac{29}{13}) \\
+||\vec v_2|| &= \frac{1301}{10 \sqrt{26}}
+\end{align*}
+\begin{align*}
+\hat{e}_2 &= \frac{\vec v_2}{||\vec v_2||} \\
+          &= (\frac{1}{1301 \sqrt{26}})(1090, 0, -410, 0, 580)
+\end{align*}
+The third basis vector $\hat{e}_3$:
+\begin{align*}
+\vec v_3 &= \vec u_3 - (u_3, \hat{e}_1) \hat{e}_1  - (u_3, \hat{e}_2)\hat{e}_2 \\
+         &= \begin{bmatrix}
+             0 \\   
+             0 \\   
+            -1 \\  
+             0 \\
+             5
+            \end{bmatrix}
+            - (\frac{-3+20}{\sqrt{26}})
+            \begin{bmatrix}
+              -\frac{1}{\sqrt{26}} \\
+              0 \\
+              \frac{3}{\sqrt{26}} \\
+              0 \\
+               \frac{4}{\sqrt{26}} 
+            \end{bmatrix}
+            - (\frac{410+2900}{1301\sqrt{26}})
+            \begin{bmatrix}
+              \frac{1090}{1301\sqrt{26}} \\
+              0 \\
+              \frac{-410}{1301\sqrt{26}} \\
+              0 \\
+               \frac{580}{1301\sqrt{26}} 
+            \end{bmatrix} \\
+         &\approx (-1.478, 0, -2.160, 0, 1.250) \\
+||\vec v_3|| &\approx 2.900
+\end{align*}
+\begin{align*}
+\hat{e}_3 &= \frac{\vec v_3}{||\vec v_3||} \\
+          &\approx (-0.510, 0, -0.745, 0, 0.431)
+\end{align*}
+
+\newpage
+\question*{ \S 11.1: Page 357: 2, 6, 10, 12, 16, 18, 20}
+\emph{Find:}
+\newline
+For questions 2 and 6, perform the indicated operations.
+\newline
+2. $-5A + 3B$ where
+\begin{align*}
+A &= 
+ \begin{bmatrix}
+  -2 & 2 \\
+  0 & 1 \\
+  14 & 2 \\
+  6 & 8 
+ \end{bmatrix}
+&B =
+ \begin{bmatrix}
+  4 & 4 \\
+  2 & 1 \\
+  14 & 16 \\
+  1 & 25
+ \end{bmatrix}
+\end{align*}
+
+6. $A^3 - B^2$ where
+\begin{align*}
+A &= 
+ \begin{bmatrix}
+  -2 & 3 \\
+  1 & 1 
+ \end{bmatrix}
+&B = 
+ \begin{bmatrix}
+  0 & 8 \\
+  -5 & 1 
+ \end{bmatrix}
+\end{align*}
+
+\emph{Solution:}
+\newline
+2. 
+\begin{align*}
+-5A + 3B &=
+-5
+ \begin{bmatrix}
+  -2 & 2 \\
+  0 & 1 \\
+  14 & 2 \\
+  6 & 8 
+ \end{bmatrix}
++ 3
+ \begin{bmatrix}
+  4 & 4 \\
+  2 & 1 \\
+  14 & 16 \\
+  1 & 25
+ \end{bmatrix} \\
+&=
+ \begin{bmatrix}
+  10 & -10 \\
+  0 & -5 \\
+  -70 & -10 \\
+  -30 & -40
+ \end{bmatrix}
++ 
+ \begin{bmatrix}
+  12 & 12 \\
+  6 & 3 \\
+  42 & 48 \\
+  3 & 75
+ \end{bmatrix}\\
+&= 
+ \begin{bmatrix}
+  22 & 2 \\
+  6 & -2 \\
+  -28 & 38 \\
+  -27 & 35
+ \end{bmatrix}
+\end{align*}
+
+6. 
+\begin{align*}
+A^3 - B^2 &=
+ \begin{bmatrix}
+  -2 & 3 \\
+  1 & 1 
+ \end{bmatrix}^3
+-
+ \begin{bmatrix}
+  0 & 8 \\
+  -5 & 1 
+ \end{bmatrix}^2 \\
+&=
+ \begin{bmatrix}
+  -2 & 3 \\
+  1 & 1 
+ \end{bmatrix}
+ \begin{bmatrix}
+  -2 & 3 \\
+  1 & 1 
+ \end{bmatrix}
+ \begin{bmatrix}
+  -2 & 3 \\
+  1 & 1 
+ \end{bmatrix}
+-
+ \begin{bmatrix}
+  0 & 8 \\
+  -5 & 1 
+ \end{bmatrix}
+ \begin{bmatrix}
+  0 & 8 \\
+  -5 & 1 
+ \end{bmatrix} \\
+&=
+ \begin{bmatrix}
+  -17 & 18 \\
+  6 & 1 
+ \end{bmatrix}
+-
+ \begin{bmatrix}
+  -40 & 8 \\
+  -5 & -39
+ \end{bmatrix} \\
+&=
+ \begin{bmatrix}
+  23 & 10 \\
+  11 & 40
+ \end{bmatrix}
+\end{align*}
+
+\newpage
+\emph{Find:}
+\newline
+For questions 10, 12, and 16, determine whether $AB$, $BA$,
+or both products are defined; carry out the defined products.
+\newline
+10. 
+\begin{align*}
+A&=
+  \begin{bmatrix}
+    -3 & 1 \\
+    6 & 2 \\
+    18 & -22 \\
+    1 & 6
+  \end{bmatrix}
+&B=
+  \begin{bmatrix}
+    -16 & 0 & 0 & 28 \\
+    0   & 1 & 1 & 26 
+  \end{bmatrix}
+\end{align*}
+12. 
+\begin{align*}
+A&=
+  \begin{bmatrix}
+    -2 & 4 \\
+    3 & 9 
+  \end{bmatrix}
+&B=
+  \begin{bmatrix}
+    1 & -3 & 7 & 2 \\
+    5 & 9 & 1 & 0 
+  \end{bmatrix}
+\end{align*}  
+16. 
+\begin{align*}
+A&=
+  \begin{bmatrix}
+    -3 & 2 \\
+    0 & -2 \\
+    1 & 8 \\
+    3 & -3 
+  \end{bmatrix}
+&B=
+  \begin{bmatrix}
+    -5 & 5 & 7 & 2
+  \end{bmatrix}
+\end{align*}  
+
+\emph{Solution:}
+\newline
+10. Both $AB$ and $BA$ are possible:
+\begin{align*}
+AB &= 
+  \begin{bmatrix}
+    -3 & 1 \\
+    6 & 2 \\
+    18 & -22 \\
+    1 & 6
+  \end{bmatrix}
+  \begin{bmatrix}
+    -16 & 0 & 0 & 28 \\
+    0   & 1 & 1 & 26 
+  \end{bmatrix} \\
+&= 
+  \begin{bmatrix}
+    48 & 1 & 1 & -51 \\
+    -96 & 2 & 2 & 220 \\
+    -288 & -22 & -22 & -68 \\
+    -16 & 6 & 6 & 184 \\
+  \end{bmatrix} \\
+BA &= 
+  \begin{bmatrix}
+    -16 & 0 & 0 & 28 \\
+    0   & 1 & 1 & 26 
+  \end{bmatrix} 
+  \begin{bmatrix}
+    -3 & 1 \\
+    6 & 2 \\
+    18 & -22 \\
+    1 & 6
+  \end{bmatrix} \\
+&= 
+  \begin{bmatrix}
+    76 & 152 \\
+    50 & 136
+  \end{bmatrix} 
+\end{align*}
+
+12. Only $AB$ is possible:
+\begin{align*}
+AB &= 
+  \begin{bmatrix}
+    -2 & 4 \\
+    3 & 9 
+  \end{bmatrix}
+  \begin{bmatrix}
+    1 & -3 & 7 & 2 \\
+    5 & 9 & 1 & 0 
+  \end{bmatrix} \\
+& = 
+  \begin{bmatrix}
+    18 & 42 & -10 & -4 \\
+    48 & 72 & 30 & 6
+  \end{bmatrix}
+\end{align*}
+
+16. Only $BA$ is possible:
+\begin{align*}
+BA &=
+  \begin{bmatrix}
+    -5 & 5 & 7 & 2
+  \end{bmatrix}
+  \begin{bmatrix}
+    -3 & 2 \\
+    0 & -2 \\
+    1 & 8 \\
+    3 & -3 
+  \end{bmatrix}\\
+& = 
+  \begin{bmatrix}
+    28 & 30
+  \end{bmatrix}
+\end{align*}
+\newline
+\emph{Find:}
+\newline
+For questions 18 and 20, determine if the product $AB$ and/or $BA$ is defined;
+determine the dimensions of the product matrix.
+\newline
+18. $A$ is $14 \times 21$ and $B$ is $ 21 \times 14$.
+\newline
+20. $A$ is $1 \times 3$ and $B$ is $3\times 3$.
+\newline
+\newline
+\emph{Solution:}
+\newline
+18. Both products are defined; $AB$ is $ 14 \times 14$ 
+and $BA$ is $21 \times 21$.
+\newline
+20. Only $AB$ is defined; it is $1 \times 3$.
+
+
+
+\end{document}
+
