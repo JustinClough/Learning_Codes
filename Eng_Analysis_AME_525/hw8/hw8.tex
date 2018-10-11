@@ -28,7 +28,114 @@ A =
 
 \emph{Solution:}
 \newline
-
+First find eigenvalues of $A$:
+\begin{align*}
+\det (\lambda I - A) = 
+  \begin{vmatrix}
+  \lambda + 3 & -5 \\
+  -5          & \lambda - 4
+  \end{vmatrix}
+  &= 0 \\
+  &= (\lambda + 3) ( \lambda -4) - (-5)(-5) \\
+  &= \lambda^2 - \lambda - 37 
+\end{align*}
+which has solutions $\lambda = \frac{1}{2} \pm \frac{\sqrt{149}}{2}$.
+The corresponding eigenvectors are:
+\begin{align*}
+  \text{When $\lambda = \frac{1}{2} + \frac{\sqrt{149}}{2}$:}
+  \begin{bmatrix}
+    \frac{7}{2} + \frac{\sqrt{149}}{2} & -5 \\
+    -5                                & -\frac{7}{2} + \frac{\sqrt{149}}{2} \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    \vec e_1
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+    \vec 0
+  \end{bmatrix} \\
+  \Rightarrow
+  \begin{bmatrix}
+    \vec e_1
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+  10 \\
+  7 + \sqrt{149}
+  \end{bmatrix} \\
+  \text{When $\lambda = \frac{1}{2} - \frac{\sqrt{149}}{2}$:}
+  \begin{bmatrix}
+    \frac{7}{2} - \frac{\sqrt{149}}{2} & -5 \\
+    -5                                & -\frac{7}{2} - \frac{\sqrt{149}}{2} \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    \vec e_2
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+    \vec 0
+  \end{bmatrix} \\
+  \Rightarrow
+  \begin{bmatrix}
+    \vec e_2
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+  10 \\
+  7 - \sqrt{149}
+  \end{bmatrix}
+\end{align*}
+Construct $D$ such that $D_{ij} = (\vec e_i, \vec e_j)$. 
+If the eigenvectors are orthogonal, 
+then $D$ will be a diagonal matrix.
+\begin{align*}
+D &= 
+  \begin{bmatrix}
+  (\vec e_i, \vec e_j)
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+  468.89 & 0 \\
+  0      & 127.11
+  \end{bmatrix}
+\end{align*}
+So the eigenvectors are orthogonal.
+Construct $Q$ such that it has
+columns of eigenvectors:
+\begin{align*}
+Q &= 
+  \begin{bmatrix}
+  | & | \\
+  \vec e_1 & \vec e_2 \\
+  | & | 
+  \end{bmatrix}\\
+  &=
+  \begin{bmatrix}
+  10             & 10 \\
+  7 - \sqrt{149} & 7 + \sqrt{149}
+  \end{bmatrix}
+\end{align*}
+Check that $Q$ diagonalizes $A$:
+\begin{align*}
+Q^T A Q &=
+  \begin{bmatrix}
+  10 & 7 - \sqrt{149}\\
+  10 & 7 + \sqrt{149}
+  \end{bmatrix}
+  \begin{bmatrix}
+  -3 & 5 \\
+  5 & 4
+  \end{bmatrix}
+  \begin{bmatrix}
+  10             & 10 \\
+  7 - \sqrt{149} & 7 + \sqrt{149}
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+  7 + \sqrt{149} & 0 \\
+  0 & 7 - \sqrt{149}
+  \end{bmatrix}
+\end{align*}
 
 \question
 \emph{Find:}
