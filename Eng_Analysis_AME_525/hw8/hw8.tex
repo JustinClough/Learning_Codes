@@ -609,10 +609,97 @@ A =
 
 12. First check to see if $A$ is unitary:
 \begin{align*}
-\bar{A}A &=
+\bar{A^T}A &=
   \begin{bmatrix}
-  a
+    \frac{1}{\sqrt{2}} & \frac{-1}{\sqrt{2}} & 0 \\
+    \frac{-i}{\sqrt{2}} & \frac{-i}{\sqrt{2}} & 0 \\
+    0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+    \frac{1}{\sqrt{2}} & \frac{i}{\sqrt{2}} & 0 \\
+    \frac{-1}{\sqrt{2}} & \frac{i}{\sqrt{2}} & 0 \\
+    0 & 0 & 1
+  \end{bmatrix} \\
+  &= I
+\end{align*}
+So $A$ is unitary.
+Check is $A$ is hermitian or skew-hermitian.
+\begin{align*}
+\bar{A} &=
+  \begin{bmatrix}
+    \frac{1}{\sqrt{2}} & \frac{-i}{\sqrt{2}} & 0 \\
+    \frac{-1}{\sqrt{2}} & \frac{-i}{\sqrt{2}} & 0 \\
+    0 & 0 & 1
+  \end{bmatrix}
+&A^T =
+  \begin{bmatrix}
+    \frac{1}{\sqrt{2}} & \frac{-1}{\sqrt{2}} & 0 \\
+    \frac{i}{\sqrt{2}} & \frac{i}{\sqrt{2}} & 0 \\
+    0 & 0 & 1
   \end{bmatrix}
 \end{align*}
+So $\bar{A} \neq A^T$ and $\bar{A} \neq -A^T$
+and is not hermitian or skew-hermitian.
+The eigenvalues values of $A$ are:
+\begin{align*}
+\det(\lambda I - A) = 
+  \begin{vmatrix}
+  \lambda-\frac{1}{\sqrt{2}} & \frac{-i}{\sqrt{2}} & 0 \\
+  \frac{1}{\sqrt{2}} & \lambda-\frac{i}{\sqrt{2}} & 0 \\
+  0 & 0 & \lambda-1
+  \end{vmatrix}
+  &= 0\\
+  &= (\lambda-1)((\lambda - \frac{1}{\sqrt{2}})(\lambda-\frac{i}{\sqrt{2}}) - (\frac{-i}{\sqrt{2}})(\frac{1}{\sqrt{2}}) \\
+  &= (\lambda-1) (\lambda^2 - \frac{1+i}{\sqrt{2}}\lambda +i) 
+\end{align*}
+which has solutions $\lambda = 1, \frac{1+i}{2\sqrt{2}} \pm \frac{\sqrt{-3i}}{2}$.
+
+14.
+The conjugate, transpose, and conjugate transpose of $A$ are:
+\begin{equation*}
+\bar{A}=
+  \begin{bmatrix}
+  -1 & 0 &  3+i \\
+  0 & 1 & 0 \\
+  3-i & 0 & 0
+  \end{bmatrix},
+A^T=
+  \begin{bmatrix}
+  -1 & 0 &  3+i \\
+  0 & 1 & 0 \\
+  3-i & 0 & 0
+  \end{bmatrix},
+\bar{A^T} =
+  \begin{bmatrix}
+  -1 & 0 &  3-i \\
+  0 & 1 & 0 \\
+  3+i & 0 & 0
+  \end{bmatrix}
+\end{equation*}
+Note that $\bar{A}=A^T$, so $A$ is hermitian.
+Check if $A$ is unitary:
+\begin{align*}
+  \bar{A^T}A &= 
+  \begin{bmatrix}
+  -1 & 0 &  3-i \\
+  0 & 1 & 0 \\
+  3+i & 0 & 0
+  \end{bmatrix}
+  \begin{bmatrix}
+  -1 & 0 & 3-i \\
+  0 & 1 & 0 \\
+  3+i & 0 & 0
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+  11 & 0 & -3 +i \\
+  0 & 1 & 0 \\
+  -3-i & 0 & 10 
+  \end{bmatrix} \\
+  &\neq I
+\end{align*}
+So $A$ is not unitary.
+
+
 
 \end{document}
