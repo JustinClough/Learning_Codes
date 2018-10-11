@@ -154,7 +154,108 @@ A =
 
 \emph{Solution:}
 \newline
-
+First find eigenvalues of $A$:
+\begin{align*}
+\det (\lambda I - A) = 
+  \begin{vmatrix}
+  \lambda & -1 & -1 \\
+  -1 & \lambda -2 & 0 \\
+  0 & 0 & \lambda-3
+  \end{vmatrix} 
+  &= 0 \\
+  &= (\lambda-3) ( \lambda (\lambda-2) - (-1)(-1)) \\
+  &= (\lambda-3) ( \lambda^2 - 2 \lambda -1 )
+\end{align*}
+which has solutions $\lambda = 3, 1\pm \sqrt{2}$.
+The corresponding eigenvectors are:
+\begin{align*}
+  \text{When $\lambda = 3$:}
+  \begin{bmatrix}
+  3  & -1 & -1 \\
+  -1 & 1 & 0 \\
+  0 & 0 & 0
+  \end{bmatrix}
+  \begin{bmatrix}
+    \vec e_1
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+    \vec 0
+  \end{bmatrix} \\
+  \Rightarrow
+  \begin{bmatrix}
+    \vec e_1
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+    1 \\
+    1 \\  
+    2
+  \end{bmatrix}  \\
+\text{When $\lambda = 1 + \sqrt{2}$:}
+  \begin{bmatrix}
+  1+ \sqrt{1}  & -1 & -1 \\
+  -1 & -1 + \sqrt{1} & 0 \\
+  0 & 0 & -2 + \sqrt{1}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \vec e_2
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+    \vec 0
+  \end{bmatrix} \\
+  \Rightarrow
+  \begin{bmatrix}
+    \vec e_2
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+    1 \\
+    1 + \sqrt{2} \\
+    0
+  \end{bmatrix}  \\
+\text{When $\lambda = 1 - \sqrt{2}$:}
+  \begin{bmatrix}
+  1- \sqrt{1}  & -1 & -1 \\
+  -1 & -1 - \sqrt{1} & 0 \\
+  0 & 0 & -2 - \sqrt{1}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \vec e_3
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+    \vec 0
+  \end{bmatrix} \\
+  \Rightarrow
+  \begin{bmatrix}
+    \vec e_3
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+    1 \\
+    1 - \sqrt{2} \\
+    0
+  \end{bmatrix}  \\
+\end{align*}
+Construct $D$ such that $D_{ij} = (\vec e_i, \vec e_j)$. 
+If the eigenvectors are orthogonal, 
+then $D$ will be a diagonal matrix.
+\begin{align*}
+D &= 
+  \begin{bmatrix}
+  (\vec e_i, \vec e_j)
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+    4 & 2 +\sqrt{2} & 0 \\
+    2+\sqrt{2} & 4 + 2\sqrt{2} & 0 \\
+    0 & 0 & 4- 2\sqrt{2}
+  \end{bmatrix}
+\end{align*}
+Since $( \vec e_2, \vec e_1) \neq 0$, 
+then the set of eigenvectors are not orthogonal.
 
 \question
 \emph{Find:}
@@ -173,6 +274,7 @@ A =
 
 \emph{Solution:}
 \newline
+
 
 \question
 \emph{Find:}
