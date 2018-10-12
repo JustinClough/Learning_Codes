@@ -699,7 +699,159 @@ Check if $A$ is unitary:
   &\neq I
 \end{align*}
 So $A$ is not unitary.
+The eigenvalues of $A$ are:
+\begin{align*}
+\det(\lambda I-A) =
+  \begin{vmatrix}
+  \lambda+1 & 0 & -3+i \\
+  0 & \lambda-1 & 0 \\
+  -3-i & 0 & \lambda
+  \end{vmatrix}
+  &= 0\\
+  &= (\lambda -1)((\lambda+1)\lambda - (-3+i)(-3-i)) \\
+  &= (\lambda -1)(\lambda^2 - \lambda - 10) 
+\end{align*}
+which has solutions $\lambda = 1, \frac{1}{2} \pm \frac{\sqrt{41}}{2}$.
 
+\newpage
+\question*{\S 12.3 page 421: 15}
+\emph{Find:}
+\newline
+Suppose $H$ is hermitian. Show that $ \overline{HH^T} = \bar{H}H$.
+
+\emph{Solution:}
+\newline
+Since $H$ is hermitian, then $\bar{H}=H^T$.
+\begin{align*}
+\overline{HH^T} &= \overline{HH^T}  \\
+  &= \bar{H}\bar{H^T} \\
+  &= \bar{H}\bar{\bar{H}}  \\
+  &= \bar{H}H
+\end{align*}
+
+\question*{\S 12.3 page 421: 16}
+\emph{Find:}
+\newline
+Prove that the main diagonal elements of a hermitian matrix must be real.
+
+\emph{Solution:}
+\newline
+Let $H$ be hermitian such that $\bar{H}=H^T$ with elements $H_{ij}$
+
+\begin{align*}
+  \bar{H} &= H^T \\
+  \bar{H_{ij}} &= H^T_{ij} \\
+  \bar{H_{ij}} &= H_{ji}  \\
+\end{align*}
+
+When $i=j$ (diagonal components): $\bar{H_{ii}} = H_{ii} $
+$\Rightarrow H_{ii}\in \mathcal{R}$; i.e.,
+the only scalars that are their own conjugate are real numbers
+and the diagonals of $H$ must be real numbers.
+
+\newpage
+\question*{\S 12.4 page 425: 2, 4, and 6}
+\emph{Find:}
+\newline
+In each of Problesm 2, 4, and 6, 
+determine a matrix $A$ to write the quadratic form as 
+$x^TAx$ and find the standard form of this quadratic form.
+\newline
+2.
+\begin{equation*}
+  4 x_1^2 - 12 x_1 x_2 + x^2_2
+\end{equation*}
+4. 
+\begin{equation*}
+  4 x_1^2 - 4 x_1 x_2 +x_2^2
+\end{equation*}
+6. 
+\begin{equation*}
+  5x_1^2 + 4 x_1 x_2 + 2 x_2^2
+\end{equation*}
+
+\emph{Solution:}
+\newline
+2.
+Try an $A$ of
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  4 & -6 \\
+  -6 & 1
+  \end{bmatrix}
+\end{equation*}
+The eigenvalues are then:
+\begin{align*}
+\det(\lambda I -A) = 
+  \begin{vmatrix}
+  \lambda-4 & 6 \\
+  6 & \lambda-1
+  \end{vmatrix}
+  &= 0 \\
+  &= (\lambda -4)(\lambda -1) -36\\
+  &= \lambda^2 - 5\lambda -32
+\end{align*}
+which has solutions $\lambda =\frac{5}{2} \pm \frac{\sqrt{153}}{2}$.
+In standard form:
+\begin{equation*}
+  \left(\frac{5}{2} +\frac{\sqrt{153}}{2}\right)x_1^2 + \left(\frac{5}{2} -\frac{\sqrt{153}}{2}\right)x_2^2
+\end{equation*}
+
+4. 
+Try an $A$ of
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  4 & -2 \\
+  -2 & 1
+  \end{bmatrix}
+\end{equation*}
+
+The eigenvalues are then:
+\begin{align*}
+\det(\lambda I -A) = 
+  \begin{vmatrix}
+  \lambda-4 & 2 \\
+  2 & \lambda-1 
+  \end{vmatrix}
+  &= 0 \\
+  &= (\lambda-1)(\lambda-4)-4 \\
+  &= \lambda(\lambda -5)
+\end{align*}
+which has solutions $\lambda=0,5$.
+In standard form:
+\begin{equation*}
+  5 x_1^2
+\end{equation*}
+
+6.
+Try an $A$ of
+\begin{equation*}
+A = 
+  \begin{bmatrix}
+  5 & 2 \\
+  2 & 2
+  \end{bmatrix}
+\end{equation*}
+
+The eigenvalues are then:
+\begin{align*}
+\det(\lambda I -A) = 
+  \begin{vmatrix}
+  \lambda-5 & -2 \\
+  -2 & \lambda-2
+  \end{vmatrix}
+  &= 0 \\
+  &= (\lambda-5)(\lambda-2) -4 \\
+  &= \lambda^2 - 7 \lambda +6 \\
+  &= (\lambda-6)(\lambda-1)
+\end{align*}
+which has solutions $\lambda=1,6$.
+In standard form:
+\begin{equation*}
+ x_1^2 + 6 x_2^2
+\end{equation*}
 
 
 \end{document}
