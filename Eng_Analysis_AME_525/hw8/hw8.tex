@@ -804,9 +804,72 @@ The eigenvalues are then:
   &= \lambda^2 - 5\lambda -32
 \end{align*}
 which has solutions $\lambda =\frac{5}{2} \pm \frac{\sqrt{153}}{2}$.
-In standard form:
+The corresponding eigenvectors are then:
+\begin{align*}
+\text{When $\lambda = \frac{5}{2} + \frac{\sqrt{153}}{2}$:}
+  \begin{bmatrix}
+  \frac{-3}{2} + \frac{\sqrt{159}}{2} & 6 \\
+  6 & \frac{3}{2} + \frac{\sqrt{159}}{2}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \hat e_1
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+   \vec 0
+  \end{bmatrix} \\
+  \Rightarrow
+  \begin{bmatrix}
+    \hat e_1
+  \end{bmatrix}
+  &=
+  \frac{1}{k_1}
+  \begin{bmatrix}
+    12 \\
+    3 - \sqrt{149}
+  \end{bmatrix} \\
+\text{When $\lambda = \frac{5}{2} - \frac{\sqrt{153}}{2}$:}
+  \begin{bmatrix}
+  \frac{-3}{2} - \frac{\sqrt{159}}{2} & 6 \\
+  6 & \frac{3}{2} - \frac{\sqrt{159}}{2}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \hat e_2
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+   \vec 0
+  \end{bmatrix} \\
+  \Rightarrow
+  \begin{bmatrix}
+    \hat e_2
+  \end{bmatrix}
+  &=
+  \frac{1}{k_2}
+  \begin{bmatrix}
+    12 \\
+    3 + \sqrt{149}
+  \end{bmatrix}
+\end{align*}
+with $k_1 = 302 - 6 \sqrt{149}$ and $k_2=302+6\sqrt{149}$.
+Define $Q$ to have the eigenvectors of $A$ as columns:
+\begin{align*}
+  Q &=
+  \begin{bmatrix}
+    | & | \\
+    \hat e_1 & \hat e_2 \\
+    | & |
+  \end{bmatrix}  \\
+  &=
+  \begin{bmatrix}
+    \frac{12}{302 - 6\sqrt{149}} & \frac{12}{302 + 6\sqrt{149}} & \\
+    \frac{3 - \sqrt{149}}{302-6\sqrt{149}} & \frac{3 + \sqrt{149}}{302+6\sqrt{149}}
+  \end{bmatrix}
+\end{align*}
+Define $\vec y = Q \vec x$ so
+in standard form:
 \begin{equation*}
-  \left(\frac{5}{2} +\frac{\sqrt{153}}{2}\right)x_1^2 + \left(\frac{5}{2} -\frac{\sqrt{153}}{2}\right)x_2^2
+  \left(\frac{5}{2} +\frac{\sqrt{153}}{2}\right)y_1^2 + \left(\frac{5}{2} -\frac{\sqrt{153}}{2}\right)y_2^2
 \end{equation*}
 
 4. 
@@ -831,11 +894,75 @@ The eigenvalues are then:
   &= \lambda(\lambda -5)
 \end{align*}
 which has solutions $\lambda=0,5$.
-In standard form:
+The corresponding eigenvectors are then:
+\begin{align*}
+\text{When $\lambda = 0$:}
+  \begin{bmatrix}
+    -4 & 2 \\
+    2 & -1
+  \end{bmatrix}
+  \begin{bmatrix}
+    \hat e_1
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+   \vec 0
+  \end{bmatrix} \\
+  \Rightarrow
+  \begin{bmatrix}
+    \hat e_1
+  \end{bmatrix}
+  &=
+  \frac{1}{k_1}
+  \begin{bmatrix}
+    1 \\
+    2
+  \end{bmatrix} \\
+\text{When $\lambda = 5$:}
+  \begin{bmatrix}
+    1 & 2 \\
+    2 & 4
+  \end{bmatrix}
+  \begin{bmatrix}
+    \hat e_2
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+   \vec 0
+  \end{bmatrix} \\
+  \Rightarrow
+  \begin{bmatrix}
+    \hat e_2
+  \end{bmatrix}
+  &=
+  \frac{1}{k_2}
+  \begin{bmatrix}
+    -2 \\
+    1
+  \end{bmatrix}
+\end{align*}
+with $k_1 = k_2 = \sqrt{5}$.
+Define $Q$ to have the eigenvectors of $A$ as columns:
+\begin{align*}
+Q &=
+  \begin{bmatrix}
+   | & | \\
+   \hat e_1 & \hat e_2  \\
+   | & | 
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+  \frac{1}{\sqrt{5}} & \frac{-2}{\sqrt{5}} \\
+  \frac{2}{\sqrt{5}} & \frac{1}{\sqrt{5}} 
+  \end{bmatrix}
+\end{align*}
+Define $\vec y = Q \vec x$ so 
+in standard form:
 \begin{equation*}
-  5 x_1^2
+  5 y_1^2
 \end{equation*}
 
+\newpage
 6.
 Try an $A$ of
 \begin{equation*}
@@ -859,9 +986,61 @@ The eigenvalues are then:
   &= (\lambda-6)(\lambda-1)
 \end{align*}
 which has solutions $\lambda=1,6$.
-In standard form:
+The corresponding eigenvalues are:
+\begin{align*}
+\text{When $\lambda = 1$:}
+  \begin{bmatrix}
+    4 & -2 \\
+    -2 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+    \hat e_1
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+    \vec 0
+  \end{bmatrix} \\
+  \begin{bmatrix}
+    \hat e_1
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+    \frac{1}{\sqrt{5}} \\
+    \frac{2}{\sqrt{5}} \\
+  \end{bmatrix} \\
+\text{When $\lambda = 6$:}
+  \begin{bmatrix}
+    1 & -2 \\
+    -2 & 4
+  \end{bmatrix}
+  \begin{bmatrix}
+    \hat e_2
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+    \vec 0
+  \end{bmatrix} \\
+  \begin{bmatrix}
+    \hat e_2
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+    \frac{-2}{\sqrt{5}} \\
+    \frac{1}{\sqrt{5}} \\
+  \end{bmatrix} \\
+\end{align*}
+Define $Q$ to have eigevectros of $A$ as columns:
+\begin{align*}
+Q &= 
+  \begin{bmatrix}
+    \frac{1}{\sqrt{5}} & \frac{-2}{\sqrt{5}} \\
+    \frac{2}{\sqrt{5}} & \frac{1}{\sqrt{5}} \\
+  \end{bmatrix}
+\end{align*}
+Define $ \vec y = Q \vec x$ such that
+in standard form:
 \begin{equation*}
- x_1^2 + 6 x_2^2
+ y_1^2 + 6 y_2^2
 \end{equation*}
 
 
