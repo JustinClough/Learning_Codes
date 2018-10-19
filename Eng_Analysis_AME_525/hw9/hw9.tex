@@ -36,7 +36,90 @@ A =
 \end{equation*}
 \noindent
 Use the principal axis theorem to analyze the conics
-(i.e., find teh conic sections, principal axes, and orientations).
+(i.e., find the conic sections, principal axes, and orientations).
+
+\emph{Solution:}
+\newline
+Define $Q$ such that it has columns of the orthogonal unit vectors:
+\begin{align*}
+Q &=
+    \begin{bmatrix}
+    | & | & | \\
+    e_1 & e_2 & e_3 \\
+    | & | & | 
+    \end{bmatrix} \\
+  &=
+    \begin{bmatrix}
+    \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}}  & 0 \\
+    \frac{1}{\sqrt{2}} & \frac{-1}{\sqrt{2}} & 0 \\
+    0                  & 0                   & 1
+    \end{bmatrix}
+\end{align*}
+
+Transform $A$ by $Q$:
+
+\begin{align*}
+Q^T A Q &= 
+  \begin{bmatrix}
+    \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} & 0 \\
+    \frac{1}{\sqrt{2}}   & \frac{-1}{\sqrt{2}} & 0 \\
+    0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+    1 & 2 & 3 \\
+    4 & 5 & 6 \\
+    7 & 8 & 9 
+  \end{bmatrix}
+  \begin{bmatrix}
+    \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}}  & 0 \\
+    \frac{1}{\sqrt{2}} & \frac{-1}{\sqrt{2}} & 0 \\
+    0                  & 0                   & 1
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+  6  & -1 & \frac{9}{\sqrt{2}} \\
+  -3 & 0 & \frac{-3}{\sqrt{2}} \\
+  \frac{15}{\sqrt{2}} & \frac{-1}{\sqrt{2}} & 9
+  \end{bmatrix}
+\end{align*}
+
+Choose a vector $x$ such that:
+\begin{equation*}
+x^T Q^T A Q x = 
+  6 x_1^2 
+  -4 x_1 x_2
+  +\frac{14}{\sqrt{2}} x_1 x_3 
+  -\frac{4}{\sqrt{2}} x_2 x_3 
+  +9 x_3^2
+\end{equation*}
+
+Try a symmetric matrix $S$ such that:
+\begin{equation*}
+S =
+  \begin{bmatrix}
+    6 & -2 & \frac{7}{\sqrt{2}} \\
+    -2 & 0 & \frac{-2}{\sqrt{2}} \\
+    \frac{7}{\sqrt{2}} & \frac{-2}{\sqrt{2}} & 9
+  \end{bmatrix}
+\end{equation*}
+which has eigenvalues:
+\begin{align*}
+\det (\lambda I - S ) =
+  \begin{bmatrix}
+    \lambda - 6 & 2 & \frac{-7}{\sqrt{2}} \\
+    2 & \lambda & \frac{2}{\sqrt{2}} \\
+    \frac{-7}{\sqrt{2}} & \frac{2}{\sqrt{2}} & \lambda-9
+  \end{bmatrix}
+  &= 0 \\
+  &= \lambda^3 - 15 \lambda^2 + \frac{109}{2} \lambda + 20
+\end{align*}
+\noindent
+which has approximate solutions of $\lambda = 0.34, 7.67 \pm 0.92i$.
+So the standard form is:
+
+\begin{equation*}
+0.34 y_1^2 + (7.67 - 0.92i) y_2^2 + (7.67 + 0.92) y_3^2
+\end{equation*}
 
 \question
 \emph{Find:}
@@ -53,6 +136,59 @@ A =
 
 Then, calculate the eigenvalues and use the result to check your answer.
 
+\emph{Solution:}
+\newline
+The invariants are:
+\begin{align*}
+\beta_1 &= \text{tr}(A) \\
+        &= 2 + 3 + 5 \\
+        &= 10 \\
+\beta_2 &=
+  \begin{vmatrix}
+  2 & 4 \\
+  0 & 3
+  \end{vmatrix}
+  +
+  \begin{vmatrix}
+  3 & 0 \\
+  0 & 5
+  \end{vmatrix} \\
+  &= 6 + 15 \\
+  &= 21 \\
+\beta_3 &= \det(A) \\
+        &= -42
+\end{align*}
+
+The eigenvalues of $A$ are then:
+\begin{align*}
+\det(\lambda I - A) = 
+  \begin{bmatrix}
+  \lambda - 2 & -4 & -6 \\
+  0 & \lambda-3 & 0 \\
+  -4 & 0 & \lambda-5
+  \end{bmatrix}
+  &= 0 \\
+  &= (\lambda -3) ( \lambda^2 - 7 \lambda - 14)
+\end{align*}
+\noindent
+which has solutions $\lambda = 3, \frac{7}{2} \pm \frac{\sqrt{105}}{2}$.
+The invariants are then:
+
+\begin{align*}
+\beta_1 &= 3 
+        + \left( \frac{7}{2} + \frac{\sqrt{105}}{2} \right)
+        + \left( \frac{7}{2} - \frac{\sqrt{105}}{2} \right) \\
+        &= 10 \\
+\beta_2 &= 3 \left( \frac{7}{2} + \frac{\sqrt{105}}{2} \right)
+        + \left( \frac{7}{2} + \frac{\sqrt{105}}{2} \right) \left( \frac{7}{2} - \frac{\sqrt{105}}{2} \right) \\
+        &= 21 \\
+\beta_3 &= 3 
+         \left( \frac{7}{2} + \frac{\sqrt{105}}{2} \right)
+         \left( \frac{7}{2} - \frac{\sqrt{105}}{2} \right) \\
+        &= -42
+\end{align*}
+
+\newpage
 \question
 \emph{Find:}
 \newline
@@ -66,6 +202,129 @@ A =
 \end{equation*}
 
 Use spectral theory. 
+
+\emph{Solution:}
+\newline
+The eigenvalues of $A$ are:
+\begin{align*}
+\det(\lambda I -A) =
+  \begin{bmatrix}
+  \lambda - 3 & -4 \\
+  -4 & \lambda+3 
+  \end{bmatrix}
+  &= 0 \\
+  &= (\lambda-3)(\lambda+3) - (-4)(-4) \\
+  &= (\lambda-5)(\lambda+5) \\
+\end{align*}
+which has solutions of $\lambda = \pm 5$.
+The corresponding eigenvectors
+\begin{align*}
+\text{When $\lambda=5$:}
+  \begin{bmatrix}
+  2 & -4 \\
+  -4 & 8 
+  \end{bmatrix}
+  \begin{bmatrix}
+    e_1
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+    0
+  \end{bmatrix} \\
+  \Rightarrow
+  \begin{bmatrix}
+    e_1
+  \end{bmatrix}
+  &= 
+  k_1
+  \begin{bmatrix}
+    2 \\
+    1
+  \end{bmatrix} \\
+\text{When $\lambda = -5$:}
+  \begin{bmatrix}
+  -8 & -4 \\
+  -4 & 2
+  \end{bmatrix}
+  \begin{bmatrix}
+    e_2
+  \end{bmatrix}
+  &= 
+  \begin{bmatrix}
+    0
+  \end{bmatrix} \\
+  \Rightarrow
+  \begin{bmatrix}
+    e_2
+  \end{bmatrix}
+  &= 
+  k_2
+  \begin{bmatrix}
+  1 \\
+  -2
+  \end{bmatrix} 
+\end{align*}
+with $k_1 = k_2 = \frac{1}{\sqrt{5}}$.
+For a $Q$ such that it has columns 
+of the eigenvectors of $A$.
+\begin{align*}
+Q &=
+  \begin{bmatrix}
+  | & |  \\
+  e_1 & e_2 \\
+  | & |
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+  2 k_1 & k_2 \\
+  k_1 & -2 k_2 
+  \end{bmatrix}
+\end{align*}
+
+Transform $A$ with $Q$:
+\begin{align*}
+Q^T A Q &=
+  \begin{bmatrix}
+  2 k_1 & k_1 \\
+  k_2 & -2 k_2
+  \end{bmatrix}
+  \begin{bmatrix}
+  3 & 4 \\
+  4 & -3 
+  \end{bmatrix}
+  \begin{bmatrix}
+  2 k_1 & k_2 \\
+  k_1 & -2 k_2 
+  \end{bmatrix} \\
+  &=
+  \begin{bmatrix}
+  5 & 0 \\
+  0 & -5 
+  \end{bmatrix}
+\end{align*}
+
+Taking the square root and transforming back:
+\begin{align*}
+Q \sqrt{Q^T A Q}Q^T &=
+  \begin{bmatrix}
+    2 k_1 & k_2 \\
+    k_1 & -2 k_2 
+  \end{bmatrix} 
+  \begin{bmatrix}
+    \sqrt{5} & 0 \\
+    0 & \sqrt{-5}
+  \end{bmatrix}
+  \begin{bmatrix}
+    2 k_1 & k_1 \\
+    k_2 & -2 k_2
+  \end{bmatrix} \\
+  &=
+  \frac{1}{\sqrt{5}}
+  \begin{bmatrix}
+    4+i  & 2-2i \\
+    2-2i & 1+4i
+  \end{bmatrix}
+\end{align*}
 
 \question
 \emph{Find:}
@@ -81,9 +340,60 @@ A =
   \end{bmatrix}
 \end{equation*}
 
-\question*{\S 19.1 page 658: 4, 8, 12, 18, 20, 22, 24}
+\question*{\S 19.1 page 658: 4, 8}
 \emph{Find:}
 \newline
+In each of Problems 4 and 8, 
+carry out the indicated calculation.
 
+4. 
+\begin{equation*}
+  \frac{(2+i)-(3-4i)}{(5-i)(3+i)}
+\end{equation*}
+
+8. 
+\begin{equation*}
+(3+i)^3
+\end{equation*}
+
+
+\question*{\S 19.1 page 658: 12}
+\emph{Find:}
+\newline
+In Problem 12, determine the magnitude and all of the arguments 
+of $z$.
+
+12.
+\begin{equation*}
+  -2+2i
+\end{equation*}
+
+
+\question*{\S 19.1 page 658: 18, 20, 22}
+\emph{Find:}
+\newline
+In each of Problems 18, 20, and 22
+write the number in polar form.
+
+18.
+\begin{equation*}
+-7i
+\end{equation*}
+
+20. 
+\begin{equation*}
+  -4 -i
+\end{equation*}
+
+22.
+\begin{equation*}
+  -12 +3i
+\end{equation*}
+
+\question*{\S 19.1 page 658: 24}
+\emph{Find:}
+\newline
+Let $z=a+ib$. 
+Determine Re($z^2$) and Im($z^2$).
 
 \end{document}
