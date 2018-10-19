@@ -340,6 +340,82 @@ A =
   \end{bmatrix}
 \end{equation*}
 
+\emph{Solution:}
+\newline
+4. The characteristic equation is:
+
+\begin{align*}
+\det(a I - A) =
+  \begin{vmatrix}
+  a - 2 & -4 & -6 \\
+  0 & a-3 & 0 \\
+  -4 & 0 & a-5 
+  \end{vmatrix}
+  &= 0 \\
+  &= a^3 -10 a^2 + 7 a + 42
+\end{align*}
+Applying $A$ to $a$:
+
+\begin{align*}
+\begin{bmatrix}
+  0
+\end{bmatrix}
+&=
+  \begin{bmatrix}
+    2 & 4 & 6 \\
+    0 & 3 & 0 \\
+    4 & 0 & 5
+  \end{bmatrix} ^3
+  - 10
+  \begin{bmatrix}
+    2 & 4 & 6 \\
+    0 & 3 & 0 \\
+    4 & 0 & 5
+  \end{bmatrix}^2
+  +7
+  \begin{bmatrix}
+    2 & 4 & 6 \\
+    0 & 3 & 0 \\
+    4 & 0 & 5
+  \end{bmatrix}
+  +42
+  \begin{bmatrix}
+    1 & 0 & 0 \\
+    0 & 1 & 0 \\
+    0 & 0 & 1
+  \end{bmatrix} \\
+&=
+  \begin{bmatrix}
+    224 & 172 & 378 \\
+    0 & 27 & 0 \\
+    252 & 160 & 413
+  \end{bmatrix}
+  -
+  \begin{bmatrix}
+  280 & 200 & 420 \\
+  0 & 90 & 0 \\
+  280 & 160 & 490 
+  \end{bmatrix}
+  +
+  \begin{bmatrix}
+  14 & 28 & 42 \\
+  0 & 21 & 0 \\
+  28 & 0 & 35
+  \end{bmatrix}
+  +
+  \begin{bmatrix}
+  42 & 0 & 0 \\
+  0 & 42 & 0 \\
+  0 & 0 & 42
+  \end{bmatrix} \\
+&= 
+  \begin{bmatrix}
+  0
+  \end{bmatrix}
+\end{align*}
+
+
+\newpage
 \question*{\S 19.1 page 658: 4, 8}
 \emph{Find:}
 \newline
@@ -356,6 +432,25 @@ carry out the indicated calculation.
 (3+i)^3
 \end{equation*}
 
+\emph{Solution:}
+\newline
+4. 
+\begin{align*}
+\frac{(2+i)-(3-4i)}{(5-i)(3+i)}
+  &= \frac{-1 + 5i}{(5-i)(3+i)}\\
+  &= \frac{\sqrt{26}e^{i101}}{\sqrt{26}e^{-i11}\sqrt{10}e^{i18}}\\
+  &= \frac{1}{\sqrt{10}} e^{i94} \\
+  &= -0.03 + 0.32 i
+\end{align*}
+
+8.
+\begin{align*}
+(3+i)^3 
+  &= (\sqrt{10} e^{i18.4})^3 \\
+  &= (10)^{\frac{3}{2}} e^{i55.3} \\
+  &= 4.6 e^{i55.3} \\
+  &= 2.6 +3.7i
+\end{align*}
 
 \question*{\S 19.1 page 658: 12}
 \emph{Find:}
@@ -368,6 +463,14 @@ of $z$.
   -2+2i
 \end{equation*}
 
+\emph{Solution:}
+\newline
+12.
+\begin{align*}
+-2+2i
+  &= \sqrt{(-2)^2 + 2^2} e^{i \text{ atan}(\frac{2}{-2})} \\
+  &= \sqrt{8} e^{i135}
+\end{align*}
 
 \question*{\S 19.1 page 658: 18, 20, 22}
 \emph{Find:}
@@ -390,10 +493,46 @@ write the number in polar form.
   -12 +3i
 \end{equation*}
 
+\emph{Solution:}
+\newline
+18.
+\begin{equation*}
+-7i = 7 e^{i270}
+\end{equation*}
+
+20.
+\begin{align*}
+-4 - i 
+  &= \sqrt{(-4)^2 + (-1)^2} e^{i \text{ atan}(\frac{-1}{-4})} \\
+  &= \sqrt{26} e^{i194}
+\end{align*}
+
+22.
+\begin{align*}
+-12 + 3i
+  &= \sqrt{(-12)^2 + 3^2} e^{i \text{ atan}(\frac{3}{-12})} \\
+  &= \sqrt{153} e^{i166}
+\end{align*}
+
+
 \question*{\S 19.1 page 658: 24}
 \emph{Find:}
 \newline
 Let $z=a+ib$. 
 Determine Re($z^2$) and Im($z^2$).
+
+\emph{Solution:}
+\newline
+\begin{align*}
+z^2 &= (a+ib) (a+ib) \\
+    &= a^2 +2abi - b^2  \\
+    &= a^2 - b^2 + 2abi \\
+\Rightarrow 
+  \text{Re($z^2$)} &= a^2 - b^2 \\
+\Rightarrow 
+  \text{Im($z^2$)} &= 2ab \\
+\end{align*}
+
+
 
 \end{document}
