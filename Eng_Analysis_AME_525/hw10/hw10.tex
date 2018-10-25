@@ -151,7 +151,7 @@ Since $\pdv{u}{x}=\pdv{v}{y}$ and $\pdv{u}{y}=-\pdv{v}{x}$
 $\forall z \in \mathcal{C} \setminus z = -i$,
 then the function is differentiable $ \forall z \in \mathcal{C} \setminus z=-i$.
 
-
+\newpage
 \question*{\S 19.3 page 671: 2, 8}
 \emph{Find:}
 \newline
@@ -169,8 +169,52 @@ $a+bi$.
   \cos (2-i) - \sin ( 2-i)
 \end{equation*}
 
+\emph{Solution:}
+\newline
 
+2.
+\begin{align*}
+\sin (1-4i) &= \frac{1}{i2} \left( e^{i(1-4i)} - e^{-i(1-4i)}\right) \\
+  &= \sin(1) \cosh(-4) + i \cos(1) \sinh(-4) \\
+  \\
+\Rightarrow
+  a &= \sin(1)\cosh(-4) \\
+\Rightarrow
+  b &= \cos(1)\sinh(-4)
+\end{align*}
 
+4. 
+\begin{align*}
+\cos(2-i) - \sin(2-i) 
+  &= 
+    \left( 
+      \frac{1}{2} \left( e^{i(2-i)} + e^{-i(2- i)}\right)
+    \right)
+    -
+    \left( 
+      \frac{1}{i2} \left( e^{i(2-i)} - e^{-i(2- i)}\right)
+    \right) \\
+  &= 
+    \cos(2)\cosh(-1) - i \sin(2)\sinh(-1)
+    -
+    \sin(2)\cosh(-1) - i\cos(2)\sinh(-1)  \\
+  &=
+    \left(
+      \cos(2) - \sin(2)
+    \right) \cosh(-1)
+    -i
+    \sinh(-1)
+    \left( 
+      \cos(2) + \sin(2)
+    \right) \\
+  \\
+\Rightarrow 
+  a &= \cosh(-1) \left( \cos(2) - \sin(2) \right)  \\
+\Rightarrow 
+  b &= \sinh(-1) \left( \cos(2) + \sin(2) \right) 
+\end{align*}
+
+\newpage
 \question*{\S 19.4 page 672: 2,4}
 \emph{Find:}
 In each of Problems 2 and 4,
