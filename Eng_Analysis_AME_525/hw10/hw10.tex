@@ -8,6 +8,7 @@
 
 \usepackage{amsmath}
  \usepackage{delarray}
+\usepackage{physics}
 
 \begin{document}
 \maketitle
@@ -47,6 +48,108 @@ can be assumed.
 
 \emph{Solution:}
 \newline
+2.
+Let $z = x+yi$ and $x,y \in \mathcal{R}$.
+\begin{align*}
+  f(z) &= z^2 - iz \\
+       &= (x+yi)^2 - i(x+iy) \\
+       &= (x^2 - y^2 +y) + i ( 2xy - x) \\
+      \\
+\Rightarrow
+  u(x,y) &=x^2 - y^2 +y  \\
+\Rightarrow
+  v(x,y) &=2xy - x 
+\end{align*}
+
+The partial derivatives are then:
+\begin{align*}
+  \pdv{u}{x} &= 2x    & \pdv{u}{y} &= -2y +1 \\
+  \pdv{v}{x} &= 2y-1  & \pdv{v}{y} &= 2x
+\end{align*}
+
+Since $\pdv{u}{x}=\pdv{v}{y}$ and $\pdv{u}{y}=-\pdv{v}{x}$ 
+$\forall z \in \mathcal{C}$,
+then the function is differentiable $ \forall z \in \mathcal{C}$.
+
+6. 
+Let $z = x+yi$ and $x,y \in \mathcal{R}$.
+\begin{align*}
+  f(z) &= z + \text{ Im}(z) \\
+   &= (x+iy) + (y) \\
+   &= (x+y) + i(y)
+      \\
+\Rightarrow
+  u(x,y) &= x+y \\
+\Rightarrow
+  v(x,y) &=y
+\end{align*}
+
+The partial derivatives are then:
+\begin{align*}
+  \pdv{u}{x} &= 1    & \pdv{u}{y} &= 1 \\
+  \pdv{v}{x} &= 0  & \pdv{v}{y} &= 1 
+\end{align*}
+
+Since the Cauchy-Riemann equations do not 
+hold for any $z$, then the function
+is not differentiable.
+
+10.
+Let $z = x+yi$ and $x,y \in \mathcal{R}$.
+\begin{align*}
+  f(z) &= iz + |z| \\
+  &= i(x+iy) + \sqrt{x^2 + y^2} \\
+  &= (\sqrt{x^2 + y^2} -y) + i(x) \\
+      \\
+\Rightarrow
+  u(x,y) &=\sqrt{x^2 + y^2} -y  \\
+\Rightarrow
+  v(x,y) &=x
+\end{align*}
+
+The partial derivatives are then:
+\begin{align*}
+  \pdv{u}{x} &= \frac{x}{\sqrt{x^2 +y^2}}    & \pdv{u}{y} &= \frac{y}{\sqrt{x^2+y^2}} - 1 \\
+  \pdv{v}{x} &= 1  & \pdv{v}{y} &= 0
+\end{align*}
+
+Let $S_i$ be the solution spaces for equations
+$i=1,2$.
+For the Cauchy-Riemann equations to hold:
+\begin{align*}
+  \pdv{u}{x} &= \pdv{v}{y} \\
+  \frac{x}{\sqrt{x^2+y^2}} &= 0 \quad \forall (x,y)\in S_1=\{(x,y)|x=0,y\neq0\} \\
+  \pdv{u}{y} &= -\pdv{v}{x} \\
+  \frac{y}{\sqrt{x^2+y^2}} -1 &= -1  \quad \forall (x,y)\in S_2=\{(x,y)| x\neq 0,y=0\}
+\end{align*}
+
+Since $S_1 \cup S_2 = \varnothing$, then there are no points
+where the Cauchy-Riemann equations hold and the 
+function is not differentiable.
+
+12.
+Let $z = x+yi$ and $x,y \in \mathcal{R}$.
+\begin{align*}
+  f(z) &= \frac{z-i}{z+i} \\
+    &= \frac{x+iy-i}{x+iy+i} \\
+    &= \frac{(x+iy-i)(x-i(y+1)}{(x+iy+i)(x-i(y+1)} \\
+    &= \frac{x^2 + y^2 -1}{x^2+y^2+2y+1} + i \frac{-2x}{x^2+y^2+2y+1}
+      \\
+\Rightarrow
+  u(x,y) &=\frac{x^2 + y^2 -1}{x^2+y^2+2y+1}  \\
+\Rightarrow
+  v(x,y) &=\frac{-2x}{x^2+y^2+2y+1}
+\end{align*}
+
+The partial derivatives are then:
+\begin{align*}
+  \pdv{u}{x} &= \frac{4x(y+1)}{(x^2+y^2+2y+1)^2}           & \pdv{u}{y} &= \frac{2(-x^2 + y^2 +2y+1)}{(x^2+y^2+2y+1)^2} \\
+  \pdv{v}{x} &=  \frac{2(-x^2+y^2+2y+1)}{(x^2+y^2+2y+1)^2} & \pdv{v}{y} &= \frac{4x(y+1)}{(x^2+y^2+2y+1)^2}
+\end{align*}
+
+Since $\pdv{u}{x}=\pdv{v}{y}$ and $\pdv{u}{y}=-\pdv{v}{x}$ 
+$\forall z \in \mathcal{C} \setminus z = -i$,
+then the function is differentiable $ \forall z \in \mathcal{C} \setminus z=-i$.
 
 
 \question*{\S 19.3 page 671: 2, 8}
@@ -65,6 +168,8 @@ $a+bi$.
 \begin{equation*}
   \cos (2-i) - \sin ( 2-i)
 \end{equation*}
+
+
 
 \question*{\S 19.4 page 672: 2,4}
 \emph{Find:}
