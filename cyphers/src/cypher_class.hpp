@@ -5,6 +5,7 @@
 #include <cerrno>
 #include <fstream>
 #include <iostream>
+#include <cctype>
 #include "wheel.hpp"
 
 using str = std::string;
@@ -26,11 +27,13 @@ class Cypher
   private:
     Wheel* wheel;
     str base; 
+    str working_base; 
     str target;
     str result;
 
     str get_file_contents( const char* filename);
     str encrypt( str pt);
+    void sanatize_base();
     bool encryptable( char letter);
     void write_to_file( str enc);
 

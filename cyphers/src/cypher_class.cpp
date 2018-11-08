@@ -15,6 +15,7 @@ Cypher::~Cypher()
 void Cypher::set_base( char* base_)
 {
   base = base_;
+  sanatize_base();
   return;
 }
 
@@ -113,7 +114,7 @@ str Cypher::encrypt( str pt)
     char letter_out;
     if( encryptable( letter_in))
     {
-      letter_out = wheel->get_letter( letter_in, base, k);
+      letter_out = wheel->get_letter( letter_in, working_base, k);
     }
     else
     {
@@ -123,6 +124,27 @@ str Cypher::encrypt( str pt)
   }
 
   return enc;
+}
+
+void Cypher::sanatize_base()
+{
+  for( unsigned int i=0; i < base.size(); i++)
+  {
+    if( !encryptable( base[i]))
+    {
+      working_base += 'a';
+    }
+    else if( std::isupper( base[i]))
+    {
+      working_base += std::tolower( base[i]);
+    }
+    else
+    {
+      working_base += base[i];
+    }
+  }   
+
+  return;
 }
 
 void Cypher::write_to_file( str enc)
