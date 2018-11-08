@@ -14,8 +14,7 @@ int main( int argc, char** argv)
     std::abort();
   }
 
+  cyph->operate();
   delete cyph;
-
-  std::cout << "Hello World!" << std::endl;
   return 0;
 }
