@@ -1,0 +1,67 @@
+\documentclass[11pt]{homework}
+
+\newcommand{\hwname}{Justin L. Clough}
+\newcommand{\hwemail}{jlclough@usc.edu}
+\newcommand{\hwtype}{Homework}
+\newcommand{\hwnum}{11}
+\newcommand{\hwclass}{AME: 525}
+
+\usepackage{amsmath}
+ \usepackage{delarray}
+\usepackage{physics}
+
+\begin{document}
+\maketitle
+
+\question*{\S 20.1 page 682: 2, 4, 8, 10, and 14}
+\emph{Find:}
+\newline
+In problems 2, 4, 8, 10, and 14,
+evaluate $\int_{\gamma} f(z) dz$.
+
+\emph{Solution:}
+\newline
+2.
+\begin{equation*}
+  f(z) = z^2 - iz, \gamma \text{ is the quarter circle at the origin from 2 to 2i}
+\end{equation*}
+
+4.
+\begin{equation*}
+  f(z) = \frac{1}{z}, \gamma \text{ is the half circle of radius 4 about the origin from 4i to -4i}
+\end{equation*}
+
+8.
+\begin{equation*}
+  f(z) = 1 + z^2, \gamma \text{ is the part of the circle of radius 3 about the origin from -3i to 3i}
+\end{equation*}
+
+10. % TODO
+\begin{equation*}
+  f(z) = |z|^2, \gamma \text{ is the line segment from -4 to i}
+\end{equation*}
+
+14.
+\begin{equation*}
+  f(z) = \text{Im}(z), \gamma \text{ is the circle of radius 4 about the origin (positive)}
+\end{equation*}
+
+\emph{Solution:}
+\newline
+2. Let $\gamma = \{z | z = 2 e^{it} \forall t\in[0,\frac{\pi}{2}]\}$.
+\begin{align*}
+  J &= \int_\gamma f(z) dz \\
+    &= \int_0^{\frac{\pi}{2}} f(z_\gamma) z_\gamma' dt \\
+    &= \int_0^{\frac{\pi}{2}} (4e^{i2t} - i2e^{it}) i2e^{it} dt \\
+    &= \int_0^{\frac{\pi}{2}} (i8e^{i3t} + 4e^{2it}) dt\\
+    &= \left[ \frac{i8e^{i3t}}{i3} + \frac{4e^{2it}}{2i} \right]_0^\frac{\pi}{2} \\
+    &= \frac{8}{3} (1-i)
+\end{align*}
+
+4.:w
+
+\question*{\S 20.2 page 685: 2, 4, 10, 12}
+\emph{Find:}
+
+
+\end{document}
