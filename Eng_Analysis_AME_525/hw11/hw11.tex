@@ -18,8 +18,6 @@
 \newline
 In problems 2, 4, 8, 10, and 14,
 evaluate $\int_{\gamma} f(z) dz$.
-
-\emph{Solution:}
 \newline
 2.
 \begin{equation*}
@@ -36,7 +34,7 @@ evaluate $\int_{\gamma} f(z) dz$.
   f(z) = 1 + z^2, \gamma \text{ is the part of the circle of radius 3 about the origin from -3i to 3i}
 \end{equation*}
 
-10. % TODO
+10. 
 \begin{equation*}
   f(z) = |z|^2, \gamma \text{ is the line segment from -4 to i}
 \end{equation*}
@@ -55,13 +53,151 @@ evaluate $\int_{\gamma} f(z) dz$.
     &= \int_0^{\frac{\pi}{2}} (4e^{i2t} - i2e^{it}) i2e^{it} dt \\
     &= \int_0^{\frac{\pi}{2}} (i8e^{i3t} + 4e^{2it}) dt\\
     &= \left[ \frac{i8e^{i3t}}{i3} + \frac{4e^{2it}}{2i} \right]_0^\frac{\pi}{2} \\
-    &= \frac{8}{3} (1-i)
+    &= -\frac{8}{3} +\frac{4}{3}i
 \end{align*}
 
-4.:w
+4. Let $\gamma = \{z | z = 4 e^{it} \forall t\in[\frac{-\pi}{2},\frac{\pi}{2}]\}$.
+\begin{align*}
+  J &= \int_\gamma f(z) dz \\
+    &= \int_\frac{-\pi}{2}^{\frac{\pi}{2}} f(z_\gamma) z_\gamma' dt  \\
+    &= \int_\frac{-\pi}{2}^{\frac{\pi}{2}} \frac{1}{4e^{it}} 4ie^{it} dt  \\
+    &= \int_\frac{-\pi}{2}^{\frac{\pi}{2}} i dt \\
+    &= i\pi
+\end{align*}
 
+8.  Let $\gamma = \{z | z = 3 e^{it} \forall t\in[\frac{-\pi}{2},\frac{\pi}{2}]\}$.
+\begin{align*}
+  J &= \int_\gamma f(z) dz \\
+    &= \int_\frac{-\pi}{2}^{\frac{\pi}{2}} f(z_\gamma) z_\gamma' dt  \\
+    &= \int_\frac{-\pi}{2}^{\frac{\pi}{2}} (1+9e^{i2t}) 3ie^{it} dt  \\
+    &= \int_\frac{-\pi}{2}^{\frac{\pi}{2}} ( 3ie^{it} + 18 e^{3it}) dt   \\
+    &= \left[ \frac{3e^{it}}{i} + \frac{18e^{2it}}{3i} \right]_\frac{-\pi}{2}^\frac{\pi}{2}  \\
+    &= 3 - 6 - (-3+6) \\
+    &= -6
+\end{align*}
+
+10. Let $\gamma = \{z | z = -4 (i+4)t \forall t\in[0,1]\}$.
+\begin{align*}
+  J &= \int_\gamma f(z) dz \\
+    &= \int_0^1 f(z_\gamma) z_\gamma' dt  \\
+    &= \int_0^1 (16-32t+17t^2)(i+4) dt  \\
+    &= \left[ (i+4)(16t - 16t^2+\frac{17}{3}t^3)\right]_0^1 \\
+    &= \frac{-68}{3} + \frac{17}{3}i
+\end{align*}
+
+14. Let $\gamma = \{z | z = 4 e^{it} \forall t\in[0,2\pi]\}$.
+\begin{align*}
+  J &= \int_\gamma f(z) dz \\
+    &= \int_0^{2\pi} f(z_\gamma) z_\gamma' dt  \\
+    &= \int_0^{2\pi} (4\sin(t)) (4ie^{it}) dt \\
+    &= 16 \int_0^{2\pi} \left(\frac{e^{it} - e^{-it}}{2i}\right) e^{it} dt  \\
+    &= -16 \int_0^{2\pi} (\frac{-e^{i2t}}{2} +1) dt  \\
+    &= -16 \left[ \frac{-e^{2it}}{4i} +t \right]_0^{2\pi} \\
+    &= -16 \pi
+\end{align*}
+
+\newpage
 \question*{\S 20.2 page 685: 2, 4, 10, 12}
 \emph{Find:}
+\newline
+In problems 2, 4, 10, and 12, 
+evaluate the integral of the function over the closed path
+All curves are oriented counterclockwise.
 
+2.
+\begin{equation*}
+  f(z) = \frac{2z}{z-i}, \gamma \text{ is the circle } |z-i|=3
+\end{equation*} 
+
+4.
+\begin{equation*}
+  f(z) = z^2 \sin(z), \gamma \text{ is the square with vertices } 0,1,i,1+i
+\end{equation*} 
+
+10.
+\begin{equation*}
+  f(z) = \sin(\frac{1}{z}), \gamma \text{ is the circle } |z-1+2i|=1
+\end{equation*} 
+
+12.
+\begin{equation*}
+  f(z) = z^2 + \text{Im}(z), \gamma \text{ is the square with vertices } 0, -2i, 2, 2-2i
+\end{equation*} 
+
+\emph{Solution:}
+\newline
+2. Let $\gamma = \{z | z = i + 3 e^{it} \forall t\in[0,2\pi]\}$.
+\begin{align*}
+  J &= \int_\gamma f(z) dz \\
+    &= \int_0^{2\pi} f(z_\gamma) z_\gamma' dt  \\
+    &= \int_0^{2\pi} \frac{ 2i + 6e^{it}}{3e^{it}} 3ie^{it} dz \\
+    &= \int_0^{2\pi} (-2 + 6i e^{it}) dt \\
+    &= \left[-2t - 6e^{it}\right]_0^{2\pi} \\
+    &= -4 \pi
+\end{align*}
+
+4. Let $z=re^{i\theta}$; the Cauchy-Riemann equations in polar form are then:
+\begin{align*}
+f(z)            &= r^2 e^{2i \theta } \sin ( r e^{i\theta}) \\
+\pdv{f}{r}      &= 2 r e^{2i\theta}\sin(r e^{i\theta}) + r^2 e^{3i\theta} \cos(re^{i\theta}) \\
+\pdv{f}{\theta} &= 2ir^2 e^{2i\theta} \sin(r e^{i\theta}) + r^3 e^{3i\theta} i cos(r e^{i\theta}) \\
+\Rightarrow
+  \pdv{f}{r} &= \frac{1}{ir} \pdv{f}{\theta} 
+\end{align*}
+
+So $f(z)$ is analytic $\forall z\in \mathcal{C}$. Any integral in plane is zero.
+
+\newpage
+10. Let $z=re^{i\theta}$; the Cauchy-Riemann equations in polar form are then:
+\begin{align*}
+f(z) &= \sin( \frac{1}{re^{i\theta}}) \\
+\pdv{f}{r} &= \frac{-1}{r^2e^{i\theta}} \cos( \frac{1}{re^{i\theta}}) \\
+\pdv{f}{\theta} &= \frac{1}{rie^{i\theta}} \cos( \frac{1}{re^{i\theta}}) \\
+\Rightarrow
+  \pdv{f}{r} &= \frac{1}{ir} \pdv{f}{\theta} 
+\end{align*}
+
+12. Let $\gamma = \{ z | z=-2it,-2i+2t,2-2i+2it,2-2t \forall t\in[0,1]\}$.
+\begin{align*}
+  J &= \int_\gamma f(z) dz \\
+    &= \int_0^1 f(z_\gamma) z_\gamma' dt  \\
+    &= \int_0^1 f(z_{\gamma_0}) z_{\gamma_0}' dt  + \int_0^1 f(z_{\gamma_1}) z_{\gamma_1}' dt  +
+         \int_0^1 f(z_{\gamma_2}) z_{\gamma_2}' dt  + \int_0^1 f(z_{\gamma_3}) z_{\gamma_3}' dt \\
+    &= \int_0^1 (-4t^2 +12it+10) dt \\
+    &= \left[ \frac{-4}{3} t^3 +6i t^2 +10t\right]_0^1 \\
+    &= 6i + \frac{26}{3}
+\end{align*}
+
+\newpage
+\question*{\S 20.3 page 696: 2,4,8,10}
+\emph{Find:}
+\newline
+In each of problems 2, 4, 8, and 10,
+evaluate the integral.
+All closed curves are positively oriented.
+
+2. $\gamma$ is any closed path enclosing 5.
+\begin{equation*}
+  f(z) = \frac{\sin(z^2)}{z-5}
+\end{equation*}
+
+4. $\gamma$ is teh rectangle having vertices $\pm4\pm i$.
+\begin{equation*}
+  f(z) = \frac{2z^3}{(z-2)^2}
+\end{equation*}
+
+8. $\gamma$ is the line segment from 1 to $-i$.
+\begin{equation*}
+f(z) = 2i\bar{z}|z|
+\end{equation*}
+
+10. $\gamma$ is teh semicircle of radius 1 about 0 from $i$ to $-i$.
+\begin{equation*}
+f(z) = (z-i)^2
+\end{equation*}
+
+\emph{Solution:}
+\newline
+2.
 
 \end{document}
