@@ -70,13 +70,12 @@ evaluate $\int_{\gamma} f(z) dz$.
   J &= \int_\gamma f(z) dz \\
     &= \int_\frac{-\pi}{2}^{\frac{\pi}{2}} f(z_\gamma) z_\gamma' dt  \\
     &= \int_\frac{-\pi}{2}^{\frac{\pi}{2}} (1+9e^{i2t}) 3ie^{it} dt  \\
-    &= \int_\frac{-\pi}{2}^{\frac{\pi}{2}} ( 3ie^{it} + 18 e^{3it}) dt   \\
-    &= \left[ \frac{3e^{it}}{i} + \frac{18e^{2it}}{3i} \right]_\frac{-\pi}{2}^\frac{\pi}{2}  \\
-    &= 3 - 6 - (-3+6) \\
-    &= -6
+    &= \int_\frac{-\pi}{2}^{\frac{\pi}{2}} ( 3ie^{it} + 27i e^{3it}) dt   \\
+    &= \left[ \frac{3e^{it}}{i} + \frac{27ie^{2it}}{3i} \right]_\frac{-\pi}{2}^\frac{\pi}{2}  \\
+    &= -12i
 \end{align*}
 
-10. Let $\gamma = \{z | z = -4 (i+4)t \forall t\in[0,1]\}$.
+10. Let $\gamma = \{z | z = -4 + (i+4)t \forall t\in[0,1]\}$.
 \begin{align*}
   J &= \int_\gamma f(z) dz \\
     &= \int_0^1 f(z_\gamma) z_\gamma' dt  \\
@@ -156,6 +155,7 @@ f(z) &= \sin( \frac{1}{re^{i\theta}}) \\
 \Rightarrow
   \pdv{f}{r} &= \frac{1}{ir} \pdv{f}{\theta} 
 \end{align*}
+So $f(z)$ is analytic $\forall z\in \mathcal{C}$. Any integral in plane is zero.
 
 12. Let $\gamma = \{ z | z=-2it,-2i+2t,2-2i+2it,2-2t \forall t\in[0,1]\}$.
 \begin{align*}
@@ -237,9 +237,9 @@ J &= \int_\gamma \frac{ 2z^3}{(z-2)^2} dz \\
   J &= \int_\gamma f(z) dz \\
     &= \int_\frac{\pi}{2}^{\frac{3\pi}{2}} f(z_\gamma) z_\gamma' dt   \\
     &= \int_\frac{\pi}{2}^{\frac{3\pi}{2}} (e^{it} - i)^2 ie^i{it} dt \\
-    &= \int_\frac{\pi}{2}^{\frac{3\pi}{2}} (ie^{3it} + 2e^{2it} +ie^{it}) dt \\
-    &= \left[ \frac{e^{3it}}{3} - i e^{2it} + e^{it} \right]_\frac{\pi}{2}^\frac{3\pi}{2} \\
-    &= \frac{-4}{3}i
+    &= \int_\frac{\pi}{2}^{\frac{3\pi}{2}} (ie^{3it} + 2e^{2it} -ie^{it}) dt \\
+    &= \left[ \frac{e^{3it}}{3} - i e^{2it} - e^{it} \right]_\frac{\pi}{2}^\frac{3\pi}{2} \\
+    &= \frac{8}{3}i
 \end{align*}
 
 \newpage
@@ -280,13 +280,15 @@ with $R\rightarrow \infty$.
 f(z) &= \frac{ z^2+1}{2z-1} \\
      &= \frac{ z^2+1}{2} \cdot \frac{1}{z-\frac{1}{2}} 
 \end{align*}
+with $R\rightarrow \infty$.
 
 10. From Taylor Series of $\sinh(x)$:
 \begin{align*}
 \sinh(x) &= \sum_{n=0}^\infty \frac{1 }{(2n+1)!} x^{2n+1} \\
 \text{Let } x &\rightarrow  \frac{1}{z^3} \\ 
 f(z) &=\sum_{n=0}^\infty \frac{ 1 }{(2n+1)!} \frac{1}{z^3}^{2n+1} \\
-  &= \sum_{n=0}^\infty \frac{ 1 }{(2n+1)!} (z-0)^{-(6n+6)} 
+  &= \sum_{n=0}^\infty \frac{ 1 }{(2n+1)!} (z-0)^{-(6n+3)} 
 \end{align*}
+with $R\rightarrow \infty$.
 
 \end{document}
