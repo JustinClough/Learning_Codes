@@ -213,7 +213,23 @@ J &= \int_\gamma \frac{ 2z^3}{(z-2)^2} dz \\
   J &=  2 i \pi  6 (2)^2 = 48 i \pi
 \end{align*}
 
-8. TODO % TODO
+8. Let $\gamma = \{z | z = 1-t(1+i) \forall t\in[ 0, 1]\}$.
+\begin{align*}
+  J &= \int_\gamma f(z) dz \\
+    &= \int_0^{1} f(z_\gamma) z_\gamma' dt   \\
+    &= \int_0^{1} (-2i+2) (1-t+it) \sqrt{1-2t+2t^2} dt   \\
+&\text{ Evaluated on a symbolic calculator:} \\
+  &= (-2i+2)
+    \left[ 
+      \left(\frac{1}{48}+\frac{i}{48}\right)  
+      \left(-3\sqrt{2}\sinh^{-1}(1-2t) + 2i \sqrt{2t^2-2t+1}
+        (8t^2-(8+6i)t +(4+3i))\right)
+    \right]_0^1 \\
+  &= (-1+i)
+  \left[ 
+    \frac{1}{2} + \frac{ \sqrt{2}}{4}\sinh^{-1}(1)
+  \right]
+\end{align*}
 
 
 10. Let $\gamma = \{z | z = e^{it} \forall t\in[\frac{\pi}{2},\frac{3\pi}{2}]\}$.
