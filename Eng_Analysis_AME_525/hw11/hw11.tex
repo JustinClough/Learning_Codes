@@ -181,7 +181,7 @@ All closed curves are positively oriented.
   f(z) = \frac{\sin(z^2)}{z-5}
 \end{equation*}
 
-4. $\gamma$ is teh rectangle having vertices $\pm4\pm i$.
+4. $\gamma$ is the rectangle having vertices $\pm4\pm i$.
 \begin{equation*}
   f(z) = \frac{2z^3}{(z-2)^2}
 \end{equation*}
@@ -191,13 +191,86 @@ All closed curves are positively oriented.
 f(z) = 2i\bar{z}|z|
 \end{equation*}
 
-10. $\gamma$ is teh semicircle of radius 1 about 0 from $i$ to $-i$.
+10. $\gamma$ is the semicircle of radius 1 about 0 from $i$ to $-i$.
 \begin{equation*}
 f(z) = (z-i)^2
 \end{equation*}
 
 \emph{Solution:}
 \newline
+2. Let $5\in D$ and $\gamma = \partial D$.
+\begin{align*}
+J &= \int_\gamma \frac{ \sin(z^2)}{z-5} dz \\
+  &= \sin( 5^2) 2 \pi i \\
+  &= 2 \pi i \sin( 25)
+\end{align*}
+
+4. Let $g(z) = 2z^3$.
+\begin{align*}
+J &= \int_\gamma \frac{ 2z^3}{(z-2)^2} dz \\
+\frac{ n! J}{2 \pi i} &=\frac{n!}{2 \pi i} \int_\gamma \frac{ 2z^3}{(z-2)^2} dz = \pdv[n]{g}{z}|_{z_0} \text{ with $n=1$, and $z_0 = 2$} \\
+\Rightarrow 
+  J &=  2 i \pi  6 (2)^2 = 48 i \pi
+\end{align*}
+
+8. TODO % TODO
+
+
+10. Let $\gamma = \{z | z = e^{it} \forall t\in[\frac{\pi}{2},\frac{3\pi}{2}]\}$.
+\begin{align*}
+  J &= \int_\gamma f(z) dz \\
+    &= \int_\frac{\pi}{2}^{\frac{3\pi}{2}} f(z_\gamma) z_\gamma' dt   \\
+    &= \int_\frac{\pi}{2}^{\frac{3\pi}{2}} (e^{it} - i)^2 ie^i{it} dt \\
+    &= \int_\frac{\pi}{2}^{\frac{3\pi}{2}} (ie^{3it} + 2e^{2it} +ie^{it}) dt \\
+    &= \left[ \frac{e^{3it}}{3} - i e^{2it} + e^{it} \right]_\frac{\pi}{2}^\frac{3\pi}{2} \\
+    &= \frac{-4}{3}i
+\end{align*}
+
+\newpage
+\question*{\S 21.2 page 710: 2,6,10 }
+\emph{Find:}
+In each of problems 2, 6, and 10,
+write the Laurent expansion of $f(z)$ in an annulus $0<|z-z_0|<R$
+about $z_0$, specifying $R$ for each problem. 
+
 2.
+\begin{equation*}
+  \frac{\sin(z)}{z^2}; 0
+\end{equation*}
+
+6.
+\begin{equation*}
+  \frac{z^2+1}{2z-1}; \frac{1}{2}
+\end{equation*}
+
+10.
+\begin{equation*}
+  \sinh(\frac{1}{z^3}); 0
+\end{equation*}
+
+\emph{Solution:}
+\newline
+2. From the Taylor Series of $\sin(z)$:
+\begin{align*}
+\sin(z) &= \sum_{n=0}^\infty \frac{ (-1)^n}{(2n+1)!} z^{2n+1} \\
+\Rightarrow 
+  \frac{ \sin(z)}{z^2} &= \sum_{n=0}^\infty \frac{ (-1)^n}{(2n+1)!} z^{2n-1} 
+\end{align*}
+\noindent
+with $R\rightarrow \infty$.
+
+6. Similar to Ex. 21.9 on page 709, this is already a Laurent series with one term:
+\begin{align*}
+f(z) &= \frac{ z^2+1}{2z-1} \\
+     &= \frac{ z^2+1}{2} \cdot \frac{1}{z-\frac{1}{2}} 
+\end{align*}
+
+10. From Taylor Series of $\sinh(x)$:
+\begin{align*}
+\sinh(x) &= \sum_{n=0}^\infty \frac{1 }{(2n+1)!} x^{2n+1} \\
+\text{Let } x &\rightarrow  \frac{1}{z^3} \\ 
+f(z) &=\sum_{n=0}^\infty \frac{ 1 }{(2n+1)!} \frac{1}{z^3}^{2n+1} \\
+  &= \sum_{n=0}^\infty \frac{ 1 }{(2n+1)!} (z-0)^{-(6n+6)} 
+\end{align*}
 
 \end{document}
