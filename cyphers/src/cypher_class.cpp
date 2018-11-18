@@ -86,6 +86,9 @@ str Cypher::get_safe_letters()
   safe += "_";
   safe += ":";
   safe += "+";
+  safe += ";";
+  safe += "(";
+  safe += ")";
   return safe;  
 }
 
