@@ -199,5 +199,54 @@ J &= \int_{-\infty}^{\infty} \frac{1}{z^2-2z+6} dx \\
   &= \frac{2\pi}{\sqrt{5}}
 \end{align*}
 
+\newpage
+\question
+\emph{Find:}
+\newline
+Invert these Laplace Transforms:
+
+13.
+\begin{equation*}
+\frac{1}{(z+3)^2}
+\end{equation*}
+
+14.
+\begin{equation*}
+\frac{1}{(z^2+9)(z-2)^2}
+\end{equation*}
+
+\emph{Solution:}
+\newline
+
+13. The function has a order 2 pole at $z_0=-3$.
+\begin{align*}
+\Res( e^{zt} F, -3) 
+  &= \lim_{z\to -3} \left( \pdv{e^{zt}}{z} \right) \\
+  &= \lim_{z\to -3} \left( te^{zt} \right) \\
+  &= te^{-3t} \\
+\\
+\Rightarrow
+f(t) &= te^{-3t} 
+\end{align*}
+
+14. The function has an order 2 pole at $z_0=2$ and order 1 poles at $z_0=\pm3i$.
+\begin{align*}
+\Res( e^{zt}F, 3i) 
+  &= \lim_{z\to 3i} \left( \frac{e^{zt}}{(z+3i)(z-2)^2} \right) \\
+  &= \frac{e^{i3t}}{6i(3i-2)^2} \\
+\Res( e^{zt}F, -3i) 
+  &= \lim_{z\to 3i} \left( \frac{e^{zt}}{(z-3i)(z-2)^2} \right) \\
+  &= \frac{e^{-i3t}}{-6i(-3i-2)^2} \\
+\Res( e^{zt}F, 2) 
+  &= \lim_{z\to 3i} \left( \frac{\partial}{\partial z}\left( \frac{e^{zt}}{z^2+9} \right) \right)  \\ 
+  &= \lim_{z\to 3i} \left( \frac{-2ze^{zt}}{(z^2+9)^2} + \frac{te^{zt}}{z^2+9}  \right)  \\ 
+  &= (13t-4) \frac{e^{2t}}{196} \\
+\\
+\Rightarrow
+f(t) 
+  &= \frac{e^{i3t}}{6i(3i-2)^2} + \frac{e^{-i3t}}{-6i(-3i-2)^2} + (13t-4) \frac{e^{2t}}{196} \\
+  &= \frac{5i+12}{1014} e^{i3t} + \frac{-5i+12}{1014} e^{-i3t} +\frac{13t-4}{196} e^{2t}
+\end{align*}
+
 
 \end{document}
