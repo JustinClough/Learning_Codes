@@ -48,7 +48,8 @@ So $f(z)$ has an order 2 pole at $z=-i$ and order 1 at $z=+i$.
 8. Let $f(z) =\frac{g(z)}{h(z)}$, 
 $g(z) = \sin(z)$ has zeros at $z=m\pi$ $\forall m=0,\pm 1, \pm 2, ...$;
 $h(z) = \sinh(z)$ has zeros at $z=i n\pi$ $\forall n=0,\pm 1, \pm 2, ...$.
-So $f(z)$ has order 1 poles at $z=i n\pi$ $\forall n=0,\pm 1, \pm 2, ...$.
+So $f(z)$ has a removable pole at $z=0$ and
+order 1 poles at $z=i n\pi$ $\forall n=\pm 1, \pm 2, ...$.
 
 12.  The Laurent expansion about 0 is:
 \begin{equation*}
@@ -126,7 +127,7 @@ J &= \int_\gamma \frac{\cos(z)}{ze^z} dz \\
 Evaluating the Taylor expansion:
 \begin{align*}
 e^{\frac{2}{z^2}} &= \sum_{n=0}^{\infty} \frac{1}{n!} \left(\frac{2}{z^2}\right)^n \\
- &= 0 + \frac{1}{z^2} + ...
+ &= 1 + \frac{1}{z^2} + ...
 \end{align*}
 
 So the coefficient of $\frac{1}{z}$ is 0:
@@ -240,12 +241,12 @@ f(t) &= te^{-3t}
 \Res( e^{zt}F, 2) 
   &= \lim_{z\to 3i} \left( \frac{\partial}{\partial z}\left( \frac{e^{zt}}{z^2+9} \right) \right)  \\ 
   &= \lim_{z\to 3i} \left( \frac{-2ze^{zt}}{(z^2+9)^2} + \frac{te^{zt}}{z^2+9}  \right)  \\ 
-  &= (13t-4) \frac{e^{2t}}{196} \\
+  &= (13t-4) \frac{e^{2t}}{169} \\
 \\
 \Rightarrow
 f(t) 
-  &= \frac{e^{i3t}}{6i(3i-2)^2} + \frac{e^{-i3t}}{-6i(-3i-2)^2} + (13t-4) \frac{e^{2t}}{196} \\
-  &= \frac{5i+12}{1014} e^{i3t} + \frac{-5i+12}{1014} e^{-i3t} +\frac{13t-4}{196} e^{2t}
+  &= \frac{e^{i3t}}{6i(3i-2)^2} + \frac{e^{-i3t}}{-6i(-3i-2)^2} + (13t-4) \frac{e^{2t}}{169} \\
+  &= \frac{5i+12}{1014} e^{i3t} + \frac{-5i+12}{1014} e^{-i3t} +\frac{13t-4}{169} e^{2t}
 \end{align*}
 
 
